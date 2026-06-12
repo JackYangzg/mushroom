@@ -20,6 +20,7 @@ import java.io.File
 class CameraController internal constructor(
     val takePicture: androidx.activity.result.ActivityResultLauncher<Uri>,
     val pickFromGallery: androidx.activity.result.ActivityResultLauncher<PickVisualMediaRequest>,
+    val pickMultipleFromGallery: androidx.activity.result.ActivityResultLauncher<PickVisualMediaRequest>,
     val cameraPermission: PermissionState,
     val pendingFile: () -> File,
 ) {
@@ -34,31 +35,43 @@ class CameraController internal constructor(
 fun rememberCameraController(
     context: Context,
     onPhotoReady: (Uri) -> Unit,
+    onPhotosReady: (List<Uri>) -> Unit = { uris -> uris.forEach(onPhotoReady) },
 ): CameraController {
     val cameraPermission = rememberPermissionState(android.Manifest.permission.CAMERA)
+    val pendingFileHolder = remember { arrayOfNulls<File>(1) }
     val pendingFile = remember {
         {
-            File(context.cacheDir, "photos/${System.currentTimeMillis()}.jpg")
+            pendingFileHolder[0] ?: File(
+                context.cacheDir,
+                "photos/${System.currentTimeMillis()}.jpg",
+            ).also { pendingFileHolder[0] = it }
         }
     }
     val takePicture = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.TakePicture(),
     ) { success ->
         if (success) {
+            val file = pendingFile()
             val uri = FileProvider.getUriForFile(
                 context,
                 "${context.packageName}.fileprovider",
-                pendingFile(),
+                file,
             )
             onPhotoReady(uri)
         }
+        pendingFileHolder[0] = null
     }
     val pickFromGallery = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickVisualMedia(),
     ) { uri ->
         uri?.let { onPhotoReady(it) }
     }
+    val pickMultipleFromGallery = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.PickMultipleVisualMedia(6),
+    ) { uris ->
+        if (uris.isNotEmpty()) onPhotosReady(uris)
+    }
     return remember {
-        CameraController(takePicture, pickFromGallery, cameraPermission, pendingFile)
+        CameraController(takePicture, pickFromGallery, pickMultipleFromGallery, cameraPermission, pendingFile)
     }
 }

@@ -1,6 +1,8 @@
 package com.yangzhiguo.mushroom.ui.recognition
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.util.Base64
 import androidx.compose.animation.AnimatedVisibility
@@ -17,6 +19,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -57,11 +61,13 @@ import com.yangzhiguo.mushroom.recognition.RecognitionResult
 import com.yangzhiguo.mushroom.recognition.RecognitionState
 import com.yangzhiguo.mushroom.recognition.RecognitionStore
 import com.yangzhiguo.mushroom.ui.components.PrimaryButton
+import com.yangzhiguo.mushroom.ui.components.MarkdownText
 
 @Composable
 fun RecognitionScreen(
-    photoUri: String,
+    photoUris: List<String>,
     onOpen3D: (scientificName: String) -> Unit,
+    onOpenSpecies: (speciesId: Int) -> Unit = {},
     onRetake: () -> Unit,
     onDone: () -> Unit = onRetake,
     viewModel: RecognitionStore = hiltViewModel(),
@@ -71,9 +77,11 @@ fun RecognitionScreen(
     val selectedMushroom by viewModel.selectedMushroom.collectAsStateWithLifecycle()
     val selectedImageUrl by viewModel.selectedImageUrl.collectAsStateWithLifecycle()
     val fallbackName by viewModel.fallbackName.collectAsStateWithLifecycle()
+    val candidateSpeciesIds by viewModel.candidateSpeciesIds.collectAsStateWithLifecycle()
 
-    LaunchedEffect(photoUri) {
-        viewModel.startRecognition(photoUriToDataUrl(context, photoUri), photoUri)
+    LaunchedEffect(photoUris) {
+        val dataUrls = photoUris.mapNotNull { photoUriToDataUrl(context, it) }
+        viewModel.startRecognition(dataUrls, photoUris)
     }
 
     Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
@@ -84,25 +92,31 @@ fun RecognitionScreen(
                 action = "重新拍照",
                 onAction = onRetake,
             )
-            RecognitionState.Uploading -> RecognitionProgress(photoUri, "正在准备照片", "即将开始识别关键特征…", viewModel::cancel)
-            is RecognitionState.Recognizing -> RecognitionProgress(
-                photoUri,
-                "正在识别",
-                recognitionStatus(current.thinkingSoFar),
+            RecognitionState.Uploading -> RecognitionProgress(
+                photoUris,
+                "正在准备 ${photoUris.size} 张照片",
+                "即将开始综合分析关键特征…",
                 viewModel::cancel,
             )
-            is RecognitionState.Recognized -> RecognitionProgress(photoUri, "正在匹配图鉴", "已经找到候选，正在核对本地资料…", viewModel::cancel)
+            is RecognitionState.Recognizing -> ThinkingProgress(
+                photoUris = photoUris,
+                thinking = current.thinkingSoFar,
+                onCancel = viewModel::cancel,
+            )
+            is RecognitionState.Recognized -> RecognitionProgress(photoUris, "正在匹配图鉴", "已经找到候选，正在核对本地资料…", viewModel::cancel)
             is RecognitionState.LocalHit -> ResultContent(
-                photoUri = photoUri,
+                photoUris = photoUris,
                 result = current.result,
                 mushroom = selectedMushroom,
                 imageUrl = selectedImageUrl,
                 onRetake = onRetake,
                 onDone = onDone,
                 onOpen3D = onOpen3D,
+                candidateSpeciesIds = candidateSpeciesIds,
+                onOpenSpecies = onOpenSpecies,
             )
             is RecognitionState.LocalMiss -> ResultContent(
-                photoUri = photoUri,
+                photoUris = photoUris,
                 result = current.result,
                 mushroom = null,
                 imageUrl = null,
@@ -110,12 +124,17 @@ fun RecognitionScreen(
                 onRetake = onRetake,
                 onDone = onDone,
                 onOpen3D = onOpen3D,
+                candidateSpeciesIds = candidateSpeciesIds,
+                onOpenSpecies = onOpenSpecies,
             )
             RecognitionState.Rendered -> Unit
             is RecognitionState.Error -> ErrorContent(
                 message = friendlyError(current.message),
                 retryable = current.retryable,
-                onRetry = { viewModel.startRecognition(photoUriToDataUrl(context, photoUri), photoUri) },
+                onRetry = {
+                    val dataUrls = photoUris.mapNotNull { photoUriToDataUrl(context, it) }
+                    viewModel.startRecognition(dataUrls, photoUris)
+                },
                 onRetake = onRetake,
             )
         }
@@ -123,22 +142,14 @@ fun RecognitionScreen(
 }
 
 @Composable
-private fun RecognitionProgress(photoUri: String, title: String, body: String, onCancel: () -> Unit) {
+private fun RecognitionProgress(photoUris: List<String>, title: String, body: String, onCancel: () -> Unit) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .padding(20.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        AsyncImage(
-            model = Uri.parse(photoUri),
-            contentDescription = "正在识别的蘑菇照片",
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(220.dp)
-                .clip(RoundedCornerShape(16.dp)),
-        )
+        RecognitionPhotoStrip(photoUris)
         Spacer(Modifier.weight(1f))
         CircularProgressIndicator(modifier = Modifier.size(32.dp), strokeWidth = 3.dp)
         Spacer(Modifier.height(24.dp))
@@ -157,8 +168,62 @@ private fun RecognitionProgress(photoUri: String, title: String, body: String, o
 }
 
 @Composable
+private fun ThinkingProgress(
+    photoUris: List<String>,
+    thinking: String,
+    onCancel: () -> Unit,
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(20.dp),
+    ) {
+        RecognitionPhotoStrip(photoUris)
+        Spacer(Modifier.height(20.dp))
+        Row(verticalAlignment = Alignment.CenterVertically) {
+            CircularProgressIndicator(modifier = Modifier.size(22.dp), strokeWidth = 2.dp)
+            Spacer(Modifier.size(12.dp))
+            Text("正在分析", style = MaterialTheme.typography.titleLarge)
+        }
+        Spacer(Modifier.height(12.dp))
+        Surface(
+            color = MaterialTheme.colorScheme.surfaceVariant,
+            shape = RoundedCornerShape(12.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .weight(1f),
+        ) {
+            MarkdownText(
+                markdown = thinking.ifBlank { "正在等待模型观察图片…" },
+                modifier = Modifier
+                    .padding(16.dp)
+                    .verticalScroll(rememberScrollState()),
+            )
+        }
+        Spacer(Modifier.height(12.dp))
+        OutlinedButton(onClick = onCancel, modifier = Modifier.fillMaxWidth()) { Text("取消") }
+    }
+}
+
+@Composable
+private fun RecognitionPhotoStrip(photoUris: List<String>) {
+    LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        items(photoUris, key = { it }) { photoUri ->
+            AsyncImage(
+                model = Uri.parse(photoUri),
+                contentDescription = "待识别照片",
+                contentScale = ContentScale.Crop,
+                modifier = Modifier
+                    .size(112.dp)
+                    .clip(RoundedCornerShape(12.dp)),
+            )
+        }
+    }
+}
+
+@Composable
 private fun ResultContent(
-    photoUri: String,
+    photoUris: List<String>,
     result: RecognitionResult,
     mushroom: LocalMushroom?,
     imageUrl: String?,
@@ -166,8 +231,11 @@ private fun ResultContent(
     onRetake: () -> Unit,
     onDone: () -> Unit,
     onOpen3D: (String) -> Unit,
+    candidateSpeciesIds: Map<String, Int>,
+    onOpenSpecies: (Int) -> Unit,
 ) {
     var reasonsExpanded by remember { mutableStateOf(false) }
+    var thinkingExpanded by remember { mutableStateOf(false) }
     val top = result.candidates.firstOrNull()
     Column(modifier = Modifier.fillMaxSize()) {
         Row(
@@ -200,7 +268,7 @@ private fun ResultContent(
                 )
             } else {
                 AsyncImage(
-                    model = Uri.parse(photoUri),
+                    model = Uri.parse(photoUris.firstOrNull().orEmpty()),
                     contentDescription = "你的照片",
                     contentScale = ContentScale.Crop,
                     modifier = Modifier
@@ -210,21 +278,13 @@ private fun ResultContent(
                 )
             }
 
-            Column(verticalArrangement = Arrangement.spacedBy(6.dp)) {
-                Text("最可能", style = MaterialTheme.typography.labelLarge, color = MaterialTheme.colorScheme.primary)
-                Text(
-                    mushroom?.commonName ?: top?.commonName ?: top?.scientificName ?: "暂时无法确认",
-                    style = MaterialTheme.typography.headlineSmall,
-                )
-                Text(
-                    mushroom?.scientificName ?: top?.scientificName.orEmpty(),
-                    style = MaterialTheme.typography.bodyLarge.copy(fontStyle = FontStyle.Italic),
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-                Text(
-                    calibratedLikelihood(top),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+            Text("识别候选", style = MaterialTheme.typography.titleMedium)
+            result.candidates.forEachIndexed { index, candidate ->
+                CandidateLine(
+                    number = index + 1,
+                    candidate = candidate,
+                    speciesId = candidateSpeciesIds[candidate.scientificName],
+                    onOpenSpecies = onOpenSpecies,
                 )
             }
 
@@ -234,15 +294,6 @@ private fun ResultContent(
                 text = "本地图鉴暂未收录 ${missingName.ifBlank { top?.scientificName.orEmpty() }}，请结合专业资料人工确认。",
                 style = MaterialTheme.typography.bodyLarge,
             )
-
-            if (result.candidates.size > 1) {
-                Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    Text("其他可能", style = MaterialTheme.typography.titleMedium)
-                    result.candidates.drop(1).forEachIndexed { index, candidate ->
-                        CandidateLine(index + 2, candidate)
-                    }
-                }
-            }
 
             Surface(
                 color = MaterialTheme.colorScheme.surface,
@@ -279,6 +330,34 @@ private fun ResultContent(
                                 modifier = Modifier.padding(bottom = 12.dp),
                             )
                         }
+                    }
+                }
+            }
+
+            Surface(
+                color = MaterialTheme.colorScheme.surfaceVariant,
+                shape = RoundedCornerShape(12.dp),
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                Column {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clickable { thinkingExpanded = !thinkingExpanded }
+                            .padding(16.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Text("大模型分析过程", style = MaterialTheme.typography.titleMedium, modifier = Modifier.weight(1f))
+                        Icon(
+                            if (thinkingExpanded) Icons.Rounded.ExpandLess else Icons.Rounded.ExpandMore,
+                            contentDescription = null,
+                        )
+                    }
+                    AnimatedVisibility(thinkingExpanded) {
+                        MarkdownText(
+                            markdown = result.thinking.ifBlank { "模型未返回单独的分析过程。" },
+                            modifier = Modifier.padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+                        )
                     }
                 }
             }
@@ -322,11 +401,26 @@ private fun SafetyBoundary() {
 }
 
 @Composable
-private fun CandidateLine(number: Int, candidate: Candidate) {
-    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+private fun CandidateLine(
+    number: Int,
+    candidate: Candidate,
+    speciesId: Int?,
+    onOpenSpecies: (Int) -> Unit,
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable(enabled = speciesId != null) { speciesId?.let(onOpenSpecies) }
+            .padding(vertical = 8.dp),
+        horizontalArrangement = Arrangement.spacedBy(12.dp),
+    ) {
         Text("$number", color = MaterialTheme.colorScheme.onSurfaceVariant)
         Column {
-            Text(candidate.commonName ?: candidate.scientificName, style = MaterialTheme.typography.bodyLarge)
+            Text(
+                candidate.commonName ?: candidate.scientificName,
+                style = MaterialTheme.typography.bodyLarge,
+                color = if (speciesId != null) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurface,
+            )
             if (!candidate.commonName.isNullOrBlank()) {
                 Text(
                     candidate.scientificName,
@@ -334,6 +428,11 @@ private fun CandidateLine(number: Int, candidate: Candidate) {
                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
+            Text(
+                if (speciesId != null) "已收录，点击查看详情" else calibratedLikelihood(candidate),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
         }
     }
 }
@@ -378,12 +477,6 @@ private fun CenterMessage(title: String, body: String, action: String, onAction:
     }
 }
 
-private fun recognitionStatus(thinking: String): String = when {
-    thinking.length < 80 -> "正在查看菌盖、菌褶和菌柄…"
-    thinking.length < 240 -> "已经看到部分关键特征，正在匹配候选…"
-    else -> "候选很接近，正在继续核对…"
-}
-
 private fun calibratedLikelihood(candidate: Candidate?): String = when {
     candidate?.confidence == null -> "与照片中的可见特征较为相似"
     candidate.confidence >= 0.8 -> "与照片中的可见特征较为相似"
@@ -398,9 +491,22 @@ private fun friendlyError(message: String): String = when {
     else -> message.ifBlank { "暂时无法识别这张照片，请换一个角度重拍。" }
 }
 
-private fun photoUriToDataUrl(context: Context, photoUri: String): String {
-    val bytes = runCatching {
-        context.contentResolver.openInputStream(Uri.parse(photoUri))?.use { it.readBytes() }
-    }.getOrNull() ?: return ""
-    return "data:image/jpeg;base64,${Base64.encodeToString(bytes, Base64.NO_WRAP)}"
+private fun photoUriToDataUrl(context: Context, photoUri: String): String? {
+    return runCatching {
+        val uri = Uri.parse(photoUri)
+        val bounds = BitmapFactory.Options().apply { inJustDecodeBounds = true }
+        context.contentResolver.openInputStream(uri)?.use {
+            BitmapFactory.decodeStream(it, null, bounds)
+        }
+        var sample = 1
+        while (bounds.outWidth / sample > 1280 || bounds.outHeight / sample > 1280) sample *= 2
+        val options = BitmapFactory.Options().apply { inSampleSize = sample }
+        val bitmap = context.contentResolver.openInputStream(uri)?.use {
+            BitmapFactory.decodeStream(it, null, options)
+        } ?: return null
+        val output = java.io.ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 82, output)
+        bitmap.recycle()
+        "data:image/jpeg;base64,${Base64.encodeToString(output.toByteArray(), Base64.NO_WRAP)}"
+    }.getOrNull()
 }

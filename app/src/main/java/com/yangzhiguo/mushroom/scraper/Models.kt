@@ -8,12 +8,32 @@ import kotlinx.serialization.json.JsonElement
 data class ApiResponse(val code: Int = 0, val msg: String? = null, val data: PageData? = null)
 
 @Serializable
+data class SpecimenDetailResponse(
+    val code: Int = 0,
+    val msg: String? = null,
+    val data: Specimen? = null,
+)
+
+@Serializable
 data class PageData(
     val records: List<Specimen> = emptyList(),
     val total: Long = 0,
     val size: Int = 0,
     val current: Long = 0,
     val pages: Long = 0,
+)
+
+@Serializable
+data class SpeciesApiResponse(
+    val code: Int = 0,
+    val msg: String? = null,
+    val data: SpeciesPageData? = null,
+)
+
+@Serializable
+data class SpeciesPageData(
+    val total: Long = 0,
+    val specimenSpeciesList: List<Specimen> = emptyList(),
 )
 
 @Serializable

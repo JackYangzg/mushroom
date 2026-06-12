@@ -1,11 +1,12 @@
--- AUTO-GENERATED FROM Models.kt Specimen class (108 fields + 1 derived: source_url)
+-- AUTO-GENERATED FROM Models.kt Specimen class (108 fields + source_type/source_url)
 -- Image-related tables/columns REMOVED per user request — only metadata stored.
 -- Edit Models.kt and re-run generator; do not edit manually.
 
 DROP TABLE IF EXISTS mushroom_specimen;
 
 CREATE TABLE mushroom_specimen (
-    id INTEGER PRIMARY KEY,
+    local_id INTEGER PRIMARY KEY AUTOINCREMENT,
+    id INTEGER NOT NULL,
     specimen_describe TEXT,
     specimen_group TEXT,
     collect_user TEXT,
@@ -113,6 +114,7 @@ CREATE TABLE mushroom_specimen (
     assigning_id TEXT,
     distribution_location TEXT,
     economic_use TEXT,
+    source_type TEXT NOT NULL,
     source_url TEXT
 );
 
@@ -120,3 +122,8 @@ CREATE INDEX idx_specimen_latin ON mushroom_specimen(species_latin);
 CREATE INDEX idx_specimen_chinese ON mushroom_specimen(species_chinese);
 CREATE INDEX idx_specimen_family_zh ON mushroom_specimen(family_chinese);
 CREATE INDEX idx_specimen_family_la ON mushroom_specimen(family_english);
+CREATE UNIQUE INDEX idx_specimen_name_source ON mushroom_specimen (
+    source_type,
+    lower(trim(coalesce(nullif(species_latin, ''), nullif(species_chinese, ''), species_common, 'id:' || id))),
+    lower(trim(coalesce(source_url, '')))
+);

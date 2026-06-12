@@ -11,6 +11,7 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.CancellationException
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -44,24 +45,51 @@ class SyncRepository @Inject constructor(
 
     /** 全量同步入口。失败抛异常给上层；成功返回总条数。 */
     suspend fun runFullSync() {
+        try {
+            runFullSyncInternal()
+        } catch (t: Exception) {
+            if (t is CancellationException) throw t
+            _state.value = SyncState.Error(t.message ?: "同步失败")
+            throw t
+        }
+    }
+
+    private suspend fun runFullSyncInternal() {
         val started = System.currentTimeMillis()
         val scraper = Scraper()
-        val scrapedDb = ScrapedDatabase(context)
 
-        val specimens = scraper.fetchAll { page, total ->
+        val records = scraper.fetchAll { page, total ->
             _state.value = SyncState.Running(page = page, totalSpecimens = total)
         }
 
-        if (specimens.isEmpty()) {
-            _state.value = SyncState.Error("No specimens fetched")
-            return
+        if (records.isEmpty()) {
+            throw IllegalStateException("未获取到物种数据，已保留现有数据库")
         }
 
         // 1. 写 scraped DB（含完整全字段）
-        scrapedDb.replaceAll(specimens) { scraper.sourceUrlFor(it.id.toInt() % 820 + 1) }
+        ScrapedDatabase(context).use { it.replaceAll(records) }
         // 2. 映射导入 Room
         val now = System.currentTimeMillis()
-        val entities = specimens.map { ScraperToRoomMapper.toEntity(it, now) }
+        val entities = records
+            .groupBy { normalizedSpeciesKey(it) }
+            .toSortedMap()
+            .values
+            .mapIndexed { index, sourceRecords ->
+                val preferred = sourceRecords.maxBy { recordCompleteness(it) }
+                val sourceTypes = sourceRecords
+                    .map { it.sourceType }
+                    .distinct()
+                    .sorted()
+                val mergedSpecimen = preferred.specimen.copy(
+                    edibleFungus = if ("EDIBLE" in sourceTypes) "是" else preferred.specimen.edibleFungus,
+                    toxicFungus = if ("TOXIC" in sourceTypes) "是" else preferred.specimen.toxicFungus,
+                )
+                ScraperToRoomMapper.toEntity(mergedSpecimen, now).copy(
+                    id = index + 1,
+                    sourceUrl = preferred.sourceUrl,
+                    sourceTypes = sourceTypes.joinToString(","),
+                )
+            }
         roomDb.withTransaction {
             speciesDao.deleteAll()  // 先清空（SpeciesDao 需要此方法）
             speciesDao.insertAll(entities)
@@ -69,11 +97,38 @@ class SyncRepository @Inject constructor(
         // 3. 持久化时间戳
         prefs.edit()
             .putLong(KEY_LAST_SYNC_AT, System.currentTimeMillis())
-            .putInt(KEY_LAST_SYNC_COUNT, specimens.size)
+            .putInt(KEY_LAST_SYNC_COUNT, entities.size)
             .apply()
 
         val elapsed = System.currentTimeMillis() - started
-        _state.value = SyncState.Success(specimens.size, elapsed)
+        _state.value = SyncState.Success(entities.size, elapsed)
+    }
+
+    private fun normalizedSpeciesKey(record: com.yangzhiguo.mushroom.scraper.ScrapedRecord): String {
+        val specimen = record.specimen
+        return sequenceOf(specimen.speciesLatin, specimen.speciesChinese, specimen.speciesCommon)
+            .mapNotNull { it?.trim()?.takeIf(String::isNotEmpty) }
+            .firstOrNull()
+            ?.lowercase()
+            ?.replace(Regex("\\s+"), " ")
+            ?: "${record.sourceType}:${specimen.id}"
+    }
+
+    private fun recordCompleteness(record: com.yangzhiguo.mushroom.scraper.ScrapedRecord): Int {
+        val specimen = record.specimen
+        return listOf(
+            specimen.speciesLatin,
+            specimen.speciesChinese,
+            specimen.familyChinese,
+            specimen.familyEnglish,
+            specimen.genusChinese,
+            specimen.genusEnglish,
+            specimen.speciesDescription,
+            specimen.speciesHabitat,
+            specimen.cap,
+            specimen.lamella,
+            specimen.stipe,
+        ).count { !it.isNullOrBlank() }
     }
 
     companion object {

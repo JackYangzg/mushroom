@@ -26,6 +26,8 @@ import com.yangzhiguo.mushroom.ui.misc.AboutScreen
 import com.yangzhiguo.mushroom.ui.misc.DisclaimerScreen
 import com.yangzhiguo.mushroom.ui.profile.MyFavoritesScreen
 import com.yangzhiguo.mushroom.ui.profile.ProfileScreen
+import com.yangzhiguo.mushroom.ui.recognition.RecognitionHistoryDetailScreen
+import com.yangzhiguo.mushroom.ui.recognition.RecognitionHistoryScreen
 import com.yangzhiguo.mushroom.ui.settings.SettingsScreen
 import com.yangzhiguo.mushroom.ui.species.SpeciesDetailScreen
 import com.yangzhiguo.mushroom.ui.species.SpeciesListScreen
@@ -71,8 +73,11 @@ fun MainShell() {
             // ---- 底部 3 个 tab ----
             composable(Route.Home.path) {
                 HomeScreen(
-                    onStartAiRecognition = {
-                        navController.navigate(Route.AiRecognitionFlow.path)
+                    onTakePhoto = {
+                        navController.navigate(Route.AiRecognitionFlow.build(Route.AiRecognitionFlow.CAMERA))
+                    },
+                    onChooseFromGallery = {
+                        navController.navigate(Route.AiRecognitionFlow.build(Route.AiRecognitionFlow.GALLERY))
                     },
                 )
             }
@@ -86,6 +91,7 @@ fun MainShell() {
             composable(Route.Profile.path) {
                 ProfileScreen(
                     onMyFavoritesClick = { navController.navigate(Route.MyFavorites.path) },
+                    onRecognitionHistoryClick = { navController.navigate(Route.RecognitionHistory.path) },
                     onSettingsClick = { navController.navigate(Route.Settings.path) },
                     onDisclaimerClick = { navController.navigate(Route.Disclaimer.path) },
                     onAboutClick = { navController.navigate(Route.About.path) },
@@ -97,6 +103,24 @@ fun MainShell() {
                 MyFavoritesScreen(
                     onBack = { navController.popBackStack() },
                     onSpeciesClick = { id ->
+                        navController.navigate(Route.SpeciesDetail.build(id))
+                    },
+                )
+            }
+            composable(Route.RecognitionHistory.path) {
+                RecognitionHistoryScreen(
+                    onBack = { navController.popBackStack() },
+                    onRecordClick = { id ->
+                        navController.navigate(Route.RecognitionHistoryDetail.build(id))
+                    },
+                )
+            }
+            composable(Route.RecognitionHistoryDetail.path) { entry ->
+                val historyId = entry.arguments?.getString(Route.RecognitionHistoryDetail.ARG_HISTORY_ID).orEmpty()
+                RecognitionHistoryDetailScreen(
+                    historyId = historyId,
+                    onBack = { navController.popBackStack() },
+                    onOpenSpecies = { id ->
                         navController.navigate(Route.SpeciesDetail.build(id))
                     },
                 )
@@ -119,11 +143,16 @@ fun MainShell() {
 
             // ---- 拍照 → 识别 → 详情/3D 流程（不在 tab 中显示）----
             composable(Route.AiRecognitionFlow.path) {
+                val source = it.arguments?.getString(Route.AiRecognitionFlow.ARG_SOURCE)
                 com.yangzhiguo.mushroom.ui.navigation.ConsultationFlowNav(
                     useAi = true,
+                    startWithGallery = source == Route.AiRecognitionFlow.GALLERY,
                     onExit = { navController.popBackStack(Route.Home.path, inclusive = false) },
                     onOpen3D = { name ->
                         navController.navigate(Route.ThreeD.build(name))
+                    },
+                    onOpenSpecies = { id ->
+                        navController.navigate(Route.SpeciesDetail.build(id))
                     },
                 )
             }

@@ -69,7 +69,7 @@ sealed class RecognitionState {
     ) : RecognitionState()
     data class Recognized(
         val result: RecognitionResult,
-        val photoUri: String? = null,
+        val photoUris: List<String> = emptyList(),
     ) : RecognitionState()
     data class LocalHit(val result: RecognitionResult) : RecognitionState()
     data class LocalMiss(val result: RecognitionResult) : RecognitionState()

@@ -61,7 +61,7 @@ fun MushroomNavHost(
             val rawUri = entry.arguments?.getString(Route.Recognition.ARG_PHOTO).orEmpty()
             val photoUri = URLDecoder.decode(rawUri, StandardCharsets.UTF_8.name())
             RecognitionScreen(
-                photoUri = photoUri,
+                photoUris = listOf(photoUri),
                 onOpen3D = { name ->
                     navController.navigate(Route.ThreeD.build(name))
                 },

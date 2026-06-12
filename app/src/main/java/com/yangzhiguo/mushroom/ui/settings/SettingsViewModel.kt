@@ -34,7 +34,7 @@ class SettingsViewModel @Inject constructor(
 
     fun startSync() {
         viewModelScope.launch {
-            syncRepo.runFullSync()
+            runCatching { syncRepo.runFullSync() }
         }
     }
 }

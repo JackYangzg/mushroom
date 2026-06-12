@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ChevronRight
 import androidx.compose.material.icons.rounded.FavoriteBorder
+import androidx.compose.material.icons.rounded.History
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material.icons.rounded.Shield
@@ -28,6 +29,7 @@ import com.yangzhiguo.mushroom.R
 @Composable
 fun ProfileScreen(
     onMyFavoritesClick: () -> Unit = {},
+    onRecognitionHistoryClick: () -> Unit = {},
     onSettingsClick: () -> Unit = {},
     onDisclaimerClick: () -> Unit = {},
     onAboutClick: () -> Unit = {},
@@ -44,6 +46,8 @@ fun ProfileScreen(
                 modifier = Modifier.padding(horizontal = 20.dp, vertical = 20.dp),
             )
             ProfileEntry(stringResource(R.string.profile_my_favorites), Icons.Rounded.FavoriteBorder, onMyFavoritesClick)
+            Divider(modifier = Modifier.padding(start = 60.dp))
+            ProfileEntry(stringResource(R.string.profile_recognition_history), Icons.Rounded.History, onRecognitionHistoryClick)
             Divider(modifier = Modifier.padding(start = 60.dp))
             ProfileEntry(stringResource(R.string.profile_entry_settings), Icons.Rounded.Settings, onSettingsClick)
             Divider(modifier = Modifier.padding(start = 60.dp))

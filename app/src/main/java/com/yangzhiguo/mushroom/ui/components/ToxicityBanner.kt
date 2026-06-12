@@ -18,7 +18,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.yangzhiguo.mushroom.domain.model.Edibility
 import com.yangzhiguo.mushroom.domain.model.ToxicityLevel
+import com.yangzhiguo.mushroom.domain.model.UseType
 import com.yangzhiguo.mushroom.ui.theme.ScientificNameStyle
 import com.yangzhiguo.mushroom.ui.theme.extended
 
@@ -34,13 +36,16 @@ import com.yangzhiguo.mushroom.ui.theme.extended
 @Composable
 fun ToxicityBanner(
     level: ToxicityLevel,
+    edibility: Edibility,
+    useType: UseType,
     chineseName: String,
     scientificName: String,
     modifier: Modifier = Modifier,
 ) {
     val label: String
     val advice: String
-    val icon = if (level == ToxicityLevel.NONE) Icons.Rounded.Info else Icons.Rounded.Warning
+    val hasRisk = level != ToxicityLevel.NONE || useType == UseType.CAUTION
+    val icon = if (hasRisk) Icons.Rounded.Warning else Icons.Rounded.Info
     val container: androidx.compose.ui.graphics.Color
     val onContainer: androidx.compose.ui.graphics.Color
     when (level) {
@@ -63,10 +68,32 @@ fun ToxicityBanner(
             onContainer = MaterialTheme.extended.onNeutralContainer
         }
         ToxicityLevel.NONE -> {
-            label = "有食用记录"
-            advice = "不代表照片中的个体可安全食用，请勿据此采食野生蘑菇。"
-            container = MaterialTheme.extended.successContainer
-            onContainer = MaterialTheme.extended.onSuccessContainer
+            when {
+                useType == UseType.CAUTION -> {
+                    label = "需谨慎"
+                    advice = "资料提示需要特殊处理或谨慎使用，不建议自行采食。"
+                    container = MaterialTheme.extended.neutralContainer
+                    onContainer = MaterialTheme.extended.onNeutralContainer
+                }
+                edibility == Edibility.EDIBLE -> {
+                    label = "有食用记录"
+                    advice = "不代表照片中的个体可安全食用，请勿据此采食野生蘑菇。"
+                    container = MaterialTheme.extended.successContainer
+                    onContainer = MaterialTheme.extended.onSuccessContainer
+                }
+                useType == UseType.MEDICINAL -> {
+                    label = "有药用记录"
+                    advice = "药用资料不等于可直接食用或可自行用药。"
+                    container = MaterialTheme.extended.neutralContainer
+                    onContainer = MaterialTheme.extended.onNeutralContainer
+                }
+                else -> {
+                    label = "食用安全性未报告"
+                    advice = "缺少可靠食用与毒性结论，不建议采食。"
+                    container = MaterialTheme.extended.neutralContainer
+                    onContainer = MaterialTheme.extended.onNeutralContainer
+                }
+            }
         }
     }
     Card(

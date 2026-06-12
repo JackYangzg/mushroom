@@ -22,6 +22,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -34,10 +35,25 @@ import com.yangzhiguo.mushroom.R
 @Composable
 fun CameraScreen(
     onPhotoReady: (android.net.Uri) -> Unit,
+    onPhotosReady: (List<android.net.Uri>) -> Unit = { uris -> uris.forEach(onPhotoReady) },
     onClose: () -> Unit,
+    openGalleryOnLaunch: Boolean = false,
 ) {
     val context = LocalContext.current
-    val controller = rememberCameraController(context, onPhotoReady = onPhotoReady)
+    val controller = rememberCameraController(
+        context,
+        onPhotoReady = onPhotoReady,
+        onPhotosReady = onPhotosReady,
+    )
+    LaunchedEffect(openGalleryOnLaunch) {
+        if (openGalleryOnLaunch) {
+            controller.pickMultipleFromGallery.launch(
+                androidx.activity.result.PickVisualMediaRequest(
+                    androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia.ImageOnly,
+                ),
+            )
+        }
+    }
 
     Surface(modifier = Modifier.fillMaxSize(), color = Color.Black) {
         Box(modifier = Modifier.fillMaxSize()) {
@@ -78,7 +94,7 @@ fun CameraScreen(
                     ) {
                         IconButton(
                             onClick = {
-                                controller.pickFromGallery.launch(
+                                controller.pickMultipleFromGallery.launch(
                                     androidx.activity.result.PickVisualMediaRequest(
                                         androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia.ImageOnly,
                                     ),
@@ -116,7 +132,7 @@ fun CameraScreen(
                     PermissionPrompt(
                         onRequest = { controller.cameraPermission.launchPermissionRequest() },
                         onGallery = {
-                            controller.pickFromGallery.launch(
+                            controller.pickMultipleFromGallery.launch(
                                 androidx.activity.result.PickVisualMediaRequest(
                                     androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia.ImageOnly,
                                 ),

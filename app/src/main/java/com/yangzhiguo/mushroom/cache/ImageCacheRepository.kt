@@ -13,21 +13,6 @@ import java.io.File
 import javax.inject.Inject
 import javax.inject.Singleton
 
-/**
- * 图片懒加载缓存。
- *
- * 触发：用户在 SpeciesDetailScreen 查看某个 specimen。
- * 流程：
- *  1. 读 DB imageLocalPath 字段
- *   - 存在 & 文件还在 → 直接返回本地 File（缓存命中）
- *   - 存在但文件丢失 → 删字段、转下载
- *   - 不存在 & remoteUrl 有效 → 走远端
- *  2. 远端下载到 filesDir/specimen_images/{id}/{filename}
- *  3. 更新 DB imageLocalPath（写入相对 filesDir 的路径）
- *  4. 返回 File
- *
- * 单 specimen 内部用 Mutex 防并发同 ID 重复下载。
- */
 @Singleton
 class ImageCacheRepository @Inject constructor(
     @ApplicationContext private val context: Context,
@@ -37,51 +22,155 @@ class ImageCacheRepository @Inject constructor(
     private val tag = "ImageCache"
     private val inflight = mutableMapOf<Int, Mutex>()
 
+    suspend fun getOrFetchThumbnail(
+        specimenId: Int,
+        remoteUrl: String?,
+        scientificName: String?,
+        sourceUrl: String?,
+    ): File? = withSpeciesLock(specimenId) {
+        cachedFiles(specimenId).firstOrNull()?.let { return@withSpeciesLock it }
+        val urls = resolveRemoteUrls(specimenId, remoteUrl, scientificName, sourceUrl)
+        urls.forEachIndexed { index, url ->
+            download(specimenId, url, index)?.let { file ->
+                dao.updateImageUrl(specimenId, url)
+                dao.updateImagePath(specimenId, relativePath(file))
+                return@withSpeciesLock file
+            }
+        }
+        null
+    }
+
+    suspend fun getOrFetchAll(
+        specimenId: Int,
+        remoteUrl: String?,
+        scientificName: String?,
+        sourceUrl: String?,
+    ): List<File> = withSpeciesLock(specimenId) {
+        val cached = cachedFiles(specimenId)
+        if (completionMarker(specimenId).exists() && cached.isNotEmpty()) {
+            return@withSpeciesLock cached
+        }
+
+        val urls = resolveRemoteUrls(specimenId, remoteUrl, scientificName, sourceUrl)
+        if (urls.isEmpty()) return@withSpeciesLock cached
+
+        val downloaded = urls.mapIndexedNotNull { index, url ->
+            val target = targetFile(specimenId, url, index)
+            val file = when {
+                target.exists() && target.length() > 0 -> target
+                else -> download(specimenId, url, index)
+            }
+            file?.let { url to it }
+        }
+        if (downloaded.size == urls.size && downloaded.isNotEmpty()) {
+            completionMarker(specimenId).apply {
+                parentFile?.mkdirs()
+                writeText(urls.joinToString("\n"))
+            }
+        } else {
+            completionMarker(specimenId).delete()
+        }
+        if (downloaded.isNotEmpty()) {
+            val (successfulUrl, firstFile) = downloaded.first()
+            dao.updateImageUrl(specimenId, successfulUrl)
+            dao.updateImagePath(specimenId, relativePath(firstFile))
+        }
+        val files = downloaded.map { it.second }
+        files.ifEmpty { cachedFiles(specimenId) }
+    }
+
+    /** Compatibility for older single-image callers. */
     suspend fun getOrFetch(
         specimenId: Int,
         remoteUrl: String?,
-    ): File? = withContext(Dispatchers.IO) {
-        val mutex = synchronized(inflight) {
-            inflight.getOrPut(specimenId) { Mutex() }
+        scientificName: String? = null,
+        sourceUrl: String? = null,
+    ): File? = getOrFetchThumbnail(specimenId, remoteUrl, scientificName, sourceUrl)
+
+    private suspend fun resolveRemoteUrls(
+        specimenId: Int,
+        remoteUrl: String?,
+        scientificName: String?,
+        sourceUrl: String?,
+    ): List<String> {
+        val entity = dao.findById(specimenId)
+        val known = listOfNotNull(entity?.imageUrl, remoteUrl).filter { it.isNotBlank() }
+        val discovered = if (!scientificName.isNullOrBlank()) {
+            runCatching { api.findImageUrls(scientificName, sourceUrl) }
+                .onFailure { Log.w(tag, "image lookup failed for $scientificName: ${it.message}") }
+                .getOrDefault(emptyList())
+        } else {
+            emptyList()
         }
-        mutex.withLock {
-            val entity = dao.findById(specimenId)
-            val localRel = entity?.imageLocalPath
-            val remote = entity?.imageUrl ?: remoteUrl
+        return (discovered + known).distinct()
+    }
 
-            // 1) 本地命中
-            if (!localRel.isNullOrEmpty()) {
-                val localFile = File(context.filesDir, localRel)
-                if (localFile.exists() && localFile.length() > 0) {
-                    Log.d(tag, "cache hit: $localRel")
-                    return@withLock localFile
-                }
-                Log.w(tag, "local path set but file missing; will re-fetch")
-            }
-
-            // 2) 远端拉取
-            if (remote.isNullOrBlank()) {
-                Log.w(tag, "no remote url for specimen $specimenId")
-                return@withLock null
-            }
-
-            val filename = deriveFilename(remote)
-            val relPath = "specimen_images/$specimenId/$filename"
-            val target = File(context.filesDir, relPath)
-            try {
-                api.downloadBytes(remote, target)
-                dao.updateImagePath(specimenId, relPath)
-                Log.i(tag, "fetched & cached $relPath (${target.length()} bytes)")
+    private suspend fun download(specimenId: Int, url: String, index: Int): File? {
+        val target = targetFile(specimenId, url, index)
+        return try {
+            api.downloadBytes(url, target)
+            if (target.length() > 0) {
+                Log.i(tag, "cached image ${target.name} (${target.length()} bytes)")
                 target
-            } catch (t: Throwable) {
-                Log.w(tag, "fetch failed for specimen $specimenId: ${t.message}")
+            } else {
+                target.delete()
                 null
             }
+        } catch (t: Throwable) {
+            target.delete()
+            Log.w(tag, "image download failed for specimen $specimenId: ${t.message}")
+            null
         }
     }
 
-    private fun deriveFilename(url: String): String {
-        val cleaned = url.substringBefore('?').substringBefore('#')
-        return cleaned.substringAfterLast('/').ifBlank { "${url.hashCode()}.img" }
+    private fun cachedFiles(specimenId: Int): List<File> =
+        cacheDir(specimenId)
+            .listFiles()
+            .orEmpty()
+            .filter { it.isFile && !it.name.startsWith(".") }
+            .mapNotNull { file ->
+                if (isValidCachedImage(file)) file else {
+                    file.delete()
+                    null
+                }
+            }
+            .sortedBy { it.name }
+
+    private fun isValidCachedImage(file: File): Boolean {
+        if (file.length() <= 0) return false
+        return runCatching {
+            file.inputStream().use { input ->
+                val header = ByteArray(32)
+                val count = input.read(header)
+                ApiClient.isSupportedImage(if (count > 0) header.copyOf(count) else byteArrayOf())
+            }
+        }.getOrDefault(false)
     }
+
+    private fun targetFile(specimenId: Int, url: String, index: Int): File {
+        val extension = url.substringBefore('?')
+            .substringBefore('#')
+            .substringAfterLast('.', "jpg")
+            .lowercase()
+            .takeIf { it.length in 2..5 && it.all(Char::isLetterOrDigit) }
+            ?: "jpg"
+        return File(cacheDir(specimenId), "%03d_%08x.%s".format(index, url.hashCode(), extension))
+    }
+
+    private fun cacheDir(specimenId: Int): File =
+        File(context.filesDir, "specimen_images/$specimenId").apply { mkdirs() }
+
+    private fun completionMarker(specimenId: Int): File =
+        File(cacheDir(specimenId), ".complete")
+
+    private fun relativePath(file: File): String =
+        file.relativeTo(context.filesDir).path
+
+    private suspend fun <T> withSpeciesLock(specimenId: Int, block: suspend () -> T): T =
+        withContext(Dispatchers.IO) {
+            val mutex = synchronized(inflight) {
+                inflight.getOrPut(specimenId) { Mutex() }
+            }
+            mutex.withLock { block() }
+        }
 }

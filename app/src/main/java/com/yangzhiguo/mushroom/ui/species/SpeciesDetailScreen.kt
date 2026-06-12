@@ -1,6 +1,7 @@
 package com.yangzhiguo.mushroom.ui.species
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -11,7 +12,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -19,6 +23,7 @@ import androidx.compose.material.icons.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.FavoriteBorder
 import androidx.compose.material3.Divider
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -32,6 +37,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
@@ -44,7 +50,9 @@ import com.yangzhiguo.mushroom.ui.components.ToxicityBanner
 import kotlinx.serialization.builtins.ListSerializer
 import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.Json
+import java.io.File
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun SpeciesDetailScreen(
     speciesId: Int,
@@ -53,7 +61,8 @@ fun SpeciesDetailScreen(
 ) {
     LaunchedEffect(speciesId) { viewModel.load(speciesId) }
     val species by viewModel.state.collectAsStateWithLifecycle()
-    val imageFile by viewModel.imageFile.collectAsStateWithLifecycle()
+    val imageFiles by viewModel.imageFiles.collectAsStateWithLifecycle()
+    val imageLoading by viewModel.imageLoading.collectAsStateWithLifecycle()
 
     Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
         Column(modifier = Modifier.fillMaxSize()) {
@@ -88,23 +97,11 @@ fun SpeciesDetailScreen(
                         .weight(1f)
                         .verticalScroll(rememberScrollState()),
                 ) {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(260.dp)
-                            .background(MaterialTheme.colorScheme.surfaceVariant),
-                        contentAlignment = Alignment.Center,
-                    ) {
-                        if (imageFile != null && imageFile!!.exists()) {
-                            AsyncImage(
-                                model = imageFile,
-                                contentDescription = current.chineseName,
-                                modifier = Modifier.fillMaxSize(),
-                            )
-                        } else {
-                            MushroomIcon(size = 120.dp, capColor = Color.White, stemColor = Color.LightGray)
-                        }
-                    }
+                    SpeciesGallery(
+                        speciesName = current.chineseName,
+                        imageFiles = imageFiles,
+                        loading = imageLoading,
+                    )
                     Column(
                         modifier = Modifier.padding(20.dp),
                         verticalArrangement = Arrangement.spacedBy(20.dp),
@@ -119,6 +116,8 @@ fun SpeciesDetailScreen(
                         }
                         ToxicityBanner(
                             level = current.toxicityLevel,
+                            edibility = current.edibility,
+                            useType = current.useType,
                             chineseName = current.chineseName,
                             scientificName = current.scientificName,
                         )
@@ -144,12 +143,74 @@ fun SpeciesDetailScreen(
                         }
                         Divider()
                         Text(
-                            "仅供科普，不能作为采食建议。数据来源：${current.sourceUrl.ifBlank { "iflora.cn" }}",
+                            "仅供科普，不能作为采食建议。物种资料来自 iFlora，图片优先来自 iFlora，缺失时来自 iNaturalist。",
                             style = MaterialTheme.typography.bodySmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                         )
                         Spacer(Modifier.height(12.dp))
                     }
+                }
+            }
+        }
+    }
+}
+
+@OptIn(ExperimentalFoundationApi::class)
+@Composable
+private fun SpeciesGallery(
+    speciesName: String,
+    imageFiles: List<File>,
+    loading: Boolean,
+) {
+    val pagerState = rememberPagerState(pageCount = { imageFiles.size.coerceAtLeast(1) })
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.surfaceVariant),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        HorizontalPager(
+            state = pagerState,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(260.dp),
+        ) { page ->
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                when {
+                    imageFiles.isNotEmpty() -> AsyncImage(
+                        model = imageFiles[page],
+                        contentDescription = "$speciesName 图片 ${page + 1}/${imageFiles.size}",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier.fillMaxSize(),
+                    )
+                    loading -> CircularProgressIndicator(
+                        modifier = Modifier.size(32.dp),
+                        strokeWidth = 3.dp,
+                    )
+                    else -> MushroomIcon(
+                        size = 120.dp,
+                        capColor = Color.White,
+                        stemColor = Color.LightGray,
+                    )
+                }
+            }
+        }
+        if (imageFiles.isNotEmpty()) {
+            Row(
+                modifier = Modifier.padding(vertical = 10.dp),
+                horizontalArrangement = Arrangement.spacedBy(7.dp),
+                verticalAlignment = Alignment.CenterVertically,
+            ) {
+                imageFiles.indices.forEach { index ->
+                    Box(
+                        modifier = Modifier
+                            .size(if (pagerState.currentPage == index) 8.dp else 6.dp)
+                            .clip(RoundedCornerShape(50))
+                            .background(
+                                if (pagerState.currentPage == index) MaterialTheme.colorScheme.primary
+                                else MaterialTheme.colorScheme.outline,
+                            ),
+                    )
                 }
             }
         }

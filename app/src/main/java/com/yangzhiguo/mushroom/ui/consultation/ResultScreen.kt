@@ -104,6 +104,8 @@ fun ResultScreen(
                 if (top != null) {
                     ToxicityBanner(
                         level = top.toxicityLevel,
+                        edibility = top.edibility,
+                        useType = top.useType,
                         chineseName = top.chineseName,
                         scientificName = top.scientificName,
                     )

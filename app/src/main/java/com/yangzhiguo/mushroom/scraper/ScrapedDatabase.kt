@@ -9,7 +9,7 @@ import android.util.Log
 /**
  * Android SQLiteDatabase 包装的 scraped DB 写入器。
  *
- * 表结构与 iflora.cn API 一一对应：102 列（id + 100 字段 + source_url）。
+ * 表结构与 iflora.cn API 一一对应，并额外保存 source_type/source_url。
  * 用途：把抓取到的全量数据写入 app internal storage，再由 [com.yangzhiguo.mushroom.sync.ScraperToRoomMapper]
  * 映射回现有 Room SpeciesEntity。
  */
@@ -26,6 +26,15 @@ class ScrapedDatabase(context: Context) : SQLiteOpenHelper(
         db.execSQL("CREATE INDEX idx_species_chinese ON mushroom_specimen(species_chinese)")
         db.execSQL("CREATE INDEX idx_family_zh ON mushroom_specimen(family_chinese)")
         db.execSQL("CREATE INDEX idx_family_la ON mushroom_specimen(family_english)")
+        db.execSQL(
+            """
+            CREATE UNIQUE INDEX idx_specimen_name_source ON mushroom_specimen (
+                source_type,
+                lower(trim(coalesce(nullif(species_latin, ''), nullif(species_chinese, ''), species_common, 'id:' || id))),
+                lower(trim(coalesce(source_url, '')))
+            )
+            """.trimIndent(),
+        )
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
@@ -33,7 +42,7 @@ class ScrapedDatabase(context: Context) : SQLiteOpenHelper(
         onCreate(db)
     }
 
-    fun replaceAll(specimens: List<Specimen>, sourceUrl: (Specimen) -> String) {
+    fun replaceAll(records: List<ScrapedRecord>) {
         val db = writableDatabase
         db.beginTransaction()
         try {
@@ -63,14 +72,10 @@ class ScrapedDatabase(context: Context) : SQLiteOpenHelper(
                    climate_zone, cap, cap_context, lamella, stipe, stipe_context,
                    odor, calm_seed, other_data, is_approve, fill_user, ssu, tub2,
                    conditionally_fungus, substrate, strain_number, is_open, borrow_status,
-                   assigning_user, assigning_id, distribution_location, economic_use, source_url)
-                  VALUES (?,?,?,?,?,?, ?,?,?,?,?, ?,?,?,?,?, ?,?,?,?,?, ?,?,?,?,?, ?,?,?,?,?,?,
-                   ?,?,?,?, ?,?,?,?,?, ?,?,?,?,?, ?,?,?,?, ?,?,?,?,?, ?,?,?,?,?, ?,
-                   ?,?,?,?, ?,?,?,?,?, ?,?,?,?,?, ?,?,?,?,?, ?,
-                   ?,?,?,?, ?,?,?,?, ?,?,?,?,?, ?,?,?,?,?, ?,
-                   ?,?,?,?, ?,?,?,?,?, ?,?,?,?, ?,?,?,?, ?)""")
-            for (s in specimens) {
-                bindAll(stmt, s, sourceUrl(s))
+                   assigning_user, assigning_id, distribution_location, economic_use, source_type, source_url)
+                  VALUES (${List(INSERT_COLUMN_COUNT) { "?" }.joinToString(",")})""")
+            for (record in deduplicateRecords(records)) {
+                bindAll(stmt, record.specimen, record.sourceType, record.sourceUrl)
                 stmt.executeInsert()
             }
             db.setTransactionSuccessful()
@@ -91,12 +96,14 @@ class ScrapedDatabase(context: Context) : SQLiteOpenHelper(
 
     companion object {
         const val DB_NAME = "scraped_mushroom.db"
-        const val DB_VERSION = 1
+        const val DB_VERSION = 4
+        private const val INSERT_COLUMN_COUNT = 110
         private const val TAG = "ScrapedDatabase"
 
         private const val SCHEMA_SQL = """
             CREATE TABLE IF NOT EXISTS mushroom_specimen (
-                id INTEGER PRIMARY KEY,
+                local_id INTEGER PRIMARY KEY AUTOINCREMENT,
+                id INTEGER NOT NULL,
                 specimen_describe TEXT, specimen_group TEXT, collect_user TEXT, collect_unit TEXT, research_team TEXT,
                 resource_type TEXT, gather_num TEXT, collection_num TEXT, collect_time TEXT, collect_country TEXT,
                 collect_province TEXT, collect_city TEXT, collect_district TEXT, collect_village TEXT,
@@ -124,11 +131,17 @@ class ScrapedDatabase(context: Context) : SQLiteOpenHelper(
                 is_approve TEXT, fill_user TEXT, ssu TEXT, tub2 TEXT, conditionally_fungus TEXT,
                 substrate TEXT, strain_number TEXT, is_open INTEGER, borrow_status INTEGER,
                 assigning_user TEXT, assigning_id TEXT, distribution_location TEXT, economic_use TEXT,
+                source_type TEXT NOT NULL,
                 source_url TEXT
             )
         """
 
-        private fun bindAll(stmt: android.database.sqlite.SQLiteStatement, s: Specimen, sourceUrl: String) {
+        private fun bindAll(
+            stmt: android.database.sqlite.SQLiteStatement,
+            s: Specimen,
+            sourceType: String,
+            sourceUrl: String,
+        ) {
             var i = 1
             stmt.bindLong(i++, s.id)
             bindStr(stmt, i++, s.specimenDescribe)
@@ -238,8 +251,8 @@ class ScrapedDatabase(context: Context) : SQLiteOpenHelper(
             bindStr(stmt, i++, s.assigningId)
             bindStr(stmt, i++, s.distributionLocation)
             bindStr(stmt, i++, s.economicUse)
+            bindStr(stmt, i++, sourceType)
             bindStr(stmt, i++, sourceUrl)
-            bindStr(stmt, i++, com.yangzhiguo.mushroom.sync.ScraperToRoomMapper.extractPrimaryImageUrl(s))
         }
 
         private fun bindStr(stmt: android.database.sqlite.SQLiteStatement, idx: Int, v: String?) {

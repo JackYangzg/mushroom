@@ -45,7 +45,7 @@ fun SettingsScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("设置") },
+                title = { Text("数据库同步") },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.Rounded.ArrowBack, contentDescription = "返回")
@@ -134,14 +134,14 @@ fun SettingsScreen(
                     if (state is SyncState.Success) {
                         val ok = state as SyncState.Success
                         Text(
-                            "✓ 同步完成：${ok.totalSpecimens} 条  (${ok.elapsedMs / 1000}s)",
+                            "同步完成：${ok.totalSpecimens} 种（${ok.elapsedMs / 1000}s）。数据已刷新，无需重启 App。",
                             color = MaterialTheme.colorScheme.primary,
                             style = MaterialTheme.typography.bodyMedium,
                         )
                     }
                     if (state is SyncState.Error) {
                         Text(
-                            "✗ 同步失败：${(state as SyncState.Error).message}",
+                            "同步失败：${(state as SyncState.Error).message}。App 会继续运行，可稍后重试。",
                             color = MaterialTheme.colorScheme.error,
                             style = MaterialTheme.typography.bodyMedium,
                         )

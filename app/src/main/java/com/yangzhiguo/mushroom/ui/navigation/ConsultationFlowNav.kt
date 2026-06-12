@@ -21,7 +21,9 @@ import com.yangzhiguo.mushroom.ui.recognition.RecognitionScreen
 fun ConsultationFlowNav(
     onExit: () -> Unit,
     useAi: Boolean = false,
+    startWithGallery: Boolean = false,
     onOpen3D: (String) -> Unit = {},
+    onOpenSpecies: (Int) -> Unit = {},
     navController: NavHostController = rememberNavController(),
 ) {
     val state = rememberConsultationFlowState()
@@ -33,17 +35,25 @@ fun ConsultationFlowNav(
         composable(Route.Camera.path) {
             com.yangzhiguo.mushroom.ui.camera.CameraScreen(
                 onPhotoReady = { uri ->
-                    state.setPhotoUri(uri)
+                    state.addPhoto(uri)
+                    navController.navigate(Route.PhotoPreview.path)
+                },
+                onPhotosReady = { uris ->
+                    state.addPhotos(uris)
                     navController.navigate(Route.PhotoPreview.path)
                 },
                 onClose = onExit,
+                openGalleryOnLaunch = startWithGallery,
             )
         }
         composable(Route.PhotoPreview.path) {
             com.yangzhiguo.mushroom.ui.camera.PhotoPreviewScreen(
-                photoUri = state.photoUri,
-                onRetake = { navController.popBackStack() },
-                onUseThis = {
+                photoUris = state.photoUris,
+                maxPhotos = com.yangzhiguo.mushroom.ui.consultation.controller.ConsultationFlowState.MAX_PHOTOS,
+                onBack = { navController.popBackStack() },
+                onAddMore = { navController.popBackStack() },
+                onRemove = state::removePhoto,
+                onUsePhotos = {
                     if (useAi) {
                         val uri = state.photoUri?.toString().orEmpty()
                         navController.navigate(Route.Recognition.build(uri)) {
@@ -56,11 +66,12 @@ fun ConsultationFlowNav(
             )
         }
         composable(Route.Recognition.PATTERN) {
-            val uri = state.photoUri?.toString().orEmpty()
             RecognitionScreen(
-                photoUri = uri,
+                photoUris = state.photoUris.map { it.toString() },
                 onOpen3D = onOpen3D,
+                onOpenSpecies = onOpenSpecies,
                 onRetake = {
+                    state.clearPhotos()
                     navController.navigate(Route.Camera.path) {
                         popUpTo(Route.Recognition.PATTERN) { inclusive = true }
                         launchSingleTop = true

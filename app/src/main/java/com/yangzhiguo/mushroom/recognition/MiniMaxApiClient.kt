@@ -6,7 +6,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.flowOn
+import kotlinx.coroutines.launch
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
@@ -31,6 +32,7 @@ import java.util.concurrent.atomic.AtomicBoolean
  *  - 连接级取消：close channel 时关闭连接
  *  - 30s 读超时（设计文档 §2.3）
  */
+@OptIn(ExperimentalSerializationApi::class)
 class MiniMaxApiClient(
     private val apiKey: String = BuildConfig.MINIMAX_API_KEY,
     private val baseUrl: String = BuildConfig.MINIMAX_API_BASE,
@@ -55,6 +57,16 @@ class MiniMaxApiClient(
         imageDataUrl: String,
         userPrompt: String = "请识别这张图片中的蘑菇。",
         systemPrompt: String = DEFAULT_SYSTEM_PROMPT,
+    ): Flow<StreamEvent> = streamRecognize(
+        imageDataUrls = listOf(imageDataUrl),
+        userPrompt = userPrompt,
+        systemPrompt = systemPrompt,
+    )
+
+    fun streamRecognize(
+        imageDataUrls: List<String>,
+        userPrompt: String = "请综合分析这些图片中的同一株蘑菇。",
+        systemPrompt: String = DEFAULT_SYSTEM_PROMPT,
     ): Flow<StreamEvent> = callbackFlow {
         val parser = RecognitionStreamParser(json)
         val cancelled = AtomicBoolean(false)
@@ -62,7 +74,7 @@ class MiniMaxApiClient(
         val requestBody = buildRequestBody(
             systemPrompt = systemPrompt,
             userPrompt = userPrompt,
-            imageDataUrl = imageDataUrl,
+            imageDataUrls = imageDataUrls,
         ).toByteArray(Charsets.UTF_8)
 
         val url = URI.create("$baseUrl/v1/text/chatcompletion_v2").toURL()
@@ -78,32 +90,34 @@ class MiniMaxApiClient(
             instanceFollowRedirects = true
         }
 
-        // channel close → 取消连接
-        awaitClose {
-            if (cancelled.compareAndSet(false, true)) {
+        val requestJob = launch(Dispatchers.IO) {
+            try {
+                conn.outputStream.use { it.write(requestBody) }
+                val code = conn.responseCode
+                if (code !in 200..299) {
+                    val errBody = runCatching {
+                        conn.errorStream?.bufferedReader()?.use(BufferedReader::readText) ?: ""
+                    }.getOrDefault("")
+                    throw RuntimeException("MiniMax HTTP $code: ${errBody.take(500)}")
+                }
+                conn.inputStream.bufferedReader(Charsets.UTF_8).use { reader ->
+                    processSse(reader, parser) { cancelled.get() }
+                }
+            } catch (t: Throwable) {
+                Log.w(tag, "streamRecognize failed: ${t.message}")
+                if (!cancelled.get()) trySend(StreamEvent.StreamError(t))
+            } finally {
                 runCatching { conn.disconnect() }
+                close()
             }
         }
 
-        try {
-            conn.outputStream.use { it.write(requestBody) }
-            val code = conn.responseCode
-            if (code !in 200..299) {
-                val errBody = runCatching { conn.errorStream?.bufferedReader()?.use(BufferedReader::readText) ?: "" }
-                    .getOrDefault("")
-                throw RuntimeException("MiniMax HTTP $code: ${errBody.take(500)}")
-            }
-            conn.inputStream.bufferedReader(Charsets.UTF_8).use { reader ->
-                processSse(reader, parser) { cancelled.get() }
-            }
-        } catch (t: Throwable) {
-            Log.w(tag, "streamRecognize failed: ${t.message}")
-            if (!cancelled.get()) trySend(StreamEvent.StreamError(t))
-        } finally {
+        awaitClose {
+            cancelled.set(true)
+            requestJob.cancel()
             runCatching { conn.disconnect() }
-            close()
         }
-    }.flowOn(Dispatchers.IO)
+    }
 
     /**
      * 逐行解析 SSE。`data: {json}\n\n` 一帧一帧喂给 RecognitionStreamParser，
@@ -160,7 +174,7 @@ class MiniMaxApiClient(
     private fun buildRequestBody(
         systemPrompt: String,
         userPrompt: String,
-        imageDataUrl: String,
+        imageDataUrls: List<String>,
     ): String {
         val body = ChatRequest(
             model = model,
@@ -173,10 +187,8 @@ class MiniMaxApiClient(
                 ),
                 Message(
                     role = "user",
-                    content = listOf(
-                        ContentPart.Text(userPrompt),
-                        ContentPart.ImageUrl(imageDataUrl),
-                    ),
+                    content = listOf(ContentPart.Text(userPrompt)) +
+                        imageDataUrls.filter { it.isNotBlank() }.map(ContentPart::ImageUrl),
                 ),
             ),
         )
@@ -235,11 +247,12 @@ class MiniMaxApiClient(
     )
 
     companion object {
-        /** 只要求可观察特征与结构化候选，不向用户暴露模型内部推理。 */
+        /** 输出可展示的跨图片观察分析，最后给出结构化候选。 */
         const val DEFAULT_SYSTEM_PROMPT =
-            "你是一名真菌学资料助手。请只描述图片中可直接观察到的特征" +
-                "（菌盖、菌褶、菌柄、菌环、菌托与生境），不要输出内部推理过程。" +
-                "最后输出 JSON 数组，给出最多 3 个候选；每项包含 scientificName、commonName、" +
-                "confidence 和 reason，其中 reason 只能写可观察特征。不可给出食用建议。"
+            "你是一名真菌学资料助手。用户会提供同一株蘑菇的多角度图片。" +
+                "请先用中文流式输出可展示的观察分析，按图片综合描述菌盖、菌褶、菌柄、菌环、菌托和生境，" +
+                "说明不同图片如何相互印证；只陈述可观察证据，不输出隐藏推理或食用建议。" +
+                "最后单独输出 JSON 数组，给出最多 3 个候选；每项包含 scientificName、commonName、" +
+                "confidence 和 reason，reason 只写支持该候选的可观察特征。"
     }
 }

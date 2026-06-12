@@ -1,32 +1,24 @@
 package com.yangzhiguo.scraper
 
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.runBlocking
-import kotlinx.coroutines.sync.Semaphore
-import kotlinx.coroutines.sync.withPermit
 import org.slf4j.LoggerFactory
 import java.nio.file.Files
 import java.nio.file.Path
 import java.nio.file.Paths
 import java.time.Duration
 import java.time.Instant
-import java.util.concurrent.atomic.AtomicInteger
 import kotlin.system.exitProcess
 
 /**
  * 临时爬虫入口（**仅元数据，不下载图片**）。
- *  1. 遍历 page=1..maxPage（默认 820）抓 specimen 列表 JSON
- *  2. 写入 SQLite（data/mushroom.db），每条记录附 source_url 用于反查
+ *  1. 依次抓取四个 iFlora 列表，均从 page=1 到首个空页
+ *  2. 写入 SQLite（data/mushroom.db），每条记录附 source_type 和 source_url
  *  3. 打印统计
  *
  * 用法（项目根目录）：
- *   ./gradlew :scraper:run                                # 全量
- *   ./gradlew :scraper:run --args="--pages 1 5"           # 仅前 5 页（烟测）
- *   ./gradlew :scraper:run --args="--fresh"               # 清库重抓
- *   ./gradlew :scraper:run --args="--resume"              # 跳过已抓页面
+ *   ./gradlew -p scraper run                              # 更新四类数据源
+ *   ./gradlew -p scraper run --args="--fresh"             # 清库重抓
+ *   ./gradlew -p scraper run --args="--resume"            # 保留现有数据并更新
  */
 fun main(args: Array<String>) = runBlocking {
     val log = LoggerFactory.getLogger("Main")
@@ -49,16 +41,14 @@ fun main(args: Array<String>) = runBlocking {
 
     log.info("data dir   : $dataDir")
     log.info("db path    : $dbPath")
-    log.info("pages      : ${opts.startPage}..${opts.endPage}")
     log.info("pageSize   : ${opts.pageSize}")
-    log.info("pageConcur : ${opts.pageConcurrency}")
     log.info("fresh      : ${opts.fresh}, resume: ${opts.resume}")
 
     Database(dbPath).use { db ->
         val api = ApiClient()
         val started = Instant.now()
 
-        scrapeAllPages(api, db, opts)
+        scrapeAllSources(api, db, opts)
 
         val dur = Duration.between(started, Instant.now())
         log.info("===== DONE =====")
@@ -72,10 +62,7 @@ fun main(args: Array<String>) = runBlocking {
 }
 
 private data class Options(
-    val startPage: Int = 1,
-    val endPage: Int = 820,
     val pageSize: Int = 6,
-    val pageConcurrency: Int = 6,
     val fresh: Boolean = false,
     val resume: Boolean = false,
     val dataDir: Path? = null,
@@ -86,9 +73,7 @@ private fun parseArgs(args: Array<String>): Options {
     var i = 0
     while (i < args.size) {
         when (args[i]) {
-            "--pages" -> { o = o.copy(startPage = args[++i].toInt(), endPage = args[++i].toInt()) }
             "--size" -> o = o.copy(pageSize = args[++i].toInt())
-            "--page-concurrency" -> o = o.copy(pageConcurrency = args[++i].toInt())
             "--fresh" -> o = o.copy(fresh = true)
             "--resume" -> o = o.copy(resume = true)
             "--data-dir" -> o = o.copy(dataDir = Paths.get(args[++i]))
@@ -106,63 +91,53 @@ private fun printHelp() {
         Mushroom Scraper — temporary offline metadata crawler for iflora.cn
 
         Usage:
-          ./gradlew :scraper:run --args="[options]"
+          ./gradlew -p scraper run --args="[options]"
 
         Options:
-          --pages A B              Page range (1-indexed, default: 1 820)
           --size N                 Records per page (default: 6)
-          --page-concurrency N     Concurrent page requests (default: 6)
           --fresh                  Wipe existing DB before scraping
           --resume                 Skip pages already represented in DB
           --data-dir PATH          Override data output directory
 
         Output:
-          data/mushroom.db   — SQLite with table mushroom_specimen (id + 100 API fields + source_url)
+          data/mushroom.db   — SQLite with table mushroom_specimen (API fields + source_type + source_url)
         """.trimIndent()
     )
 }
 
-private suspend fun scrapeAllPages(api: ApiClient, db: Database, opts: Options) {
+private suspend fun scrapeAllSources(api: ApiClient, db: Database, opts: Options) {
     val log = LoggerFactory.getLogger("Scrape")
-    val semaphore = Semaphore(opts.pageConcurrency)
-    val total = opts.endPage - opts.startPage + 1
-    val done = AtomicInteger(0)
-    val errored = AtomicInteger(0)
     val started = Instant.now()
+    val seen = mutableSetOf<String>()
+    if (!opts.resume) db.deleteAll()
 
-    coroutineScope {
-        val jobs = (opts.startPage..opts.endPage).map { page ->
-            async(Dispatchers.IO) {
-                semaphore.withPermit {
-                    try {
-                        if (opts.resume && db.countSpecimens() > 0) {
-                            val expected = (page - opts.startPage + 1) * opts.pageSize
-                            val current = db.countSpecimens().toInt()
-                            if (current >= expected) {
-                                log.debug("page {} skipped (resume)", page)
-                                return@async
-                            }
-                        }
-                        val resp = api.fetchPage(page.toLong(), opts.pageSize)
-                        val records = resp.data?.records.orEmpty()
-                        for (s in records) {
-                            val srcUrl = "https://fungi.iflora.cn/#/species_specimen/retrieve?page=$page"
-                            db.upsertSpecimen(s, srcUrl)
-                        }
-                        val n = done.incrementAndGet()
-                        if (n % 50 == 0 || n == total) {
-                            val elapsed = Duration.between(started, Instant.now()).toSeconds()
-                            log.info("pages {}/{} ({}%) — elapsed {}s — specimens={}",
-                                n, total, n * 100 / total, elapsed, db.countSpecimens())
-                        }
-                    } catch (t: Throwable) {
-                        errored.incrementAndGet()
-                        log.error("page {} failed: {}", page, t.toString())
-                    }
+    for (source in DataSource.entries) {
+        var page = 1
+        var sourceCount = 0
+        while (true) {
+            val specimens = api.fetchPage(source, page, opts.pageSize)
+            if (specimens.isEmpty()) {
+                log.info("{} stopped at empty page {}", source.name, page)
+                break
+            }
+            for (specimen in specimens) {
+                val record = ScrapedRecord(specimen, source, source.detailUrl(specimen))
+                if (seen.add(record.dedupeKey)) {
+                    db.upsertSpecimen(record.specimen, record.sourceType, record.sourceUrl)
+                    sourceCount++
                 }
             }
+            db.flush()
+            if (page % 50 == 0) {
+                log.info("{} page {} — source records={} — database={}",
+                    source.name, page, sourceCount, db.countSpecimens())
+            }
+            page++
+            check(page <= 100_000) {
+                "${source.name} exceeded pagination safety limit without an empty page"
+            }
         }
-        jobs.awaitAll()
+        log.info("{} complete: {} unique records", source.name, sourceCount)
     }
-    log.info("scrape done: {} pages ok, {} errored", done.get(), errored.get())
+    log.info("all sources complete in {}s", Duration.between(started, Instant.now()).toSeconds())
 }

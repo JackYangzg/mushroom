@@ -12,8 +12,14 @@ class SpeciesRepositoryImpl @Inject constructor(
     private val dao: SpeciesDao,
 ) : SpeciesRepository {
     override fun observeAll(): Flow<List<SpeciesEntity>> = dao.observeAll()
-    override fun filterByUseType(useType: UseType): Flow<List<SpeciesEntity>> = dao.filterByUseType(useType)
-    override fun search(query: String): Flow<List<SpeciesEntity>> = dao.searchByName(query)
+    override fun filterByUseType(useType: UseType): Flow<List<SpeciesEntity>> = when (useType) {
+        UseType.EDIBLE -> dao.filterEdible()
+        UseType.MEDICINAL -> dao.filterMedicinal()
+        UseType.POISONOUS -> dao.filterPoisonous()
+        UseType.CAUTION -> dao.filterCaution()
+        UseType.UNREPORTED -> dao.observeAll()
+    }
+    override fun search(query: String): Flow<List<SpeciesEntity>> = dao.searchByName(query.trim())
     override fun observeFavorites(): Flow<List<SpeciesEntity>> = dao.observeFavorites()
     override suspend fun findById(id: Int): SpeciesEntity? = dao.findById(id)
     override suspend fun findByIds(ids: List<Int>): List<SpeciesEntity> = dao.findByIds(ids)

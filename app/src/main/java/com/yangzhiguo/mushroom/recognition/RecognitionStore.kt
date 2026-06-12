@@ -3,6 +3,7 @@ package com.yangzhiguo.mushroom.recognition
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.yangzhiguo.mushroom.data.local.SpeciesDao
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -33,6 +34,8 @@ import javax.inject.Inject
 class RecognitionStore @Inject constructor(
     private val api: MiniMaxApiClient,
     private val repository: MushroomRepository,
+    private val historyRepository: RecognitionHistoryRepository,
+    private val speciesDao: SpeciesDao,
 ) : ViewModel() {
 
     private val tag = "RecognitionStore"
@@ -57,6 +60,17 @@ class RecognitionStore @Inject constructor(
      * @param photoUri 可选，本地文件 URI（仅用于回显）
      */
     fun startRecognition(imageDataUrl: String, photoUri: String? = null) {
+        startRecognition(listOf(imageDataUrl), listOfNotNull(photoUri))
+    }
+
+    fun startRecognition(imageDataUrls: List<String>, photoUris: List<String>) {
+        if (imageDataUrls.isEmpty()) {
+            _state.value = RecognitionState.Error(
+                message = "无法读取所选图片，请重新选择。",
+                retryable = false,
+            )
+            return
+        }
         // 防止重复启动
         if (_state.value is RecognitionState.Recognizing ||
             _state.value is RecognitionState.Uploading
@@ -67,7 +81,10 @@ class RecognitionStore @Inject constructor(
         retried = false
         thinkingAccum = ""
         _selectedImageUrl.value = null
-        runRecognition(imageDataUrl, photoUri)
+        _selectedMushroom.value = null
+        _fallbackName.value = ""
+        _candidateSpeciesIds.value = emptyMap()
+        runRecognition(imageDataUrls, photoUris)
     }
 
     /** 取消当前识别任务，回到 Canceled。 */
@@ -84,6 +101,9 @@ class RecognitionStore @Inject constructor(
         thinkingAccum = ""
         retried = false
         _selectedImageUrl.value = null
+        _selectedMushroom.value = null
+        _fallbackName.value = ""
+        _candidateSpeciesIds.value = emptyMap()
         _state.value = RecognitionState.Idle
     }
 
@@ -100,7 +120,7 @@ class RecognitionStore @Inject constructor(
 
     // ---- 内部 ----
 
-    private fun runRecognition(imageDataUrl: String, photoUri: String?) {
+    private fun runRecognition(imageDataUrls: List<String>, photoUris: List<String>) {
         // 启动期 guard
         try {
             ApiKeyGuard.require()
@@ -112,18 +132,16 @@ class RecognitionStore @Inject constructor(
         currentJob = viewModelScope.launch {
             _state.value = RecognitionState.Uploading
 
-            val stream = api.streamRecognize(imageDataUrl)
+            val stream = api.streamRecognize(imageDataUrls)
             val collected = mutableListOf<Candidate>()
-            var lastThinking = ""
 
             try {
                 stream.collect { event ->
                     when (event) {
                         is StreamEvent.ThinkingChunk -> {
                             thinkingAccum += event.delta
-                            lastThinking = thinkingAccum
                             _state.value = RecognitionState.Recognizing(
-                                thinkingSoFar = lastThinking,
+                                thinkingSoFar = thinkingAccum,
                                 isThinkingExpanded = true,
                             )
                         }
@@ -141,7 +159,7 @@ class RecognitionStore @Inject constructor(
                 if (!retried) {
                     retried = true
                     Log.w(tag, "触发自动重试 1 次")
-                    runRecognition(imageDataUrl, photoUri)
+                    runRecognition(imageDataUrls, photoUris)
                     return@launch
                 }
                 _state.value = RecognitionState.Error(
@@ -163,7 +181,20 @@ class RecognitionStore @Inject constructor(
                 )
                 return@launch
             }
-            _state.value = RecognitionState.Recognized(result = result, photoUri = photoUri)
+            _state.value = RecognitionState.Recognized(result = result, photoUris = photoUris)
+            _candidateSpeciesIds.value = result.candidates.mapNotNull { candidate ->
+                speciesDao.findBestNameMatch(
+                    scientificName = candidate.scientificName.trim(),
+                    commonName = candidate.commonName.orEmpty().trim(),
+                )?.let {
+                    candidate.scientificName to it.id
+                }
+            }.toMap()
+            runCatching {
+                historyRepository.save(result = result, photoUris = photoUris)
+            }.onFailure {
+                Log.w(tag, "保存识别历史失败: ${it.message}")
+            }
 
             // 自动触发本地检索（用户在识别页等结果时无需点选）
             resolveLookup(result)
@@ -212,6 +243,9 @@ class RecognitionStore @Inject constructor(
 
     private val _fallbackName = MutableStateFlow<String>("")
     val fallbackName: StateFlow<String> = _fallbackName.asStateFlow()
+
+    private val _candidateSpeciesIds = MutableStateFlow<Map<String, Int>>(emptyMap())
+    val candidateSpeciesIds: StateFlow<Map<String, Int>> = _candidateSpeciesIds.asStateFlow()
 
     override fun onCleared() {
         super.onCleared()

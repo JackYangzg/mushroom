@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -20,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import com.yangzhiguo.mushroom.data.local.SpeciesEntity
+import com.yangzhiguo.mushroom.domain.model.Edibility
 import com.yangzhiguo.mushroom.domain.model.ToxicityLevel
 import com.yangzhiguo.mushroom.domain.model.UseType
 
@@ -46,7 +48,7 @@ fun SpeciesRow(
                 color = MaterialTheme.colorScheme.surfaceVariant,
                 shape = RoundedCornerShape(12.dp),
             ) {
-                Box(contentAlignment = Alignment.Center) { MushroomIcon(size = 46.dp) }
+                SpeciesThumbnail(species = species, modifier = Modifier.fillMaxSize())
             }
             Column(
                 modifier = Modifier.weight(1f),
@@ -78,7 +80,7 @@ private fun RiskLabel(species: SpeciesEntity) {
         species.toxicityLevel == ToxicityLevel.DEADLY -> "高风险"
         species.toxicityLevel == ToxicityLevel.TOXIC -> "有毒"
         species.useType == UseType.CAUTION -> "需谨慎"
-        species.useType == UseType.EDIBLE -> "有食用记录"
+        species.edibility == Edibility.EDIBLE -> "有食用记录"
         species.useType == UseType.MEDICINAL -> "药用记录"
         else -> "资料记录"
     }

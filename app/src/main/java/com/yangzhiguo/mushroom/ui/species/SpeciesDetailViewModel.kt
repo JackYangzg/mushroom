@@ -22,15 +22,27 @@ class SpeciesDetailViewModel @Inject constructor(
     private val _state = MutableStateFlow<SpeciesEntity?>(null)
     val state: StateFlow<SpeciesEntity?> = _state.asStateFlow()
 
-    private val _imageFile = MutableStateFlow<File?>(null)
-    val imageFile: StateFlow<File?> = _imageFile.asStateFlow()
+    private val _imageFiles = MutableStateFlow<List<File>>(emptyList())
+    val imageFiles: StateFlow<List<File>> = _imageFiles.asStateFlow()
+
+    private val _imageLoading = MutableStateFlow(false)
+    val imageLoading: StateFlow<Boolean> = _imageLoading.asStateFlow()
 
     fun load(id: Int) {
         viewModelScope.launch {
             val sp = repo.findById(id)
             _state.value = sp
-            // 触发图片懒加载：先看 DB imageLocalPath，命中则直接返回；否则远端拉
-            _imageFile.value = imageCache.getOrFetch(id, sp?.imageUrl)
+            _imageLoading.value = true
+            try {
+                _imageFiles.value = imageCache.getOrFetchAll(
+                    specimenId = id,
+                    remoteUrl = sp?.imageUrl,
+                    scientificName = sp?.scientificName,
+                    sourceUrl = sp?.sourceUrl,
+                )
+            } finally {
+                _imageLoading.value = false
+            }
         }
     }
 

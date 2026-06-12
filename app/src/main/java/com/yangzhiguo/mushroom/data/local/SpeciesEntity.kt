@@ -46,6 +46,7 @@ data class SpeciesEntity(
     @ColumnInfo("model_3d_url") val model3dUrl: String? = null,
     @ColumnInfo("dna_barcode") val dnaBarcode: String? = null,
     @ColumnInfo("source_url") val sourceUrl: String = "",
+    @ColumnInfo("source_types") val sourceTypes: String = "",
     @ColumnInfo("image_url") val imageUrl: String? = null,                // 远端主图 URL，scrape 时填
     @ColumnInfo("image_local_path") val imageLocalPath: String? = null,    // 本地缓存路径（filesDir 相对），查看页面后填充
     @ColumnInfo("is_favorite") val isFavorite: Boolean = false,           // 我的收藏(用户标记)

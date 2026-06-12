@@ -36,7 +36,8 @@ import com.yangzhiguo.mushroom.ui.components.MushroomIcon
  */
 @Composable
 fun HomeScreen(
-    onStartAiRecognition: () -> Unit = {},
+    onTakePhoto: () -> Unit = {},
+    onChooseFromGallery: () -> Unit = {},
 ) {
     Surface(color = MaterialTheme.colorScheme.background) {
         Column(
@@ -72,7 +73,7 @@ fun HomeScreen(
             )
             Spacer(Modifier.weight(1f))
             Button(
-                onClick = onStartAiRecognition,
+                onClick = onTakePhoto,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(56.dp),
@@ -85,7 +86,7 @@ fun HomeScreen(
             }
             Spacer(Modifier.height(10.dp))
             OutlinedButton(
-                onClick = onStartAiRecognition,
+                onClick = onChooseFromGallery,
                 modifier = Modifier
                     .fillMaxWidth()
                     .height(52.dp),

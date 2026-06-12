@@ -85,21 +85,28 @@ object ScraperToRoomMapper {
     }
 
     fun deriveUseType(s: Specimen): UseType = when {
-        s.medicinalFungus == "是" -> UseType.MEDICINAL
-        s.edibleFungus == "是" -> UseType.EDIBLE
-        s.toxicFungus == "是" -> UseType.POISONOUS
+        hasRecord(s.conditionallyFungus) -> UseType.CAUTION
+        hasRecord(s.medicinalFungus) -> UseType.MEDICINAL
+        hasRecord(s.edibleFungus) -> UseType.EDIBLE
+        hasRecord(s.toxicFungus) -> UseType.POISONOUS
         else -> UseType.UNREPORTED
     }
 
     fun deriveToxicityLevel(s: Specimen): ToxicityLevel = when {
-        s.toxicFungus == "是" -> ToxicityLevel.TOXIC
+        hasRecord(s.toxicFungus) -> ToxicityLevel.TOXIC
         else -> ToxicityLevel.NONE
     }
 
     fun deriveEdibility(s: Specimen, toxicity: ToxicityLevel): Edibility = when {
+        hasRecord(s.edibleFungus) -> Edibility.EDIBLE
         toxicity == ToxicityLevel.TOXIC -> Edibility.INEDIBLE
-        s.edibleFungus == "是" -> Edibility.EDIBLE
         else -> Edibility.UNKNOWN
+    }
+
+    internal fun hasRecord(value: String?): Boolean {
+        val normalized = value?.trim()?.lowercase().orEmpty()
+        return normalized.isNotEmpty() &&
+            normalized !in setOf("0", "否", "无", "none", "false", "null", "未知")
     }
 
     private fun truncate(s: String?, max: Int = 200): String =

@@ -20,6 +20,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.yangzhiguo.mushroom.R
+import com.yangzhiguo.mushroom.BuildConfig
+import com.yangzhiguo.mushroom.ui.components.MarkdownText
 
 /**
  * 关于页面(从"我的"tab 进入,带返回按钮)。
@@ -61,24 +63,24 @@ fun AboutScreen(onBack: () -> Unit = {}) {
                     .padding(16.dp)
                     .verticalScroll(rememberScrollState()),
             ) {
-                Text(
-                    text = """
-                        **Mushroom 蘑菇识别** v1.0
+                MarkdownText(
+                    markdown = """
+                        # 蘑菇鉴别
+                        版本 ${BuildConfig.VERSION_NAME}
 
-                        一款辅助认识野生蘑菇的 Android App。
-                        拍一张照片，App 会根据可观察特征提供候选学名，
-                        并结合本地图鉴展示辨识资料。
+                        本 App 用于辅助认识蘑菇。你可以拍照或从相册选择图片，获得 AI 生成的候选名称，并在同步后的本地图鉴中检索物种资料。
 
-                        **数据来源**
-                        - AI 识别：MiniMax M3
-                        - 学术参考：fungi.iflora.cn / mushroom.iflora.cn
-                        - 蘑菇图鉴：本地种子库（assets/mushroom_index.json）
+                        ## 数据来源
+                        - 物种目录、有食用记录与毒性风险列表：中科院昆明植物研究所 iFlora 真菌子平台 `fungi.iflora.cn`
+                        - 3D 学术参考：`mushroom.iflora.cn`
+                        - 图片识别：MiniMax 模型服务
 
-                        **特别提醒**
-                        本 App 仅供学习与兴趣参考，**不可作为食用或药用依据**。
-                        详见「免责声明」页。
+                        ## 数据更新
+                        图鉴数据可在“我的 > 数据库同步”中手动更新。同步成功后立即生效，无需重启 App。
+
+                        ## 使用边界
+                        AI 和数据库记录都可能不完整或存在误差。本 App **不能确认食用安全性，也不能替代真菌学、医疗或食品安全专业意见**。
                     """.trimIndent(),
-                    style = MaterialTheme.typography.bodyMedium,
                     modifier = Modifier.padding(top = 12.dp),
                 )
             }

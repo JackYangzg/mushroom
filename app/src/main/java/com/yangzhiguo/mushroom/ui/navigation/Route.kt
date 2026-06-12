@@ -22,6 +22,11 @@ sealed class Route(val path: String) {
 
     // ---- "我的" tab 内部子页(从 ProfileScreen 跳转)----
     data object MyFavorites : Route("my_favorites")
+    data object RecognitionHistory : Route("recognition_history")
+    data object RecognitionHistoryDetail : Route("recognition_history/{historyId}") {
+        const val ARG_HISTORY_ID = "historyId"
+        fun build(id: String): String = "recognition_history/$id"
+    }
     data object Disclaimer : Route("disclaimer")
     data object About : Route("about")
 
@@ -31,7 +36,12 @@ sealed class Route(val path: String) {
     data object Result : Route("flow/result")
 
     /** 拍照 → AI 识别（设计文档 §2 主链路）。 */
-    data object AiRecognitionFlow : Route("flow/ai_recognition")
+    data object AiRecognitionFlow : Route("flow/ai_recognition/{source}") {
+        const val ARG_SOURCE = "source"
+        const val CAMERA = "camera"
+        const val GALLERY = "gallery"
+        fun build(source: String) = "flow/ai_recognition/$source"
+    }
 
     // ---- 拍照识别流程（设计文档 §2）----
 

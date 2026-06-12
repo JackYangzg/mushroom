@@ -24,6 +24,19 @@ data class PageData(
     val pages: Long = 0,
 )
 
+@Serializable
+data class SpeciesApiResponse(
+    val code: Int = 0,
+    val msg: String? = null,
+    val data: SpeciesPageData? = null,
+)
+
+@Serializable
+data class SpeciesPageData(
+    val total: Long = 0,
+    val specimenSpeciesList: List<Specimen> = emptyList(),
+)
+
 /**
  * 单条 specimen。仅保留可持久化的字段；
  * API 中的图片列表（sysFileList / kibSpeciesPictures / 各种 FileList）由 JsonElement 占位，

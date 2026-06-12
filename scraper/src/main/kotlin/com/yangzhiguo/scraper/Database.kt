@@ -11,7 +11,7 @@ import java.sql.Types
  * SQLite 持久化层。Xerial JDBC 直接操作 Standard SQLite 文件，
  * 与 Android Room 完全兼容（Room 底层就是 SQLite）。
  *
- * 仅持久化蘑菇元数据 + source_url；
+ * 仅持久化蘑菇元数据 + source_type + source_url；
  * 图片相关的字段（sysFileList / kibSpeciesPictures）已从 Specimen 移除，
  * 抓取到的链接以 source_url 形式保留供反查。
  */
@@ -46,9 +46,17 @@ class Database(private val dbPath: Path) : AutoCloseable {
             }
         }
         conn.commit()
+        ensureSourceTypeColumn()
+        removeDuplicateSourceNameLinks()
+        createSourceNameLinkUniqueIndex()
     }
 
-    fun upsertSpecimen(s: Specimen, sourceUrl: String) {
+    fun deleteAll() {
+        conn.createStatement().use { it.executeUpdate("DELETE FROM mushroom_specimen") }
+        conn.commit()
+    }
+
+    fun upsertSpecimen(s: Specimen, sourceType: String, sourceUrl: String) {
         conn.prepareStatement(
             """
             INSERT OR REPLACE INTO mushroom_specimen (
@@ -160,8 +168,10 @@ class Database(private val dbPath: Path) : AutoCloseable {
                 assigning_id,
                 distribution_location,
                 economic_use,
+                source_type,
                 source_url
             ) VALUES (
+                ?,
                 ?,
                 ?,
                 ?,
@@ -383,9 +393,13 @@ class Database(private val dbPath: Path) : AutoCloseable {
             setNString(ps, i++, s.assigningId)
             setNString(ps, i++, s.distributionLocation)
             setNString(ps, i++, s.economicUse)
+            setNString(ps, i++, sourceType)
             setNString(ps, i++, sourceUrl)
             ps.executeUpdate()
         }
+    }
+
+    fun flush() {
         conn.commit()
     }
 
@@ -393,6 +407,63 @@ class Database(private val dbPath: Path) : AutoCloseable {
         it.executeQuery("SELECT COUNT(*) FROM mushroom_specimen").use { rs ->
             rs.next(); rs.getLong(1)
         }
+    }
+
+    private fun ensureSourceTypeColumn() {
+        val hasColumn = conn.createStatement().use { statement ->
+            statement.executeQuery("PRAGMA table_info(mushroom_specimen)").use { result ->
+                generateSequence { if (result.next()) result.getString("name") else null }
+                    .any { it == "source_type" }
+            }
+        }
+        if (!hasColumn) {
+            conn.createStatement().use {
+                it.executeUpdate(
+                    "ALTER TABLE mushroom_specimen ADD COLUMN source_type TEXT NOT NULL DEFAULT 'UNKNOWN'",
+                )
+            }
+            conn.commit()
+        }
+        conn.createStatement().use {
+            it.execute("DROP INDEX IF EXISTS idx_specimen_name_source")
+        }
+        conn.commit()
+    }
+
+    private fun removeDuplicateSourceNameLinks() {
+        conn.createStatement().use { statement ->
+            statement.executeUpdate(
+                """
+                DELETE FROM mushroom_specimen
+                WHERE rowid NOT IN (
+                    SELECT MIN(rowid)
+                    FROM mushroom_specimen
+                    GROUP BY source_type, lower(trim(
+                        coalesce(nullif(species_latin, ''), nullif(species_chinese, ''), species_common, 'id:' || id)
+                    )), lower(trim(coalesce(source_url, '')))
+                )
+                """.trimIndent(),
+            )
+        }
+        conn.commit()
+    }
+
+    private fun createSourceNameLinkUniqueIndex() {
+        conn.createStatement().use {
+            it.execute(
+                """
+                CREATE UNIQUE INDEX IF NOT EXISTS idx_specimen_name_source
+                ON mushroom_specimen (
+                    source_type,
+                    lower(trim(
+                        coalesce(nullif(species_latin, ''), nullif(species_chinese, ''), species_common, 'id:' || id)
+                    )),
+                    lower(trim(coalesce(source_url, '')))
+                )
+                """.trimIndent(),
+            )
+        }
+        conn.commit()
     }
 
     /** 抽样校验：返回任意 N 条 specimen 的关键字段。 */

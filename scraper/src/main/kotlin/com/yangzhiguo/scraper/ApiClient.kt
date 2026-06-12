@@ -8,6 +8,8 @@ import kotlinx.serialization.decodeFromString
 import org.slf4j.LoggerFactory
 import java.net.HttpURLConnection
 import java.net.URI
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 /**
  * 极简 HTTP 客户端：用 JDK 自带 HttpURLConnection。
@@ -38,6 +40,31 @@ class ApiClient(
         val url = "$baseUrl/admin/kibspecimen/page?current=$current&size=$size&type=user"
         val body = getWithRetry(url)
         json.decodeFromString<ApiResponse>(body)
+    }
+
+    suspend fun fetchPage(
+        source: DataSource,
+        page: Int,
+        pageSize: Int = 6,
+    ): List<Specimen> = withContext(Dispatchers.IO) {
+        when (source.kind) {
+            DataSource.Kind.SPECIMEN ->
+                fetchPage(page.toLong(), pageSize).data?.records.orEmpty()
+            DataSource.Kind.SPECIES -> {
+                val params = linkedMapOf(
+                    "page" to page.toString(),
+                    "pageSize" to pageSize.toString(),
+                ).apply { putAll(source.filters) }
+                val query = params.entries.joinToString("&") { (key, value) ->
+                    "${encode(key)}=${encode(value)}"
+                }
+                val body = getWithRetry("$baseUrl/admin/kibHome/getSpeciesList?$query")
+                json.decodeFromString<SpeciesApiResponse>(body)
+                    .data
+                    ?.specimenSpeciesList
+                    .orEmpty()
+            }
+        }
     }
 
     // ── 内部 ─────────────────────────────────────────────────────────────
@@ -106,4 +133,7 @@ class ApiClient(
         val jitter = (base * 0.25 * (Math.random() * 2 - 1)).toLong()
         return (base + jitter).coerceAtLeast(200L)
     }
+
+    private fun encode(value: String): String =
+        URLEncoder.encode(value, StandardCharsets.UTF_8.name())
 }
