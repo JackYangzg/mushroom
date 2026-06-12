@@ -11,12 +11,12 @@ import kotlin.system.exitProcess
 
 /**
  * 临时爬虫入口（**仅元数据，不下载图片**）。
- *  1. 依次抓取四个 iFlora 列表，均从 page=1 到首个空页
+ *  1. 依次抓取标本检索与物种总目录，均从 page=1 到首个空页
  *  2. 写入 SQLite（data/mushroom.db），每条记录附 source_type 和 source_url
  *  3. 打印统计
  *
  * 用法（项目根目录）：
- *   ./gradlew -p scraper run                              # 更新四类数据源
+ *   ./gradlew -p scraper run                              # 更新两个数据源
  *   ./gradlew -p scraper run --args="--fresh"             # 清库重抓
  *   ./gradlew -p scraper run --args="--resume"            # 保留现有数据并更新
  */

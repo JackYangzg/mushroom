@@ -11,20 +11,32 @@ interface SpeciesDao {
     @Query("SELECT * FROM mushroom_species ORDER BY id ASC")
     fun observeAll(): Flow<List<SpeciesEntity>>
 
-    @Query("SELECT * FROM mushroom_species WHERE instr(',' || source_types || ',', ',EDIBLE,') > 0 ORDER BY id ASC")
+    @Query("""
+        SELECT * FROM mushroom_species
+        WHERE instr(',' || source_types || ',', ',EDIBLE,') > 0
+        ORDER BY id ASC
+    """)
     fun filterEdible(): Flow<List<SpeciesEntity>>
 
-    @Query("SELECT * FROM mushroom_species WHERE use_type = 'MEDICINAL' ORDER BY id ASC")
+    @Query("""
+        SELECT * FROM mushroom_species
+        WHERE instr(',' || source_types || ',', ',MEDICINAL,') > 0
+        ORDER BY id ASC
+    """)
     fun filterMedicinal(): Flow<List<SpeciesEntity>>
 
     @Query("""
         SELECT * FROM mushroom_species
-        WHERE instr(',' || source_types || ',', ',TOXIC,') > 0
+        WHERE instr(',' || source_types || ',', ',POISONOUS,') > 0
         ORDER BY toxicity_level DESC, id ASC
     """)
     fun filterPoisonous(): Flow<List<SpeciesEntity>>
 
-    @Query("SELECT * FROM mushroom_species WHERE use_type = 'CAUTION' ORDER BY id ASC")
+    @Query("""
+        SELECT * FROM mushroom_species
+        WHERE instr(',' || source_types || ',', ',CAUTION,') > 0
+        ORDER BY id ASC
+    """)
     fun filterCaution(): Flow<List<SpeciesEntity>>
 
     @Query("""

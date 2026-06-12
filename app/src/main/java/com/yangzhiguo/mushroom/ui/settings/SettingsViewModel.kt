@@ -32,6 +32,7 @@ class SettingsViewModel @Inject constructor(
     val isSyncing: Boolean
         get() = state.value is SyncState.Running
 
+    /** 用户手动触发同步入口（设置页「立即同步」按钮）。 */
     fun startSync() {
         viewModelScope.launch {
             runCatching { syncRepo.runFullSync() }

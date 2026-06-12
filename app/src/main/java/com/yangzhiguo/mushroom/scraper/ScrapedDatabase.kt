@@ -26,15 +26,7 @@ class ScrapedDatabase(context: Context) : SQLiteOpenHelper(
         db.execSQL("CREATE INDEX idx_species_chinese ON mushroom_specimen(species_chinese)")
         db.execSQL("CREATE INDEX idx_family_zh ON mushroom_specimen(family_chinese)")
         db.execSQL("CREATE INDEX idx_family_la ON mushroom_specimen(family_english)")
-        db.execSQL(
-            """
-            CREATE UNIQUE INDEX idx_specimen_name_source ON mushroom_specimen (
-                source_type,
-                lower(trim(coalesce(nullif(species_latin, ''), nullif(species_chinese, ''), species_common, 'id:' || id))),
-                lower(trim(coalesce(source_url, '')))
-            )
-            """.trimIndent(),
-        )
+        db.execSQL("CREATE UNIQUE INDEX idx_specimen_source_url ON mushroom_specimen (trim(source_url))")
     }
 
     override fun onUpgrade(db: SQLiteDatabase, oldVersion: Int, newVersion: Int) {
@@ -96,7 +88,7 @@ class ScrapedDatabase(context: Context) : SQLiteOpenHelper(
 
     companion object {
         const val DB_NAME = "scraped_mushroom.db"
-        const val DB_VERSION = 4
+        const val DB_VERSION = 5
         private const val INSERT_COLUMN_COUNT = 110
         private const val TAG = "ScrapedDatabase"
 
@@ -132,7 +124,7 @@ class ScrapedDatabase(context: Context) : SQLiteOpenHelper(
                 substrate TEXT, strain_number TEXT, is_open INTEGER, borrow_status INTEGER,
                 assigning_user TEXT, assigning_id TEXT, distribution_location TEXT, economic_use TEXT,
                 source_type TEXT NOT NULL,
-                source_url TEXT
+                source_url TEXT NOT NULL
             )
         """
 

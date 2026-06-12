@@ -54,7 +54,7 @@ class ApiClient(
                 val params = linkedMapOf(
                     "page" to page.toString(),
                     "pageSize" to pageSize.toString(),
-                ).apply { putAll(source.filters) }
+                )
                 val query = params.entries.joinToString("&") { (key, value) ->
                     "${encode(key)}=${encode(value)}"
                 }

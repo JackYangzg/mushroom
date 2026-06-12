@@ -47,6 +47,7 @@ object ScraperToRoomMapper {
             model3dUrl = null,
             dnaBarcode = s.itsGenbank,
             sourceUrl = "",
+            sourceTypes = deriveRecordTags(s).joinToString(","),
             imageUrl = extractPrimaryImageUrl(s),
             imageLocalPath = null,   // 由 ImageCacheRepository 在用户查看页面后回填
             lastUpdated = now,
@@ -85,12 +86,23 @@ object ScraperToRoomMapper {
     }
 
     fun deriveUseType(s: Specimen): UseType = when {
-        hasRecord(s.conditionallyFungus) -> UseType.CAUTION
-        hasRecord(s.medicinalFungus) -> UseType.MEDICINAL
-        hasRecord(s.edibleFungus) -> UseType.EDIBLE
+        hasCautionRecord(s) -> UseType.CAUTION
         hasRecord(s.toxicFungus) -> UseType.POISONOUS
+        hasRecord(s.edibleFungus) -> UseType.EDIBLE
+        hasRecord(s.medicinalFungus) -> UseType.MEDICINAL
         else -> UseType.UNREPORTED
     }
+
+    fun deriveRecordTags(s: Specimen): List<String> = buildList {
+        if (hasRecord(s.edibleFungus)) add(UseType.EDIBLE.name)
+        if (hasRecord(s.medicinalFungus)) add(UseType.MEDICINAL.name)
+        if (hasRecord(s.toxicFungus)) add(UseType.POISONOUS.name)
+        if (hasCautionRecord(s)) add(UseType.CAUTION.name)
+    }
+
+    fun hasCautionRecord(s: Specimen): Boolean =
+        hasRecord(s.conditionallyFungus) ||
+            (hasRecord(s.edibleFungus) && hasRecord(s.toxicFungus))
 
     fun deriveToxicityLevel(s: Specimen): ToxicityLevel = when {
         hasRecord(s.toxicFungus) -> ToxicityLevel.TOXIC

@@ -7,18 +7,18 @@ import java.nio.file.Files
 class DatabaseTest {
 
     @Test
-    fun deduplicatesWithinSourceAndRetainsDifferentSources() {
+    fun sourceUrlIsTheOnlyUniqueKey() {
         val dbPath = Files.createTempDirectory("mushroom-db-test").resolve("mushroom.db")
         val specimen = Specimen(id = 5, speciesLatin = "Coltricia crassa")
         val url = DataSource.GENERAL_DIRECTORY.detailUrl(specimen)
 
         Database(dbPath).use { db ->
-            db.upsertSpecimen(specimen, DataSource.EDIBLE.name, url)
-            db.upsertSpecimen(specimen, DataSource.EDIBLE.name, url)
+            db.upsertSpecimen(specimen, DataSource.SPECIMEN.name, url)
+            db.upsertSpecimen(specimen.copy(speciesLatin = "Different name"), DataSource.SPECIMEN.name, url)
             db.upsertSpecimen(specimen, DataSource.GENERAL_DIRECTORY.name, url)
             db.flush()
 
-            assertEquals(2, db.countSpecimens())
+            assertEquals(1, db.countSpecimens())
         }
     }
 }

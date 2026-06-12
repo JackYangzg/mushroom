@@ -5,12 +5,9 @@ import java.nio.charset.StandardCharsets
 
 enum class DataSource(
     val kind: Kind,
-    val filters: Map<String, String> = emptyMap(),
 ) {
     SPECIMEN(Kind.SPECIMEN),
-    EDIBLE(Kind.SPECIES, mapOf("edibleFungus" to "是")),
     GENERAL_DIRECTORY(Kind.SPECIES),
-    TOXIC(Kind.SPECIES, mapOf("toxicFungus" to "是")),
     ;
 
     enum class Kind { SPECIMEN, SPECIES }
@@ -41,16 +38,8 @@ data class ScrapedRecord(
         get() = source.name
 
     val dedupeKey: String
-        get() = "$sourceType|${normalizedName(specimen)}|${sourceUrl.trim().lowercase()}"
+        get() = sourceUrl.trim()
 }
-
-internal fun normalizedName(specimen: Specimen): String =
-    sequenceOf(specimen.speciesLatin, specimen.speciesChinese, specimen.speciesCommon)
-        .mapNotNull { it?.trim()?.takeIf(String::isNotEmpty) }
-        .firstOrNull()
-        ?.lowercase()
-        ?.replace(Regex("\\s+"), " ")
-        ?: "id:${specimen.id}"
 
 internal fun deduplicateRecords(records: Iterable<ScrapedRecord>): List<ScrapedRecord> =
     records.distinctBy(ScrapedRecord::dedupeKey)

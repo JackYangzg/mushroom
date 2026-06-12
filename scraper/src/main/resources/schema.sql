@@ -115,15 +115,11 @@ CREATE TABLE mushroom_specimen (
     distribution_location TEXT,
     economic_use TEXT,
     source_type TEXT NOT NULL,
-    source_url TEXT
+    source_url TEXT NOT NULL
 );
 
 CREATE INDEX idx_specimen_latin ON mushroom_specimen(species_latin);
 CREATE INDEX idx_specimen_chinese ON mushroom_specimen(species_chinese);
 CREATE INDEX idx_specimen_family_zh ON mushroom_specimen(family_chinese);
 CREATE INDEX idx_specimen_family_la ON mushroom_specimen(family_english);
-CREATE UNIQUE INDEX idx_specimen_name_source ON mushroom_specimen (
-    source_type,
-    lower(trim(coalesce(nullif(species_latin, ''), nullif(species_chinese, ''), species_common, 'id:' || id))),
-    lower(trim(coalesce(source_url, '')))
-);
+CREATE UNIQUE INDEX idx_specimen_source_url ON mushroom_specimen (trim(source_url));

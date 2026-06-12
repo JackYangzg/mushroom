@@ -47,8 +47,8 @@ class Database(private val dbPath: Path) : AutoCloseable {
         }
         conn.commit()
         ensureSourceTypeColumn()
-        removeDuplicateSourceNameLinks()
-        createSourceNameLinkUniqueIndex()
+        removeDuplicateSourceUrls()
+        createSourceUrlUniqueIndex()
     }
 
     fun deleteAll() {
@@ -426,11 +426,12 @@ class Database(private val dbPath: Path) : AutoCloseable {
         }
         conn.createStatement().use {
             it.execute("DROP INDEX IF EXISTS idx_specimen_name_source")
+            it.execute("DROP INDEX IF EXISTS idx_specimen_source_url")
         }
         conn.commit()
     }
 
-    private fun removeDuplicateSourceNameLinks() {
+    private fun removeDuplicateSourceUrls() {
         conn.createStatement().use { statement ->
             statement.executeUpdate(
                 """
@@ -438,9 +439,7 @@ class Database(private val dbPath: Path) : AutoCloseable {
                 WHERE rowid NOT IN (
                     SELECT MIN(rowid)
                     FROM mushroom_specimen
-                    GROUP BY source_type, lower(trim(
-                        coalesce(nullif(species_latin, ''), nullif(species_chinese, ''), species_common, 'id:' || id)
-                    )), lower(trim(coalesce(source_url, '')))
+                    GROUP BY trim(source_url)
                 )
                 """.trimIndent(),
             )
@@ -448,18 +447,12 @@ class Database(private val dbPath: Path) : AutoCloseable {
         conn.commit()
     }
 
-    private fun createSourceNameLinkUniqueIndex() {
+    private fun createSourceUrlUniqueIndex() {
         conn.createStatement().use {
             it.execute(
                 """
-                CREATE UNIQUE INDEX IF NOT EXISTS idx_specimen_name_source
-                ON mushroom_specimen (
-                    source_type,
-                    lower(trim(
-                        coalesce(nullif(species_latin, ''), nullif(species_chinese, ''), species_common, 'id:' || id)
-                    )),
-                    lower(trim(coalesce(source_url, '')))
-                )
+                CREATE UNIQUE INDEX IF NOT EXISTS idx_specimen_source_url
+                ON mushroom_specimen (trim(source_url))
                 """.trimIndent(),
             )
         }

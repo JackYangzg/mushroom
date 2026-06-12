@@ -32,6 +32,42 @@ class ScraperToRoomMapperTest {
 
         assertEquals(ToxicityLevel.TOXIC, toxicity)
         assertEquals(Edibility.EDIBLE, ScraperToRoomMapper.deriveEdibility(specimen, toxicity))
+        assertEquals(
+            listOf(
+                UseType.EDIBLE.name,
+                UseType.POISONOUS.name,
+                UseType.CAUTION.name,
+            ),
+            ScraperToRoomMapper.deriveRecordTags(specimen),
+        )
+        assertEquals(UseType.CAUTION, ScraperToRoomMapper.deriveUseType(specimen))
+    }
+
+    @Test
+    fun edibleMedicinalAndToxicRecordsKeepAllDimensions() {
+        val specimen = Specimen(
+            edibleFungus = "是",
+            medicinalFungus = "Antitumor",
+            toxicFungus = "是",
+        )
+
+        assertEquals(
+            listOf(
+                UseType.EDIBLE.name,
+                UseType.MEDICINAL.name,
+                UseType.POISONOUS.name,
+                UseType.CAUTION.name,
+            ),
+            ScraperToRoomMapper.deriveRecordTags(specimen),
+        )
+    }
+
+    @Test
+    fun explicitConditionalRecordIsCaution() {
+        val specimen = Specimen(conditionallyFungus = "是")
+
+        assertTrue(ScraperToRoomMapper.hasCautionRecord(specimen))
+        assertEquals(listOf(UseType.CAUTION.name), ScraperToRoomMapper.deriveRecordTags(specimen))
     }
 
     @Test

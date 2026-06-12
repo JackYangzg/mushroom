@@ -7,7 +7,15 @@ import org.junit.Test
 class DataSourceTest {
 
     @Test
-    fun dedupeUsesNormalizedNameAndCanonicalLink() {
+    fun onlyRequestedSourcesArePresent() {
+        assertEquals(
+            setOf(DataSource.SPECIMEN, DataSource.GENERAL_DIRECTORY),
+            DataSource.entries.toSet(),
+        )
+    }
+
+    @Test
+    fun dedupeUsesOnlyCanonicalLink() {
         val specimen = Specimen(id = 5, speciesLatin = "  Coltricia   crassa ")
         val canonical = DataSource.GENERAL_DIRECTORY.detailUrl(specimen)
         val records = listOf(
@@ -15,7 +23,7 @@ class DataSourceTest {
             ScrapedRecord(
                 specimen.copy(speciesLatin = "coltricia crassa"),
                 DataSource.GENERAL_DIRECTORY,
-                canonical.uppercase(),
+                canonical,
             ),
         )
 
@@ -33,15 +41,15 @@ class DataSourceTest {
     }
 
     @Test
-    fun sameNameAndLinkRemainDistinctAcrossSources() {
+    fun sameLinkIsDuplicateRegardlessOfSourceOrName() {
         val specimen = Specimen(id = 5, speciesLatin = "Coltricia crassa")
         val canonical = DataSource.GENERAL_DIRECTORY.detailUrl(specimen)
 
         assertEquals(
-            2,
+            1,
             deduplicateRecords(
                 listOf(
-                    ScrapedRecord(specimen, DataSource.EDIBLE, canonical),
+                    ScrapedRecord(specimen.copy(speciesLatin = "Different name"), DataSource.SPECIMEN, canonical),
                     ScrapedRecord(specimen, DataSource.GENERAL_DIRECTORY, canonical),
                 ),
             ).size,
