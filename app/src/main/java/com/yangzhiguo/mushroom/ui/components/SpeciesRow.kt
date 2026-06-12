@@ -8,81 +8,94 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Warning
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.unit.dp
 import com.yangzhiguo.mushroom.data.local.SpeciesEntity
 import com.yangzhiguo.mushroom.domain.model.ToxicityLevel
 import com.yangzhiguo.mushroom.domain.model.UseType
-import com.yangzhiguo.mushroom.ui.theme.ScientificNameStyle
-import com.yangzhiguo.mushroom.ui.theme.extended
 
-/**
- * One row in the S11 species list and the S3 推荐区. Shows:
- *  - MushroomIcon (image placeholder — local assets not present in prototype)
- *  - Chinese name (bold), scientific name (italic gray)
- *  - Toxicity icon + season + habitat compact one-liner
- */
 @Composable
 fun SpeciesRow(
     species: SpeciesEntity,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val (tint, icon) = toxicityVisuals(species.toxicityLevel)
-    val useLabel = when (species.useType) {
-        UseType.EDIBLE -> "可食"
-        UseType.MEDICINAL -> "可药用"
-        UseType.POISONOUS -> "有毒"
-        UseType.CAUTION -> "需谨慎"
-        UseType.UNREPORTED -> "无报道"
-    }
-    Card(
-        modifier = modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface),
-        shape = RoundedCornerShape(12.dp),
+    Surface(
         onClick = onClick,
+        color = MaterialTheme.colorScheme.background,
+        modifier = modifier.fillMaxWidth(),
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(12.dp),
+                .padding(vertical = 12.dp),
             verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            horizontalArrangement = Arrangement.spacedBy(14.dp),
         ) {
-            Box(modifier = Modifier.size(48.dp), contentAlignment = Alignment.Center) {
-                MushroomIcon(size = 48.dp)
+            Surface(
+                modifier = Modifier.size(64.dp),
+                color = MaterialTheme.colorScheme.surfaceVariant,
+                shape = RoundedCornerShape(12.dp),
+            ) {
+                Box(contentAlignment = Alignment.Center) { MushroomIcon(size = 46.dp) }
             }
-            Column(modifier = Modifier.fillMaxWidth()) {
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Text(
-                        text = species.chineseName,
-                        style = MaterialTheme.typography.titleMedium,
-                        modifier = Modifier.padding(end = 8.dp),
-                    )
-                    Text(text = icon, style = MaterialTheme.typography.titleMedium, color = tint)
-                }
-                Text(text = species.scientificName, style = ScientificNameStyle)
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(3.dp),
+            ) {
+                Text(species.chineseName, style = MaterialTheme.typography.titleMedium)
                 Text(
-                    text = "$useLabel · ${species.season} · ${species.habitat}",
+                    species.scientificName,
+                    style = MaterialTheme.typography.bodySmall.copy(fontStyle = FontStyle.Italic),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                )
+                Text(
+                    species.habitat.substringBefore(",").ifBlank { "生境未记录" },
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
                 )
             }
+            RiskLabel(species)
         }
     }
 }
 
 @Composable
-private fun toxicityVisuals(level: ToxicityLevel): Pair<Color, String> = when (level) {
-    ToxicityLevel.DEADLY -> MaterialTheme.colorScheme.error to "🚨"
-    ToxicityLevel.TOXIC -> MaterialTheme.extended.warning to "⚠️"
-    ToxicityLevel.MILD -> MaterialTheme.extended.neutral to "❌"
-    ToxicityLevel.NONE -> MaterialTheme.extended.success to "✅"
+private fun RiskLabel(species: SpeciesEntity) {
+    val isRisk = species.toxicityLevel == ToxicityLevel.TOXIC ||
+        species.toxicityLevel == ToxicityLevel.DEADLY ||
+        species.useType == UseType.CAUTION
+    val label = when {
+        species.toxicityLevel == ToxicityLevel.DEADLY -> "高风险"
+        species.toxicityLevel == ToxicityLevel.TOXIC -> "有毒"
+        species.useType == UseType.CAUTION -> "需谨慎"
+        species.useType == UseType.EDIBLE -> "有食用记录"
+        species.useType == UseType.MEDICINAL -> "药用记录"
+        else -> "资料记录"
+    }
+    Surface(
+        color = if (isRisk) MaterialTheme.colorScheme.errorContainer else MaterialTheme.colorScheme.surfaceVariant,
+        contentColor = if (isRisk) MaterialTheme.colorScheme.onErrorContainer else MaterialTheme.colorScheme.onSurfaceVariant,
+        shape = RoundedCornerShape(6.dp),
+    ) {
+        Row(
+            modifier = Modifier.padding(horizontal = 8.dp, vertical = 5.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(4.dp),
+        ) {
+            if (isRisk) {
+                Icon(Icons.Rounded.Warning, contentDescription = null, modifier = Modifier.size(14.dp))
+            }
+            Text(label, style = MaterialTheme.typography.labelSmall)
+        }
+    }
 }

@@ -39,14 +39,14 @@ private val LightColorScheme = lightColorScheme(
     onError = Color.White,
     errorContainer = ErrorRedLight,
     onErrorContainer = Color(0xFF410002),
-    background = Color(0xFFF5F1E8),
+    background = Color(0xFFF7F7F5),
     onBackground = OnSurfaceLight,
     surface = Cream,
     onSurface = OnSurfaceLight,
-    surfaceVariant = Color(0xFFF1ECE0),
-    onSurfaceVariant = Color(0xFF555555),
+    surfaceVariant = Color(0xFFF0F2F0),
+    onSurfaceVariant = Color(0xFF6F7671),
     outline = OutlineLight,
-    outlineVariant = Color(0xFFE0DDD5),
+    outlineVariant = Color(0xFFE5E8E5),
 )
 
 private val DarkColorScheme = darkColorScheme(
@@ -119,8 +119,8 @@ fun MushroomTheme(
     if (!view.isInEditMode) {
         SideEffect {
             val window = (view.context as Activity).window
-            window.statusBarColor = colorScheme.primary.toArgb()
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = false
+            window.statusBarColor = colorScheme.background.toArgb()
+            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
         }
     }
 

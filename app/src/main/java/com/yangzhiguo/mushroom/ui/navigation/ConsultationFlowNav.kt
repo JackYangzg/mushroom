@@ -60,7 +60,13 @@ fun ConsultationFlowNav(
             RecognitionScreen(
                 photoUri = uri,
                 onOpen3D = onOpen3D,
-                onRetake = { navController.popBackStack(Route.Camera.path, inclusive = false) },
+                onRetake = {
+                    navController.navigate(Route.Camera.path) {
+                        popUpTo(Route.Recognition.PATTERN) { inclusive = true }
+                        launchSingleTop = true
+                    }
+                },
+                onDone = onExit,
             )
         }
         composable(Route.FeatureForm.path) {

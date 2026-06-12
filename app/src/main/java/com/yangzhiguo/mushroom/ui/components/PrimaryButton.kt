@@ -29,14 +29,14 @@ fun PrimaryButton(
     Button(
         onClick = onClick,
         enabled = enabled,
-        shape = RoundedCornerShape(8.dp),
+        shape = RoundedCornerShape(12.dp),
         colors = ButtonDefaults.buttonColors(
             containerColor = MaterialTheme.colorScheme.primary,
             contentColor = MaterialTheme.colorScheme.onPrimary,
         ),
         modifier = modifier
             .fillMaxWidth()
-            .height(48.dp),
+            .height(52.dp),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,

@@ -9,20 +9,20 @@
     <string name="action_retry">重试</string>
 
     <!-- S2 Onboarding -->
-    <string name="onboarding_skip">跳过</string>
+    <string name="onboarding_skip">稍后再说</string>
     <string name="onboarding_close">×</string>
-    <string name="onboarding_title_1">真人专家,30 分钟出结论</string>
-    <string name="onboarding_body_1">蘑菇照片 → 5 分钟匹配 → 30 分钟内真人回答</string>
+    <string name="onboarding_title_1">先说清楚一件事</string>
+    <string name="onboarding_body_1">照片识别只能提供候选，不能作为采食或医疗依据。拍摄时尽量包含菌盖、菌褶和菌柄。</string>
     <string name="onboarding_title_2">AI 预筛辅助 + 100 种本地图鉴</string>
     <string name="onboarding_body_2">离线可浏览 100 种常见蘑菇,采菇路上也有底</string>
     <string name="onboarding_title_3">出错包赔 + 免责声明</string>
     <string name="onboarding_body_3">结果有误可申请复核,重要决策以专家意见为准</string>
-    <string name="onboarding_agreement">我已阅读并同意《用户协议》《隐私政策》《免责声明》</string>
+    <string name="onboarding_agreement">我已阅读并理解上述说明</string>
     <string name="onboarding_next">下一步</string>
-    <string name="onboarding_enter">进入</string>
+    <string name="onboarding_enter">开始使用</string>
 
     <!-- S3 Home (free mode) -->
-    <string name="home_title">蘑菇鉴别</string>
+    <string name="home_title">识别</string>
     <string name="home_cta_title">📷 立即鉴别</string>
     <string name="home_cta_subtitle">免费 · 离线可查 100 种</string>
     <string name="home_section_recommend">推荐</string>
@@ -36,15 +36,15 @@
     <string name="camera_shutter">拍照</string>
     <string name="camera_gallery">相册</string>
     <string name="camera_permission_title">需要相机权限</string>
-    <string name="camera_permission_body">为了拍摄蘑菇照片,需要授权相机权限</string>
-    <string name="camera_permission_open_settings">去设置</string>
+    <string name="camera_permission_body">点击允许后即可拍摄；也可以直接从相册选择照片。</string>
+    <string name="camera_permission_open_settings">允许使用相机</string>
 
     <!-- S5 PhotoPreview -->
     <string name="preview_retake">重拍</string>
-    <string name="preview_use_this">用这张 →</string>
-    <string name="preview_suggestion">⚠ 建议:再拍一张菌褶细节</string>
-    <string name="preview_photo_too_small">图片过小,可能影响识别</string>
-    <string name="preview_low_light">光线不足,建议重拍</string>
+    <string name="preview_use_this">使用这张</string>
+    <string name="preview_suggestion">照片清晰，可以开始识别</string>
+    <string name="preview_photo_too_small">图片尺寸较小，请靠近后重拍</string>
+    <string name="preview_low_light">照片太暗，请换到光线更好的位置重拍</string>
 
     <!-- S6 FeatureForm -->
     <string name="form_title">补充信息,提高准确度</string>
@@ -92,14 +92,14 @@
     <string name="result_note_no_ring_no_volva">提示:无环无托 ≠ 无毒,仍以专家结论为准</string>
 
     <!-- S11 SpeciesList -->
-    <string name="species_list_title">100 种常见蘑菇</string>
+    <string name="species_list_title">图鉴</string>
     <string name="species_filter_all">全部</string>
-    <string name="species_filter_edible">可食</string>
-    <string name="species_filter_medicinal">可药用</string>
-    <string name="species_filter_poisonous">有毒</string>
+    <string name="species_filter_edible">有食用记录</string>
+    <string name="species_filter_medicinal">药用记录</string>
+    <string name="species_filter_poisonous">毒性风险</string>
     <string name="species_filter_caution">需谨慎</string>
     <string name="species_filter_unreported">无用途报道</string>
-    <string name="species_search_hint">搜索蘑菇…</string>
+    <string name="species_search_hint">搜索中文名或学名</string>
 
     <!-- S12 SpeciesDetail -->
     <string name="species_back">←</string>
@@ -117,22 +117,22 @@
 
     <!-- S13 Profile -->
     <string name="profile_title">我的</string>
-    <string name="profile_my_favorites">❤️ 我的收藏</string>
+    <string name="profile_my_favorites">我的收藏</string>
 
     <!-- 我的 tab 内部入口(用户要求:我的收藏 / 设置 / 免责声明 / 关于) -->
-    <string name="profile_entry_settings">⚙  设置</string>
-    <string name="profile_entry_disclaimer">⚠  免责声明</string>
-    <string name="profile_entry_about">ℹ  关于</string>
+    <string name="profile_entry_settings">偏好设置</string>
+    <string name="profile_entry_disclaimer">隐私与免责声明</string>
+    <string name="profile_entry_about">关于</string>
 
     <!-- 底部 tab 标签(用户要求:主页 / 常见 / 我的) -->
-    <string name="tab_home">主页</string>
-    <string name="tab_species">常见</string>
+    <string name="tab_home">识别</string>
+    <string name="tab_species">图鉴</string>
     <string name="tab_profile">我的</string>
 
     <!-- 我的收藏子页 -->
     <string name="my_favorites_title">我的收藏</string>
     <string name="my_favorites_empty_title">还没有收藏的蘑菇</string>
-    <string name="my_favorites_empty_subtitle">在物种详情页点击 ❤️ 即可加入收藏</string>
+    <string name="my_favorites_empty_subtitle">在物种详情页点击收藏按钮即可加入</string>
 
     <!-- Common -->
     <string name="cd_mushroom_icon">蘑菇图标</string>

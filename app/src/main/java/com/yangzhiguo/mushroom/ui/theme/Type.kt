@@ -36,6 +36,18 @@ val Typography = Typography(
         fontSize = 22.sp,
         lineHeight = 28.sp,
     ),
+    headlineMedium = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.Medium,
+        fontSize = 28.sp,
+        lineHeight = 36.sp,
+    ),
+    headlineSmall = TextStyle(
+        fontFamily = FontFamily.Default,
+        fontWeight = FontWeight.Medium,
+        fontSize = 24.sp,
+        lineHeight = 32.sp,
+    ),
     titleMedium = TextStyle(
         fontFamily = FontFamily.Default,
         fontWeight = FontWeight.Medium,
@@ -57,5 +69,5 @@ val ScientificNameStyle = TextStyle(
     fontStyle = FontStyle.Italic,
     fontSize = 14.sp,
     lineHeight = 20.sp,
-    color = OnSurfaceLight.copy(alpha = 0.6f),
+    color = OnSurfaceLight.copy(alpha = 0.62f),
 )

@@ -71,8 +71,8 @@ sealed class RecognitionState {
         val result: RecognitionResult,
         val photoUri: String? = null,
     ) : RecognitionState()
-    data object LocalHit : RecognitionState()
-    data object LocalMiss : RecognitionState()
+    data class LocalHit(val result: RecognitionResult) : RecognitionState()
+    data class LocalMiss(val result: RecognitionResult) : RecognitionState()
     data object Rendered : RecognitionState()
     data class Error(val message: String, val retryable: Boolean = true) : RecognitionState()
     data object Canceled : RecognitionState()

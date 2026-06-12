@@ -42,13 +42,10 @@ fun AboutScreen(onBack: () -> Unit = {}) {
                                 onClick = onBack,
                             ),
                         style = MaterialTheme.typography.titleLarge,
-                        color = MaterialTheme.colorScheme.onPrimary,
+                        color = MaterialTheme.colorScheme.onSurface,
                     )
                 },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
-                    titleContentColor = MaterialTheme.colorScheme.onPrimary,
-                ),
+                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background),
             )
         },
     ) { padding ->
@@ -69,8 +66,8 @@ fun AboutScreen(onBack: () -> Unit = {}) {
                         **Mushroom 蘑菇识别** v1.0
 
                         一款辅助认识野生蘑菇的 Android App。
-                        拍一张照片，AI 模型流式输出思考过程与候选学名，
-                        本地索引秒级命中详情，远端 WebView 拉取完整资料。
+                        拍一张照片，App 会根据可观察特征提供候选学名，
+                        并结合本地图鉴展示辨识资料。
 
                         **数据来源**
                         - AI 识别：MiniMax M3

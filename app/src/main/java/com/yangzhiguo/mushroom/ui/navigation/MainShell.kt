@@ -2,7 +2,7 @@ package com.yangzhiguo.mushroom.ui.navigation
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.Home
+import androidx.compose.material.icons.rounded.CameraAlt
 import androidx.compose.material.icons.rounded.MenuBook
 import androidx.compose.material.icons.rounded.Person
 import androidx.compose.material3.Icon
@@ -151,7 +151,7 @@ private val TAB_ROUTES = setOf(
 )
 
 private val Tabs = listOf(
-    TabItem(Route.Home.path, R.string.tab_home, Icons.Rounded.Home),
+    TabItem(Route.Home.path, R.string.tab_home, Icons.Rounded.CameraAlt),
     TabItem(Route.SpeciesList.path, R.string.tab_species, Icons.Rounded.MenuBook),
     TabItem(Route.Profile.path, R.string.tab_profile, Icons.Rounded.Person),
 )

@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.Warning
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -38,26 +39,32 @@ fun ToxicityBanner(
     modifier: Modifier = Modifier,
 ) {
     val label: String
+    val advice: String
+    val icon = if (level == ToxicityLevel.NONE) Icons.Rounded.Info else Icons.Rounded.Warning
     val container: androidx.compose.ui.graphics.Color
     val onContainer: androidx.compose.ui.graphics.Color
     when (level) {
         ToxicityLevel.DEADLY -> {
-            label = "剧毒 / 严禁采食 🚨"
+            label = "高风险：可能致命"
+            advice = "严禁采食，接触或误食后请立即寻求专业帮助。"
             container = MaterialTheme.colorScheme.errorContainer
             onContainer = MaterialTheme.colorScheme.onErrorContainer
         }
         ToxicityLevel.TOXIC -> {
-            label = "有毒 / 不建议食 ⚠"
+            label = "毒性风险"
+            advice = "不要采食，仅凭照片不能排除更危险的近似种。"
             container = MaterialTheme.extended.warningContainer
             onContainer = MaterialTheme.extended.onWarningContainer
         }
         ToxicityLevel.MILD -> {
-            label = "不可食 ❌"
+            label = "需谨慎"
+            advice = "缺少可靠食用结论，不建议采食。"
             container = MaterialTheme.extended.neutralContainer
             onContainer = MaterialTheme.extended.onNeutralContainer
         }
         ToxicityLevel.NONE -> {
-            label = "可食 ✅"
+            label = "有食用记录"
+            advice = "不代表照片中的个体可安全食用，请勿据此采食野生蘑菇。"
             container = MaterialTheme.extended.successContainer
             onContainer = MaterialTheme.extended.onSuccessContainer
         }
@@ -74,17 +81,17 @@ fun ToxicityBanner(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.spacedBy(12.dp),
         ) {
-            Icon(Icons.Rounded.Warning, contentDescription = null, tint = onContainer)
+            Icon(icon, contentDescription = null, tint = onContainer)
             Column(modifier = Modifier.fillMaxWidth()) {
                 Text(text = label, style = MaterialTheme.typography.titleLarge, color = onContainer)
                 Text(
-                    text = scientificName,
-                    style = ScientificNameStyle.copy(color = onContainer.copy(alpha = 0.7f)),
+                    text = advice,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = onContainer,
                 )
                 Text(
-                    text = chineseName,
-                    style = MaterialTheme.typography.bodyLarge,
-                    color = onContainer,
+                    text = "$chineseName · $scientificName",
+                    style = ScientificNameStyle.copy(color = onContainer.copy(alpha = 0.72f)),
                 )
             }
         }

@@ -10,12 +10,15 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowBack
+import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,7 +33,6 @@ import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.yangzhiguo.mushroom.R
-import com.yangzhiguo.mushroom.ui.components.MushroomIcon
 import com.yangzhiguo.mushroom.ui.components.PrimaryButton
 
 @Composable
@@ -41,21 +43,24 @@ fun PhotoPreviewScreen(
 ) {
     val context = LocalContext.current
     val fileMeta = remember(photoUri) { photoUri?.let { readFileMeta(context, it) } }
-    val tooSmall = (fileMeta?.sizeBytes ?: 0L) in 1L..50_000L
-    val tooDark = (fileMeta?.brightness ?: 255) < 40
+    val warning = when {
+        (fileMeta?.sizeBytes ?: 0L) in 1L..50_000L -> stringResource(R.string.preview_photo_too_small)
+        (fileMeta?.brightness ?: 255) < 40 -> stringResource(R.string.preview_low_light)
+        else -> null
+    }
 
     Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
         Column(modifier = Modifier.fillMaxSize()) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(8.dp),
+                    .padding(horizontal = 8.dp, vertical = 6.dp),
                 verticalAlignment = Alignment.CenterVertically,
             ) {
                 IconButton(onClick = onRetake) {
-                    Icon(Icons.Rounded.ArrowBack, contentDescription = null)
+                    Icon(Icons.Rounded.ArrowBack, contentDescription = stringResource(R.string.preview_retake))
                 }
-                Text(text = stringResource(R.string.preview_retake))
+                Text("确认照片", style = MaterialTheme.typography.titleLarge)
             }
             Box(
                 modifier = Modifier
@@ -64,43 +69,39 @@ fun PhotoPreviewScreen(
                     .background(Color.Black),
                 contentAlignment = Alignment.Center,
             ) {
-                if (photoUri != null) {
-                    AsyncImage(
-                        model = ImageRequest.Builder(context).data(photoUri).crossfade(true).build(),
-                        contentDescription = null,
-                        contentScale = ContentScale.Fit,
-                        modifier = Modifier.fillMaxSize(),
-                    )
-                } else {
-                    MushroomIcon(size = 96.dp, capColor = Color.White, stemColor = Color.LightGray)
+                AsyncImage(
+                    model = ImageRequest.Builder(context).data(photoUri).crossfade(true).build(),
+                    contentDescription = "待识别的蘑菇照片",
+                    contentScale = ContentScale.Fit,
+                    modifier = Modifier.fillMaxSize(),
+                )
+            }
+            if (warning != null) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 20.dp, vertical = 12.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                ) {
+                    Icon(Icons.Rounded.Info, contentDescription = null, tint = MaterialTheme.colorScheme.tertiary)
+                    Text(warning, style = MaterialTheme.typography.bodyMedium)
                 }
             }
-            val hint = when {
-                tooSmall -> stringResource(R.string.preview_photo_too_small)
-                tooDark -> stringResource(R.string.preview_low_light)
-                else -> stringResource(R.string.preview_suggestion)
-            }
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(8.dp),
-            ) {
-                Text("⚠", style = MaterialTheme.typography.titleLarge)
-                Text(hint, style = MaterialTheme.typography.bodyMedium)
-            }
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
+                    .padding(20.dp),
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
             ) {
-                PrimaryButton(
-                    text = stringResource(R.string.preview_retake),
+                OutlinedButton(
                     onClick = onRetake,
-                    modifier = Modifier.weight(1f),
-                )
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(52.dp),
+                ) {
+                    Text(stringResource(R.string.preview_retake))
+                }
                 PrimaryButton(
                     text = stringResource(R.string.preview_use_this),
                     onClick = onUseThis,
@@ -119,10 +120,13 @@ private fun readFileMeta(context: Context, uri: Uri): PhotoFileMeta? {
     }.getOrNull() ?: 0L
     val brightness = runCatching {
         context.contentResolver.openInputStream(uri)?.use { input ->
-            val opts = BitmapFactory.Options().apply { inJustDecodeBounds = true }
-            BitmapFactory.decodeStream(input, null, opts)
-        }
-        255
+            val options = BitmapFactory.Options().apply { inSampleSize = 8 }
+            val bitmap = BitmapFactory.decodeStream(input, null, options) ?: return@use 255
+            val x = bitmap.width / 2
+            val y = bitmap.height / 2
+            val pixel = bitmap.getPixel(x, y)
+            (android.graphics.Color.red(pixel) + android.graphics.Color.green(pixel) + android.graphics.Color.blue(pixel)) / 3
+        } ?: 255
     }.getOrDefault(255)
     return PhotoFileMeta(size, brightness)
 }

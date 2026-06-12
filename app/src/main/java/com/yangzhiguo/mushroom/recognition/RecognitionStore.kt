@@ -70,15 +70,6 @@ class RecognitionStore @Inject constructor(
         runRecognition(imageDataUrl, photoUri)
     }
 
-    /** 切换思考区折叠状态。 */
-    fun toggleThinkingPanel() {
-        _state.update { s ->
-            if (s is RecognitionState.Recognizing) {
-                s.copy(isThinkingExpanded = !s.isThinkingExpanded)
-            } else s
-        }
-    }
-
     /** 取消当前识别任务，回到 Canceled。 */
     fun cancel() {
         currentJob?.cancel()
@@ -189,7 +180,7 @@ class RecognitionStore @Inject constructor(
             is MushroomRepository.LookupResult.Hit -> {
                 _state.update { current ->
                     if (current is RecognitionState.Recognized) {
-                        RecognitionState.LocalHit
+                        RecognitionState.LocalHit(result)
                     } else current
                 }
                 _selectedMushroom.value = lookup.mushroom
@@ -202,7 +193,7 @@ class RecognitionStore @Inject constructor(
                 }
             }
             is MushroomRepository.LookupResult.Miss -> {
-                _state.value = RecognitionState.LocalMiss
+                _state.value = RecognitionState.LocalMiss(result)
                 _fallbackName.value = lookup.fallbackName
             }
         }
