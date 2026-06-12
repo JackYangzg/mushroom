@@ -117,24 +117,7 @@
 
     <!-- S13 Profile -->
     <string name="profile_title">我的</string>
-    <string name="profile_user_id">User ID: 20260611001</string>
-    <string name="profile_orders_count">已鉴别 5 次</string>
-    <string name="profile_section_orders">订单</string>
-    <string name="profile_my_orders">📋 我的订单</string>
     <string name="profile_my_favorites">❤️ 我的收藏</string>
-    <string name="profile_section_support">客服</string>
-    <string name="profile_contact_support">💬 联系客服</string>
-    <string name="profile_faq">❓ 常见问题</string>
-    <string name="profile_feedback">📝 反馈建议</string>
-    <string name="profile_section_legal">法务</string>
-    <string name="profile_user_agreement">📄 用户协议</string>
-    <string name="profile_privacy">🔒 隐私政策</string>
-    <string name="profile_disclaimer">⚠️ 免责声明</string>
-    <string name="profile_section_system">系统</string>
-    <string name="profile_notifications">🔔 推送设置</string>
-    <string name="profile_dark_mode">🌙 深色模式</string>
-    <string name="profile_about">📦 关于蘑菇鉴别 v1.0</string>
-    <string name="profile_logout">退出登录</string>
 
     <!-- 我的 tab 内部入口(用户要求:我的收藏 / 设置 / 免责声明 / 关于) -->
     <string name="profile_entry_settings">⚙  设置</string>

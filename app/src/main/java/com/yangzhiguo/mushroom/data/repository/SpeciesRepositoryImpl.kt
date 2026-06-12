@@ -14,6 +14,11 @@ class SpeciesRepositoryImpl @Inject constructor(
     override fun observeAll(): Flow<List<SpeciesEntity>> = dao.observeAll()
     override fun filterByUseType(useType: UseType): Flow<List<SpeciesEntity>> = dao.filterByUseType(useType)
     override fun search(query: String): Flow<List<SpeciesEntity>> = dao.searchByName(query)
+    override fun observeFavorites(): Flow<List<SpeciesEntity>> = dao.observeFavorites()
     override suspend fun findById(id: Int): SpeciesEntity? = dao.findById(id)
     override suspend fun findByIds(ids: List<Int>): List<SpeciesEntity> = dao.findByIds(ids)
+    override suspend fun toggleFavorite(id: Int) {
+        val current = dao.findById(id) ?: return
+        dao.setFavorite(id, !current.isFavorite)
+    }
 }

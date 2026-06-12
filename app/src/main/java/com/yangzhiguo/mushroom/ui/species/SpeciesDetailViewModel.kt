@@ -33,4 +33,13 @@ class SpeciesDetailViewModel @Inject constructor(
             _imageFile.value = imageCache.getOrFetch(id, sp?.imageUrl)
         }
     }
+
+    fun toggleFavorite() {
+        val current = _state.value ?: return
+        viewModelScope.launch {
+            repo.toggleFavorite(current.id)
+            // 重新拉取,让 isFavorite 通过 state 流回 UI
+            _state.value = repo.findById(current.id)
+        }
+    }
 }

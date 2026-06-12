@@ -8,6 +8,8 @@ interface SpeciesRepository {
     fun observeAll(): Flow<List<SpeciesEntity>>
     fun filterByUseType(useType: UseType): Flow<List<SpeciesEntity>>
     fun search(query: String): Flow<List<SpeciesEntity>>
+    fun observeFavorites(): Flow<List<SpeciesEntity>>
     suspend fun findById(id: Int): SpeciesEntity?
     suspend fun findByIds(ids: List<Int>): List<SpeciesEntity>
+    suspend fun toggleFavorite(id: Int)
 }

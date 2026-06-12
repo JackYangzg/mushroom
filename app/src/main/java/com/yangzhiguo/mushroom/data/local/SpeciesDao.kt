@@ -43,4 +43,10 @@ interface SpeciesDao {
 
     @Query("UPDATE mushroom_species SET image_local_path = :path, last_updated = :ts WHERE id = :id")
     suspend fun updateImagePath(id: Int, path: String?, ts: Long = System.currentTimeMillis())
+
+    @Query("SELECT * FROM mushroom_species WHERE is_favorite = 1 ORDER BY last_updated DESC, id ASC")
+    fun observeFavorites(): Flow<List<SpeciesEntity>>
+
+    @Query("UPDATE mushroom_species SET is_favorite = :isFavorite, last_updated = :ts WHERE id = :id")
+    suspend fun setFavorite(id: Int, isFavorite: Boolean, ts: Long = System.currentTimeMillis())
 }
