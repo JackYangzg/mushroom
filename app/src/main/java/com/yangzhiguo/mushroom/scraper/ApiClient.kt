@@ -205,7 +205,11 @@ class ApiClient(
     }
 
     private fun extractSpecimenId(sourceUrl: String): Long? {
+        // DataSource.kt 写入的 SPECIMEN URL 是 `/specimenDetail/{id}`，
+        // GENERAL_DIRECTORY 是 `/speciesDetail/{id}/...`；两种都要匹配。
+        // 之前缺 `specimenDetail` 这一条，导致 SPECIMEN 源的回源补图永远拿不到 id。
         val patterns = listOf(
+            Regex("""/specimenDetail/(\d+)""", RegexOption.IGNORE_CASE),
             Regex("""/speciesDetail/(\d+)""", RegexOption.IGNORE_CASE),
             Regex("""/kibspecimen/(\d+)""", RegexOption.IGNORE_CASE),
         )

@@ -157,6 +157,67 @@ class ApiClientTest {
         }
     }
 
+    /**
+     * 回归测试：DataSource.kt 写入的 SPECIMEN 类型 sourceUrl 形如 `/specimenDetail/33`，
+     * 而早期版本的 `extractSpecimenId` 只匹配 `/speciesDetail/` 与 `/kibspecimen/`，
+     * 导致 SPECIMEN 源永远走不到详情 API，多图回源直接失败。
+     */
+    @Test
+    fun findImageUrls_routesSpecimenDetailSourceUrlToDetailApi() = runBlocking {
+        val server = MockWebServer()
+        server.enqueue(
+            MockResponse().setBody(
+                """
+                {
+                  "code": 0,
+                  "data": {
+                    "id": 33,
+                    "speciesLatin": "Inocybe assimilata",
+                    "sysFileList": [],
+                    "kibSpeciesPictures": [
+                      {"uf_src": "http://cloudfile.biotracks.cn/a.jpg"},
+                      {"uf_src": "http://cloudfile.biotracks.cn/b.jpg"},
+                      {"uf_src": "http://cloudfile.biotracks.cn/c.jpg"},
+                      {"uf_src": "http://cloudfile.biotracks.cn/d.jpg"}
+                    ]
+                  }
+                }
+                """.trimIndent(),
+            ),
+        )
+        server.start()
+
+        try {
+            val baseUrl = server.url("/").toString().removeSuffix("/")
+            val client = ApiClient(
+                baseUrl = baseUrl,
+                iNaturalistBaseUrl = baseUrl,
+                maxRetries = 0,
+                connectTimeoutMs = 1_000,
+                readTimeoutMs = 1_000,
+            )
+
+            val imageUrls = client.findImageUrls(
+                scientificName = "Inocybe assimilata",
+                sourceUrl = "https://fungi.iflora.cn/#/specimenDetail/33",
+            )
+
+            assertEquals(
+                listOf(
+                    "http://cloudfile.biotracks.cn/a.jpg",
+                    "http://cloudfile.biotracks.cn/b.jpg",
+                    "http://cloudfile.biotracks.cn/c.jpg",
+                    "http://cloudfile.biotracks.cn/d.jpg",
+                ),
+                imageUrls,
+            )
+            assertEquals("/admin/kibspecimen/33", server.takeRequest().path)
+            assertEquals(1, server.requestCount)
+        } finally {
+            server.shutdown()
+        }
+    }
+
     @Test
     fun findPrimaryImageUrl_fallsBackToINaturalistWhenIFloraHasNoImage() = runBlocking {
         val server = MockWebServer()
