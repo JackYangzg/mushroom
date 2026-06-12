@@ -1,0 +1,162 @@
+<resources>
+    <string name="app_name">蘑菇鉴别</string>
+
+    <!-- S1 Splash -->
+    <string name="splash_brand_zh">蘑菇鉴别</string>
+    <string name="splash_brand_en">Mushroom ID</string>
+    <string name="splash_loading">加载本地数据…</string>
+    <string name="splash_error">数据加载失败,请重试</string>
+    <string name="action_retry">重试</string>
+
+    <!-- S2 Onboarding -->
+    <string name="onboarding_skip">跳过</string>
+    <string name="onboarding_close">×</string>
+    <string name="onboarding_title_1">真人专家,30 分钟出结论</string>
+    <string name="onboarding_body_1">蘑菇照片 → 5 分钟匹配 → 30 分钟内真人回答</string>
+    <string name="onboarding_title_2">AI 预筛辅助 + 100 种本地图鉴</string>
+    <string name="onboarding_body_2">离线可浏览 100 种常见蘑菇,采菇路上也有底</string>
+    <string name="onboarding_title_3">出错包赔 + 免责声明</string>
+    <string name="onboarding_body_3">结果有误可申请复核,重要决策以专家意见为准</string>
+    <string name="onboarding_agreement">我已阅读并同意《用户协议》《隐私政策》《免责声明》</string>
+    <string name="onboarding_next">下一步</string>
+    <string name="onboarding_enter">进入</string>
+
+    <!-- S3 Home (free mode) -->
+    <string name="home_title">蘑菇鉴别</string>
+    <string name="home_cta_title">📷 立即鉴别</string>
+    <string name="home_cta_subtitle">免费 · 离线可查 100 种</string>
+    <string name="home_section_recommend">推荐</string>
+    <string name="home_recommend_field_guide">100 种常见蘑菇图鉴</string>
+
+    <!-- S4 Camera -->
+    <string name="camera_close">×</string>
+    <string name="camera_flash">💡</string>
+    <string name="camera_flip">🔄</string>
+    <string name="camera_hint">拍清晰菌盖和菌褶</string>
+    <string name="camera_shutter">拍照</string>
+    <string name="camera_gallery">相册</string>
+    <string name="camera_permission_title">需要相机权限</string>
+    <string name="camera_permission_body">为了拍摄蘑菇照片,需要授权相机权限</string>
+    <string name="camera_permission_open_settings">去设置</string>
+
+    <!-- S5 PhotoPreview -->
+    <string name="preview_retake">重拍</string>
+    <string name="preview_use_this">用这张 →</string>
+    <string name="preview_suggestion">⚠ 建议:再拍一张菌褶细节</string>
+    <string name="preview_photo_too_small">图片过小,可能影响识别</string>
+    <string name="preview_low_light">光线不足,建议重拍</string>
+
+    <!-- S6 FeatureForm -->
+    <string name="form_title">补充信息,提高准确度</string>
+    <string name="form_field_cap_color">菌盖颜色 *</string>
+    <string name="form_field_ring">菌环 *</string>
+    <string name="form_field_volva">菌托 *</string>
+    <string name="form_field_habitat">栖息地 *</string>
+    <string name="form_field_season">季节</string>
+    <string name="form_field_note">备注(选填)</string>
+    <string name="form_note_hint">有腥味 / 树根旁…</string>
+    <string name="form_submit">立即鉴别 →</string>
+    <string name="form_missing_required">还需填 %1$d 项</string>
+    <string name="form_cap_white">白</string>
+    <string name="form_cap_yellow">黄</string>
+    <string name="form_cap_red">红</string>
+    <string name="form_cap_brown">褐</string>
+    <string name="form_cap_black">黑</string>
+    <string name="form_cap_purple">紫</string>
+    <string name="form_cap_other">其他</string>
+    <string name="form_ring_yes">有</string>
+    <string name="form_ring_no">无</string>
+    <string name="form_ring_unclear">看不清</string>
+    <string name="form_habitat_conifer">针叶林</string>
+    <string name="form_habitat_broadleaf">阔叶林</string>
+    <string name="form_habitat_grass">草地</string>
+    <string name="form_habitat_deadwood">腐木</string>
+    <string name="form_habitat_field">田边</string>
+    <string name="form_season_spring">春</string>
+    <string name="form_season_summer">夏</string>
+    <string name="form_season_autumn">秋</string>
+    <string name="form_season_winter">冬</string>
+    <string name="form_no_match_warning">您填的特征较少匹配,可能需要多张图,建议补充菌褶特写</string>
+
+    <!-- S9 Result (free mode, no order/payment) -->
+    <string name="result_title">鉴别结论</string>
+    <string name="result_section_conclusion">结论</string>
+    <string name="result_section_compare">配图(对比)</string>
+    <string name="result_your_photo">你的照片</string>
+    <string name="result_field_photo">图鉴照片</string>
+    <string name="result_section_risk">风险提示</string>
+    <string name="result_risk_consult">鉴别为咨询建议,不构成医疗</string>
+    <string name="result_risk_no_wild">任何情况下请勿采食野生菌</string>
+    <string name="result_action_share">截图发给朋友</string>
+    <string name="result_action_done">完成</string>
+    <string name="result_note_no_ring_no_volva">提示:无环无托 ≠ 无毒,仍以专家结论为准</string>
+
+    <!-- S11 SpeciesList -->
+    <string name="species_list_title">100 种常见蘑菇</string>
+    <string name="species_filter_all">全部</string>
+    <string name="species_filter_edible">可食</string>
+    <string name="species_filter_medicinal">可药用</string>
+    <string name="species_filter_poisonous">有毒</string>
+    <string name="species_filter_caution">需谨慎</string>
+    <string name="species_filter_unreported">无用途报道</string>
+    <string name="species_search_hint">搜索蘑菇…</string>
+
+    <!-- S12 SpeciesDetail -->
+    <string name="species_back">←</string>
+    <string name="species_id_points">辨识要点</string>
+    <string name="species_morphology">形态细节</string>
+    <string name="species_similar">相似种</string>
+    <string name="species_symptoms">误食症状</string>
+    <string name="species_toxicity">毒性等级</string>
+    <string name="species_edibility">可食性</string>
+    <string name="species_season">季节</string>
+    <string name="species_habitat">栖息地</string>
+    <string name="species_disclaimer">仅供科普,不构成采食建议</string>
+    <string name="species_find_expert">找专家鉴别</string>
+    <string name="species_source">数据来源:iflora.cn</string>
+
+    <!-- S13 Profile -->
+    <string name="profile_title">我的</string>
+    <string name="profile_user_id">User ID: 20260611001</string>
+    <string name="profile_orders_count">已鉴别 5 次</string>
+    <string name="profile_section_orders">订单</string>
+    <string name="profile_my_orders">📋 我的订单</string>
+    <string name="profile_my_favorites">❤️ 我的收藏</string>
+    <string name="profile_section_support">客服</string>
+    <string name="profile_contact_support">💬 联系客服</string>
+    <string name="profile_faq">❓ 常见问题</string>
+    <string name="profile_feedback">📝 反馈建议</string>
+    <string name="profile_section_legal">法务</string>
+    <string name="profile_user_agreement">📄 用户协议</string>
+    <string name="profile_privacy">🔒 隐私政策</string>
+    <string name="profile_disclaimer">⚠️ 免责声明</string>
+    <string name="profile_section_system">系统</string>
+    <string name="profile_notifications">🔔 推送设置</string>
+    <string name="profile_dark_mode">🌙 深色模式</string>
+    <string name="profile_about">📦 关于蘑菇鉴别 v1.0</string>
+    <string name="profile_logout">退出登录</string>
+
+    <!-- 我的 tab 内部入口(用户要求:我的收藏 / 设置 / 免责声明 / 关于) -->
+    <string name="profile_entry_settings">⚙  设置</string>
+    <string name="profile_entry_disclaimer">⚠  免责声明</string>
+    <string name="profile_entry_about">ℹ  关于</string>
+
+    <!-- 底部 tab 标签(用户要求:主页 / 常见 / 我的) -->
+    <string name="tab_home">主页</string>
+    <string name="tab_species">常见</string>
+    <string name="tab_profile">我的</string>
+
+    <!-- 我的收藏子页 -->
+    <string name="my_favorites_title">我的收藏</string>
+    <string name="my_favorites_empty_title">还没有收藏的蘑菇</string>
+    <string name="my_favorites_empty_subtitle">在物种详情页点击 ❤️ 即可加入收藏</string>
+
+    <!-- Common -->
+    <string name="cd_mushroom_icon">蘑菇图标</string>
+    <string name="cd_back">返回</string>
+    <string name="cd_close">关闭</string>
+    <string name="cd_status_icon">状态图标</string>
+    <string name="error_generic">出错了</string>
+    <string name="ok">确定</string>
+    <string name="cancel">取消</string>
+</resources>

@@ -1,0 +1,13 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!--
+      Splash background. Uses the cream surface to feel like a "blank page" before the
+      logo fades in. Compose-driven Theme.Mushroom colors are independent of this XML;
+      the activity uses `windowSplashScreenBackground` to color the OS-level splash too.
+    -->
+    <style name="Theme.Mushroom" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowSplashScreenBackground" tools:targetApi="s">#FAF8F3</item>
+        <item name="android:windowSplashScreenAnimatedIcon" tools:targetApi="s">@drawable/ic_splash_mushroom</item>
+    </style>
+</resources>

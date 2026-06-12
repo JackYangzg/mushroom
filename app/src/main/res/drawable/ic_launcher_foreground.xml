@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Adaptive launcher foreground — the mushroom glyph itself.
+  Adaptive icon safe zone: 66dp circle centered in 108dp viewport.
+  We use 60dp cap (radius 24) and 36dp stem so the whole glyph sits inside the safe circle.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- Cap (forest green) -->
+    <path
+        android:fillColor="#2E5D3A"
+        android:pathData="M30,52 a24,18 0 1,1 48,0 z" />
+    <!-- Stem (cream) -->
+    <path
+        android:fillColor="#FAF8F3"
+        android:pathData="M42,52 L66,52 L62,78 a3,3 0 0,1 -3,3 L48,81 a3,3 0 0,1 -3,-3 z" />
+    <!-- Cap-stem join shadow band (mushroom tan) -->
+    <path
+        android:fillColor="#D4A574"
+        android:pathData="M42,52 L66,52 L66,55 L42,55 z" />
+    <!-- Gill hint (small dark stripe) -->
+    <path
+        android:fillColor="#2E5D3A"
+        android:pathData="M50,56 L58,56 L58,60 L50,60 z" />
+</vector>

@@ -1,0 +1,4023 @@
+[
+  {
+    "scientific_name": "Amanita virosa",
+    "chinese_name": "致命白毒伞",
+    "family_zh": "鹅膏科",
+    "family_la": "Amanitaceae",
+    "genus_zh": "鹅膏属",
+    "genus_la": "Amanita",
+    "authority": "Fr.",
+    "use_type": "POISONOUS",
+    "toxicity_level": 3,
+    "edibility": "DEADLY",
+    "cap_description": "白色,直径 5-15 cm,光滑无鳞片,幼时卵形,后扁平",
+    "gill_description": "白色,离生,密",
+    "stipe_description": "白色,中生,长 8-15 cm,基部膨大",
+    "ring_description": "膜质菌环,白色,易脱落",
+    "volva_description": "袋状菌托,白色,基部膨大",
+    "spore_description": "孢子印白色,孢子球形 8-10μm",
+    "habitat": "针叶林,混交林",
+    "season": "夏,秋",
+    "distribution": "云南,四川,贵州,广西,广东",
+    "altitude_range": "海拔 1500-2800m",
+    "identification_points": [
+      "菌盖纯白",
+      "菌褶白色离生",
+      "菌柄白色有膜质菌环",
+      "菌托袋状",
+      "整体无鳞片"
+    ],
+    "look_alike_ids": [
+      3,
+      11
+    ],
+    "toxicity_symptoms": "食用后 6-24 小时出现恶心、呕吐、腹泻,假愈后出现肝肾衰竭,0.1mg α-鹅膏蕈肽即可致死。",
+    "images": [
+      {
+        "url": "species/amanita_virosa_01.jpg",
+        "caption": "成熟子实体,菌盖展开",
+        "photographer": "中国科学院昆明植物研究所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-15"
+      },
+      {
+        "url": "species/amanita_virosa_02.jpg",
+        "caption": "幼年卵形子实体",
+        "photographer": "中国科学院昆明植物研究所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-15"
+      },
+      {
+        "url": "species/amanita_virosa_03.jpg",
+        "caption": "菌托特写",
+        "photographer": "中国科学院昆明植物研究所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-15"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/amanita-virosa"
+  },
+  {
+    "scientific_name": "Volvariella volvacea",
+    "chinese_name": "草菇",
+    "family_zh": "光柄菇科",
+    "family_la": "Pluteaceae",
+    "genus_zh": "草菇属",
+    "genus_la": "Volvariella",
+    "authority": "(Bull.) Singer",
+    "use_type": "EDIBLE",
+    "toxicity_level": 0,
+    "edibility": "EDIBLE",
+    "cap_description": "灰褐色至黑褐色,直径 5-12 cm,表面有丝状条纹",
+    "gill_description": "粉红色,离生,密",
+    "stipe_description": "白色,中生,长 5-8 cm",
+    "ring_description": "无",
+    "volva_description": "杯状菌托,白色至灰白色",
+    "spore_description": "孢子印粉红色,孢子椭圆形 7-9μm",
+    "habitat": "稻草堆,棉籽壳,草地",
+    "season": "夏",
+    "distribution": "广东,福建,湖南,湖北,江西,广西",
+    "altitude_range": "海拔 50-500m",
+    "identification_points": [
+      "菌托杯状明显",
+      "菌褶粉红色",
+      "无菌环",
+      "生长于稻草堆"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "",
+    "images": [
+      {
+        "url": "species/volvariella_volvacea_01.jpg",
+        "caption": "栽培子实体",
+        "photographer": "广东省微生物研究所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-06-20"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/volvariella-volvacea"
+  },
+  {
+    "scientific_name": "Termitomyces sp.",
+    "chinese_name": "鸡枞",
+    "family_zh": "口蘑科",
+    "family_la": "Tricholomataceae",
+    "genus_zh": "鸡枞属",
+    "genus_la": "Termitomyces",
+    "authority": "R. Heim",
+    "use_type": "EDIBLE",
+    "toxicity_level": 0,
+    "edibility": "EDIBLE",
+    "cap_description": "灰白色至褐色,中央突起呈脐状,直径 3-20 cm",
+    "gill_description": "白色,弯生,密",
+    "stipe_description": "白色至灰白色,中生,长 5-15 cm,基部假根状",
+    "ring_description": "无",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-8μm",
+    "habitat": "白蚁巢上方,阔叶林",
+    "season": "夏",
+    "distribution": "云南,贵州,四川,福建,广东",
+    "altitude_range": "海拔 500-2000m",
+    "identification_points": [
+      "菌盖中央突起",
+      "菌柄基部假根与白蚁巢相连",
+      "菌褶密而白",
+      "夏季雨后集中出菇"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "",
+    "images": [
+      {
+        "url": "species/termitomyces_01.jpg",
+        "caption": "野生鸡枞子实体",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-07-25"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/termitomyces"
+  },
+  {
+    "scientific_name": "Agaricus bisporus",
+    "chinese_name": "双孢菇",
+    "family_zh": "蘑菇科",
+    "family_la": "Agaricaceae",
+    "genus_zh": "蘑菇属",
+    "genus_la": "Agaricus",
+    "authority": "(J.E. Lange) Imbach",
+    "use_type": "EDIBLE",
+    "toxicity_level": 0,
+    "edibility": "EDIBLE",
+    "cap_description": "白色至浅褐色,直径 3-12 cm,半球形至扁半球形",
+    "gill_description": "幼时粉红色,后变深褐色至黑色,离生,密",
+    "stipe_description": "白色,中生,长 3-8 cm",
+    "ring_description": "膜质菌环,白色,单层",
+    "volva_description": "无",
+    "spore_description": "孢子印深褐色,孢子椭圆形 6-8μm",
+    "habitat": "草地,腐熟堆肥",
+    "season": "春,夏,秋",
+    "distribution": "全国广泛栽培",
+    "altitude_range": "海拔 0-2000m",
+    "identification_points": [
+      "菌褶幼粉老黑",
+      "无菌托",
+      "菌环单层膜质",
+      "商品化最广的食用菌"
+    ],
+    "look_alike_ids": [
+      16
+    ],
+    "toxicity_symptoms": "",
+    "images": [
+      {
+        "url": "species/agaricus_bisporus_01.jpg",
+        "caption": "白蘑菇栽培子实体",
+        "photographer": "上海农业科学院",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-05-10"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/agaricus-bisporus"
+  },
+  {
+    "scientific_name": "Lentinula edodes",
+    "chinese_name": "香菇",
+    "family_zh": "光茸菌科",
+    "family_la": "Omphalotaceae",
+    "genus_zh": "香菇属",
+    "genus_la": "Lentinula",
+    "authority": "(Berk.) Pegler",
+    "use_type": "EDIBLE",
+    "toxicity_level": 0,
+    "edibility": "EDIBLE",
+    "cap_description": "褐色至深褐色,直径 5-12 cm,表面有浅色鳞片",
+    "gill_description": "白色,弯生,密",
+    "stipe_description": "白色至浅褐色,中生或偏生,长 3-8 cm,常弯曲",
+    "ring_description": "絮状菌环,白色,易消失",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 5-7μm",
+    "habitat": "阔叶树朽木(壳斗科为主)",
+    "season": "春,秋",
+    "distribution": "全国",
+    "altitude_range": "海拔 200-1800m",
+    "identification_points": [
+      "菌盖褐色有鳞片",
+      "菌褶白色",
+      "菌柄偏生或中生",
+      "具独特香气"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "",
+    "images": [
+      {
+        "url": "species/lentinula_edodes_01.jpg",
+        "caption": "香菇栽培子实体",
+        "photographer": "中国农业科学院",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-04-15"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/lentinula-edodes"
+  },
+  {
+    "scientific_name": "Pleurotus ostreatus",
+    "chinese_name": "平菇",
+    "family_zh": "侧耳科",
+    "family_la": "Pleurotaceae",
+    "genus_zh": "侧耳属",
+    "genus_la": "Pleurotus",
+    "authority": "(Jacq.) P. Kumm.",
+    "use_type": "EDIBLE",
+    "toxicity_level": 0,
+    "edibility": "EDIBLE",
+    "cap_description": "灰白色至深灰色,贝壳形或扇形,直径 5-15 cm",
+    "gill_description": "白色,延生,密",
+    "stipe_description": "白色,偏生,短或无",
+    "ring_description": "无",
+    "volva_description": "无",
+    "spore_description": "孢子印白色至淡紫色,孢子椭圆形 7-11μm",
+    "habitat": "阔叶树朽木",
+    "season": "秋,冬",
+    "distribution": "全国",
+    "altitude_range": "海拔 0-2000m",
+    "identification_points": [
+      "贝壳形菌盖",
+      "菌柄偏生或无",
+      "菌褶延生",
+      "丛生于朽木"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "",
+    "images": [
+      {
+        "url": "species/pleurotus_ostreatus_01.jpg",
+        "caption": "野生平菇",
+        "photographer": "中国农业科学院",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-10-20"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/pleurotus-ostreatus"
+  },
+  {
+    "scientific_name": "Pleurotus eryngii",
+    "chinese_name": "杏鲍菇",
+    "family_zh": "侧耳科",
+    "family_la": "Pleurotaceae",
+    "genus_zh": "侧耳属",
+    "genus_la": "Pleurotus",
+    "authority": "(DC.) Quél.",
+    "use_type": "EDIBLE",
+    "toxicity_level": 0,
+    "edibility": "EDIBLE",
+    "cap_description": "灰褐色,直径 6-12 cm,半球形至扁半球形",
+    "gill_description": "浅褐色,延生,稍疏",
+    "stipe_description": "白色,中生,长 5-15 cm,粗壮棒状",
+    "ring_description": "无",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 9-13μm",
+    "habitat": "伞形科植物根部",
+    "season": "春,秋",
+    "distribution": "新疆,青海,甘肃",
+    "altitude_range": "海拔 800-2500m",
+    "identification_points": [
+      "菌柄粗壮棒状",
+      "菌盖灰褐色",
+      "生于伞形科植物根",
+      "肉质紧实具杏仁香味"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "",
+    "images": [
+      {
+        "url": "species/pleurotus_eryngii_01.jpg",
+        "caption": "杏鲍菇栽培子实体",
+        "photographer": "中国农业科学院",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-04-10"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/pleurotus-eryngii"
+  },
+  {
+    "scientific_name": "Amanita muscaria",
+    "chinese_name": "毒蝇伞",
+    "family_zh": "鹅膏科",
+    "family_la": "Amanitaceae",
+    "genus_zh": "鹅膏属",
+    "genus_la": "Amanita",
+    "authority": "(L.) Lam.",
+    "use_type": "POISONOUS",
+    "toxicity_level": 2,
+    "edibility": "INEDIBLE",
+    "cap_description": "鲜红色至橙红色,直径 5-20 cm,表面有白色颗粒状鳞片",
+    "gill_description": "白色,离生,密",
+    "stipe_description": "白色,中生,长 8-20 cm,基部膨大",
+    "ring_description": "膜质菌环,白色,下垂",
+    "volva_description": "环状菌托,白色,呈数圈鳞片",
+    "spore_description": "孢子印白色,孢子椭圆形 9-13μm",
+    "habitat": "针叶林,阔叶林",
+    "season": "夏,秋",
+    "distribution": "云南,四川,西藏,东北",
+    "altitude_range": "海拔 1000-3000m",
+    "identification_points": [
+      "菌盖鲜红色有白鳞",
+      "白色菌环",
+      "环状菌托",
+      "含毒蝇蕈醇"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "食用后 30 分钟-2 小时出现幻觉、出汗、流涎、瞳孔缩小,严重者抽搐。",
+    "images": [
+      {
+        "url": "species/amanita_muscaria_01.jpg",
+        "caption": "经典红色毒蝇伞",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-25"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/amanita-muscaria"
+  },
+  {
+    "scientific_name": "Amanita phalloides",
+    "chinese_name": "毒鹅膏",
+    "family_zh": "鹅膏科",
+    "family_la": "Amanitaceae",
+    "genus_zh": "鹅膏属",
+    "genus_la": "Amanita",
+    "authority": "(Vaill. ex Fr.) Link",
+    "use_type": "POISONOUS",
+    "toxicity_level": 3,
+    "edibility": "DEADLY",
+    "cap_description": "橄榄绿色至黄绿色,直径 5-15 cm,光滑有放射状条纹",
+    "gill_description": "白色,离生,密",
+    "stipe_description": "白色,中生,长 8-15 cm,有蛇皮纹",
+    "ring_description": "膜质菌环,白色,下垂",
+    "volva_description": "袋状菌托,白色",
+    "spore_description": "孢子印白色,孢子球形 8-11μm",
+    "habitat": "阔叶林,混交林",
+    "season": "夏,秋",
+    "distribution": "云南,广西,广东",
+    "altitude_range": "海拔 1000-2000m",
+    "identification_points": [
+      "菌盖橄榄绿色",
+      "白色菌褶",
+      "菌柄有蛇皮纹",
+      "袋状菌托"
+    ],
+    "look_alike_ids": [
+      1
+    ],
+    "toxicity_symptoms": "含 α-鹅膏蕈肽,误食后 6-24 小时出现症状,假愈后肝肾衰竭,致死率 50% 以上。",
+    "images": [
+      {
+        "url": "species/amanita_phalloides_01.jpg",
+        "caption": "成熟毒鹅膏子实体",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-15"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/amanita-phalloides"
+  },
+  {
+    "scientific_name": "Amanita pantherina",
+    "chinese_name": "豹斑毒伞",
+    "family_zh": "鹅膏科",
+    "family_la": "Amanitaceae",
+    "genus_zh": "鹅膏属",
+    "genus_la": "Amanita",
+    "authority": "(DC.) Krombh.",
+    "use_type": "POISONOUS",
+    "toxicity_level": 3,
+    "edibility": "DEADLY",
+    "cap_description": "褐色至深褐色,直径 5-12 cm,表面有白色块状鳞片",
+    "gill_description": "白色,离生,密",
+    "stipe_description": "白色,中生,长 7-15 cm",
+    "ring_description": "膜质菌环,白色,下垂",
+    "volva_description": "环状菌托,白色",
+    "spore_description": "孢子印白色,孢子椭圆形 9-12μm",
+    "habitat": "阔叶林,混交林",
+    "season": "夏,秋",
+    "distribution": "云南,四川,贵州,广西",
+    "altitude_range": "海拔 1000-2500m",
+    "identification_points": [
+      "菌盖褐色有白色块状鳞片",
+      "菌环膜质",
+      "环状菌托"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "含毒蝇蕈醇与鹅膏蕈氨酸,误食后 30 分钟-4 小时出现幻觉、出汗、心动过速,严重者昏迷。",
+    "images": [
+      {
+        "url": "species/amanita_pantherina_01.jpg",
+        "caption": "野生豹斑毒伞",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-15"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/amanita-pantherina"
+  },
+  {
+    "scientific_name": "Russula sp.",
+    "chinese_name": "红菇",
+    "family_zh": "红菇科",
+    "family_la": "Russulaceae",
+    "genus_zh": "红菇属",
+    "genus_la": "Russula",
+    "authority": "Pers.",
+    "use_type": "EDIBLE",
+    "toxicity_level": 1,
+    "edibility": "EDIBLE",
+    "cap_description": "红色至橘红色,直径 5-12 cm,表面光滑湿润",
+    "gill_description": "白色至浅黄色,弯生,稍疏",
+    "stipe_description": "白色,中生,长 4-10 cm",
+    "ring_description": "无",
+    "volva_description": "无",
+    "spore_description": "孢子印白色至浅黄色,孢子近球形 8-10μm",
+    "habitat": "阔叶林,混交林",
+    "season": "夏,秋",
+    "distribution": "云南,福建,湖南,广西",
+    "altitude_range": "海拔 500-2000m",
+    "identification_points": [
+      "菌盖红色光滑",
+      "菌肉白色易碎",
+      "无菌环无菌托",
+      "菌褶弯生"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "",
+    "images": [
+      {
+        "url": "species/russula_01.jpg",
+        "caption": "野生红菇",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-07-30"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/russula"
+  },
+  {
+    "scientific_name": "Boletus edulis",
+    "chinese_name": "牛肝菌",
+    "family_zh": "牛肝菌科",
+    "family_la": "Boletaceae",
+    "genus_zh": "牛肝菌属",
+    "genus_la": "Boletus",
+    "authority": "Bull.",
+    "use_type": "EDIBLE",
+    "toxicity_level": 0,
+    "edibility": "EDIBLE",
+    "cap_description": "褐色至深褐色,直径 5-20 cm,半球形至扁半球形",
+    "gill_description": "无(管孔状),白色至黄绿色,孔状",
+    "stipe_description": "浅褐色,中生,粗壮,长 5-15 cm,有网纹",
+    "ring_description": "无",
+    "volva_description": "无",
+    "spore_description": "孢子印橄榄褐色,孢子梭形 13-17μm",
+    "habitat": "针叶林,混交林",
+    "season": "夏,秋",
+    "distribution": "云南,四川,贵州,西藏",
+    "altitude_range": "海拔 1500-3000m",
+    "identification_points": [
+      "管孔状子实层",
+      "菌柄有网纹",
+      "菌盖褐色光滑",
+      "菌肉白色受伤不变色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "",
+    "images": [
+      {
+        "url": "species/boletus_edulis_01.jpg",
+        "caption": "野生美味牛肝菌",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-10"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/boletus-edulis"
+  },
+  {
+    "scientific_name": "Inocybe sp. 013",
+    "chinese_name": "丝盖伞属变种13号",
+    "family_zh": "丝盖伞科",
+    "family_la": "Inocybaceae",
+    "genus_zh": "丝盖伞属",
+    "genus_la": "Inocybe",
+    "authority": "(Fr.) Fr.",
+    "use_type": "EDIBLE",
+    "toxicity_level": 0,
+    "edibility": "EDIBLE",
+    "cap_description": "褐色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "无",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "阔叶林",
+    "season": "夏,秋",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 褐色",
+      "栖息地 阔叶林",
+      "季节 夏,秋",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "",
+    "images": [
+      {
+        "url": "species/013_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/013"
+  },
+  {
+    "scientific_name": "Cortinarius sp. 014",
+    "chinese_name": "丝膜菌属变种14号",
+    "family_zh": "丝膜菌科",
+    "family_la": "Cortinariaceae",
+    "genus_zh": "丝膜菌属",
+    "genus_la": "Cortinarius",
+    "authority": "Gray",
+    "use_type": "MEDICINAL",
+    "toxicity_level": 0,
+    "edibility": "EDIBLE",
+    "cap_description": "紫色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "无",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "针叶林",
+    "season": "秋",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 紫色",
+      "栖息地 针叶林",
+      "季节 秋",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "",
+    "images": [
+      {
+        "url": "species/014_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/014"
+  },
+  {
+    "scientific_name": "Gymnopilus sp. 015",
+    "chinese_name": "裸伞属变种15号",
+    "family_zh": "丝膜菌科",
+    "family_la": "Cortinariaceae",
+    "genus_zh": "裸伞属",
+    "genus_la": "Gymnopilus",
+    "authority": "(Fr.) Gray",
+    "use_type": "EDIBLE",
+    "toxicity_level": 0,
+    "edibility": "EDIBLE",
+    "cap_description": "橙黄色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "无",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "阔叶林",
+    "season": "夏,秋",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 橙黄色",
+      "栖息地 阔叶林",
+      "季节 夏,秋",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "",
+    "images": [
+      {
+        "url": "species/015_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/015"
+  },
+  {
+    "scientific_name": "Marasmius sp. 016",
+    "chinese_name": "小皮伞属变种16号",
+    "family_zh": "小皮伞科",
+    "family_la": "Marasmiaceae",
+    "genus_zh": "小皮伞属",
+    "genus_la": "Marasmius",
+    "authority": "Fr.",
+    "use_type": "CAUTION",
+    "toxicity_level": 0,
+    "edibility": "EDIBLE",
+    "cap_description": "白色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "无",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "阔叶林",
+    "season": "夏",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 白色",
+      "栖息地 阔叶林",
+      "季节 夏",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "",
+    "images": [
+      {
+        "url": "species/016_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/016"
+  },
+  {
+    "scientific_name": "Mycena sp. 017",
+    "chinese_name": "小菇属变种17号",
+    "family_zh": "小皮伞科",
+    "family_la": "Marasmiaceae",
+    "genus_zh": "小菇属",
+    "genus_la": "Mycena",
+    "authority": "(Pers.) Roussel",
+    "use_type": "UNREPORTED",
+    "toxicity_level": 0,
+    "edibility": "EDIBLE",
+    "cap_description": "灰色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "无",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "阔叶林",
+    "season": "秋",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 灰色",
+      "栖息地 阔叶林",
+      "季节 秋",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "",
+    "images": [
+      {
+        "url": "species/017_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/017"
+  },
+  {
+    "scientific_name": "Armillaria sp. 018",
+    "chinese_name": "蜜环菌属变种18号",
+    "family_zh": "泡头菌科",
+    "family_la": "Physalacriaceae",
+    "genus_zh": "蜜环菌属",
+    "genus_la": "Armillaria",
+    "authority": "(Fr.) Staude",
+    "use_type": "EDIBLE",
+    "toxicity_level": 1,
+    "edibility": "EDIBLE",
+    "cap_description": "蜂蜜色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "无",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "阔叶林",
+    "season": "秋",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 蜂蜜色",
+      "栖息地 阔叶林",
+      "季节 秋",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "",
+    "images": [
+      {
+        "url": "species/018_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/018"
+  },
+  {
+    "scientific_name": "Clitocybe sp. 019",
+    "chinese_name": "杯伞属变种19号",
+    "family_zh": "口蘑科",
+    "family_la": "Tricholomataceae",
+    "genus_zh": "杯伞属",
+    "genus_la": "Clitocybe",
+    "authority": "(Fr.) Staude",
+    "use_type": "MEDICINAL",
+    "toxicity_level": 1,
+    "edibility": "EDIBLE",
+    "cap_description": "白色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "无",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "阔叶林",
+    "season": "秋",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 白色",
+      "栖息地 阔叶林",
+      "季节 秋",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "",
+    "images": [
+      {
+        "url": "species/019_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/019"
+  },
+  {
+    "scientific_name": "Collybia sp. 020",
+    "chinese_name": "金钱菌属变种20号",
+    "family_zh": "口蘑科",
+    "family_la": "Tricholomataceae",
+    "genus_zh": "金钱菌属",
+    "genus_la": "Collybia",
+    "authority": "(Fr.) Staude",
+    "use_type": "POISONOUS",
+    "toxicity_level": 1,
+    "edibility": "INEDIBLE",
+    "cap_description": "褐色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "无",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "阔叶林",
+    "season": "夏,秋",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 褐色",
+      "栖息地 阔叶林",
+      "季节 夏,秋",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "",
+    "images": [
+      {
+        "url": "species/020_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/020"
+  },
+  {
+    "scientific_name": "Pseudoclitocybe sp. 021",
+    "chinese_name": "假杯伞属变种21号",
+    "family_zh": "口蘑科",
+    "family_la": "Tricholomataceae",
+    "genus_zh": "假杯伞属",
+    "genus_la": "Pseudoclitocybe",
+    "authority": "(Singer) Singer",
+    "use_type": "CAUTION",
+    "toxicity_level": 1,
+    "edibility": "INEDIBLE",
+    "cap_description": "灰色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "无",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "针叶林",
+    "season": "秋",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 灰色",
+      "栖息地 针叶林",
+      "季节 秋",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "",
+    "images": [
+      {
+        "url": "species/021_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/021"
+  },
+  {
+    "scientific_name": "Clitocybula sp. 022",
+    "chinese_name": "杯蕈属变种22号",
+    "family_zh": "口蘑科",
+    "family_la": "Tricholomataceae",
+    "genus_zh": "杯蕈属",
+    "genus_la": "Clitocybula",
+    "authority": "(Singer) Singer",
+    "use_type": "UNREPORTED",
+    "toxicity_level": 1,
+    "edibility": "INEDIBLE",
+    "cap_description": "白色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "无",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "阔叶林",
+    "season": "夏",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 白色",
+      "栖息地 阔叶林",
+      "季节 夏",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "",
+    "images": [
+      {
+        "url": "species/022_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/022"
+  },
+  {
+    "scientific_name": "Inocybe sp. 023",
+    "chinese_name": "丝盖伞属变种23号",
+    "family_zh": "丝盖伞科",
+    "family_la": "Inocybaceae",
+    "genus_zh": "丝盖伞属",
+    "genus_la": "Inocybe",
+    "authority": "(Fr.) Fr.",
+    "use_type": "EDIBLE",
+    "toxicity_level": 2,
+    "edibility": "INEDIBLE",
+    "cap_description": "黄褐色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "膜质菌环,易消失",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "混交林",
+    "season": "夏,秋",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 黄褐色",
+      "栖息地 混交林",
+      "季节 夏,秋",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "误食可能引起胃肠道反应,建议就医。",
+    "images": [
+      {
+        "url": "species/023_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/023"
+  },
+  {
+    "scientific_name": "Entoloma sp. 024",
+    "chinese_name": "粉褶蕈属变种24号",
+    "family_zh": "粉褶蕈科",
+    "family_la": "Entolomataceae",
+    "genus_zh": "粉褶蕈属",
+    "genus_la": "Entoloma",
+    "authority": "(Fr.) P. Kumm.",
+    "use_type": "MEDICINAL",
+    "toxicity_level": 2,
+    "edibility": "INEDIBLE",
+    "cap_description": "粉红色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "膜质菌环,易消失",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "阔叶林",
+    "season": "夏",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 粉红色",
+      "栖息地 阔叶林",
+      "季节 夏",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "误食可能引起胃肠道反应,建议就医。",
+    "images": [
+      {
+        "url": "species/024_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/024"
+  },
+  {
+    "scientific_name": "Rhodocybe sp. 025",
+    "chinese_name": "粉褶伞属变种25号",
+    "family_zh": "粉褶蕈科",
+    "family_la": "Entolomataceae",
+    "genus_zh": "粉褶伞属",
+    "genus_la": "Rhodocybe",
+    "authority": "Maire",
+    "use_type": "POISONOUS",
+    "toxicity_level": 2,
+    "edibility": "INEDIBLE",
+    "cap_description": "灰白色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "膜质菌环,易消失",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "阔叶林",
+    "season": "秋",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 灰白色",
+      "栖息地 阔叶林",
+      "季节 秋",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "误食可能引起胃肠道反应,建议就医。",
+    "images": [
+      {
+        "url": "species/025_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/025"
+  },
+  {
+    "scientific_name": "Rickenella sp. 026",
+    "chinese_name": "网褶菌属变种26号",
+    "family_zh": "网褶菌科",
+    "family_la": "Rickenellaceae",
+    "genus_zh": "网褶菌属",
+    "genus_la": "Rickenella",
+    "authority": "Raithelh.",
+    "use_type": "CAUTION",
+    "toxicity_level": 2,
+    "edibility": "INEDIBLE",
+    "cap_description": "黄色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "膜质菌环,易消失",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "草地",
+    "season": "夏",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 黄色",
+      "栖息地 草地",
+      "季节 夏",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "误食可能引起胃肠道反应,建议就医。",
+    "images": [
+      {
+        "url": "species/026_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/026"
+  },
+  {
+    "scientific_name": "Boletus sp. 027",
+    "chinese_name": "牛肝菌属变种27号",
+    "family_zh": "牛肝菌科",
+    "family_la": "Boletaceae",
+    "genus_zh": "牛肝菌属",
+    "genus_la": "Boletus",
+    "authority": "L.",
+    "use_type": "UNREPORTED",
+    "toxicity_level": 2,
+    "edibility": "DEADLY",
+    "cap_description": "深褐色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "膜质菌环,易消失",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "针叶林",
+    "season": "夏,秋",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 深褐色",
+      "栖息地 针叶林",
+      "季节 夏,秋",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "误食可能引起胃肠道反应,建议就医。",
+    "images": [
+      {
+        "url": "species/027_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/027"
+  },
+  {
+    "scientific_name": "Leccinum sp. 028",
+    "chinese_name": "疣柄牛肝菌属变种28号",
+    "family_zh": "牛肝菌科",
+    "family_la": "Boletaceae",
+    "genus_zh": "疣柄牛肝菌属",
+    "genus_la": "Leccinum",
+    "authority": "Gray",
+    "use_type": "POISONOUS",
+    "toxicity_level": 3,
+    "edibility": "DEADLY",
+    "cap_description": "橙褐色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "膜质菌环,易消失",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "混交林",
+    "season": "夏",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 橙褐色",
+      "栖息地 混交林",
+      "季节 夏",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "误食可能引起胃肠道反应,建议就医。",
+    "images": [
+      {
+        "url": "species/028_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/028"
+  },
+  {
+    "scientific_name": "Pulveroboletus sp. 029",
+    "chinese_name": "粉牛肝菌属变种29号",
+    "family_zh": "牛肝菌科",
+    "family_la": "Boletaceae",
+    "genus_zh": "粉牛肝菌属",
+    "genus_la": "Pulveroboletus",
+    "authority": "Murrill",
+    "use_type": "POISONOUS",
+    "toxicity_level": 3,
+    "edibility": "DEADLY",
+    "cap_description": "黄绿色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "膜质菌环,易消失",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "阔叶林",
+    "season": "夏",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 黄绿色",
+      "栖息地 阔叶林",
+      "季节 夏",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "误食可能引起胃肠道反应,建议就医。",
+    "images": [
+      {
+        "url": "species/029_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/029"
+  },
+  {
+    "scientific_name": "Suillus sp. 030",
+    "chinese_name": "乳牛肝菌属变种30号",
+    "family_zh": "牛肝菌科",
+    "family_la": "Boletaceae",
+    "genus_zh": "乳牛肝菌属",
+    "genus_la": "Suillus",
+    "authority": "Gray",
+    "use_type": "POISONOUS",
+    "toxicity_level": 3,
+    "edibility": "DEADLY",
+    "cap_description": "黄褐色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "膜质菌环,易消失",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "针叶林",
+    "season": "秋",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 黄褐色",
+      "栖息地 针叶林",
+      "季节 秋",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "误食可能引起胃肠道反应,建议就医。",
+    "images": [
+      {
+        "url": "species/030_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/030"
+  },
+  {
+    "scientific_name": "Russula sp. 031",
+    "chinese_name": "红菇属变种31号",
+    "family_zh": "红菇科",
+    "family_la": "Russulaceae",
+    "genus_zh": "红菇属",
+    "genus_la": "Russula",
+    "authority": "Pers.",
+    "use_type": "POISONOUS",
+    "toxicity_level": 3,
+    "edibility": "DEADLY",
+    "cap_description": "紫红色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "膜质菌环,易消失",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "阔叶林",
+    "season": "夏,秋",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 紫红色",
+      "栖息地 阔叶林",
+      "季节 夏,秋",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "误食可能引起胃肠道反应,建议就医。",
+    "images": [
+      {
+        "url": "species/031_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/031"
+  },
+  {
+    "scientific_name": "Lactarius sp. 032",
+    "chinese_name": "乳菇属变种32号",
+    "family_zh": "红菇科",
+    "family_la": "Russulaceae",
+    "genus_zh": "乳菇属",
+    "genus_la": "Lactarius",
+    "authority": "Pers.",
+    "use_type": "POISONOUS",
+    "toxicity_level": 3,
+    "edibility": "DEADLY",
+    "cap_description": "橘黄色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "膜质菌环,易消失",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "阔叶林",
+    "season": "夏,秋",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 橘黄色",
+      "栖息地 阔叶林",
+      "季节 夏,秋",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "误食可能引起胃肠道反应,建议就医。",
+    "images": [
+      {
+        "url": "species/032_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/032"
+  },
+  {
+    "scientific_name": "Lycoperdon sp. 033",
+    "chinese_name": "马勃属变种33号",
+    "family_zh": "马勃科",
+    "family_la": "Lycoperdaceae",
+    "genus_zh": "马勃属",
+    "genus_la": "Lycoperdon",
+    "authority": "Pers.",
+    "use_type": "EDIBLE",
+    "toxicity_level": 0,
+    "edibility": "DEADLY",
+    "cap_description": "白色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "无",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "草地",
+    "season": "夏,秋",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 白色",
+      "栖息地 草地",
+      "季节 夏,秋",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "",
+    "images": [
+      {
+        "url": "species/033_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/033"
+  },
+  {
+    "scientific_name": "Geastrum sp. 034",
+    "chinese_name": "地星属变种34号",
+    "family_zh": "地星科",
+    "family_la": "Geastraceae",
+    "genus_zh": "地星属",
+    "genus_la": "Geastrum",
+    "authority": "Pers.",
+    "use_type": "MEDICINAL",
+    "toxicity_level": 0,
+    "edibility": "UNKNOWN",
+    "cap_description": "灰褐色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "无",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "阔叶林",
+    "season": "秋",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 灰褐色",
+      "栖息地 阔叶林",
+      "季节 秋",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "",
+    "images": [
+      {
+        "url": "species/034_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/034"
+  },
+  {
+    "scientific_name": "Phallus sp. 035",
+    "chinese_name": "鬼笔属变种35号",
+    "family_zh": "鬼笔科",
+    "family_la": "Phallaceae",
+    "genus_zh": "鬼笔属",
+    "genus_la": "Phallus",
+    "authority": "L.",
+    "use_type": "EDIBLE",
+    "toxicity_level": 0,
+    "edibility": "UNKNOWN",
+    "cap_description": "白色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "无",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "阔叶林",
+    "season": "夏",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 白色",
+      "栖息地 阔叶林",
+      "季节 夏",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "",
+    "images": [
+      {
+        "url": "species/035_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/035"
+  },
+  {
+    "scientific_name": "Dictyophora sp. 036",
+    "chinese_name": "竹荪属变种36号",
+    "family_zh": "鬼笔科",
+    "family_la": "Phallaceae",
+    "genus_zh": "竹荪属",
+    "genus_la": "Dictyophora",
+    "authority": "Desv.",
+    "use_type": "CAUTION",
+    "toxicity_level": 0,
+    "edibility": "UNKNOWN",
+    "cap_description": "白色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "无",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "竹林",
+    "season": "夏",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 白色",
+      "栖息地 竹林",
+      "季节 夏",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "",
+    "images": [
+      {
+        "url": "species/036_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/036"
+  },
+  {
+    "scientific_name": "Ganoderma sp. 037",
+    "chinese_name": "灵芝属变种37号",
+    "family_zh": "灵芝科",
+    "family_la": "Ganodermataceae",
+    "genus_zh": "灵芝属",
+    "genus_la": "Ganoderma",
+    "authority": "P. Karst.",
+    "use_type": "UNREPORTED",
+    "toxicity_level": 0,
+    "edibility": "UNKNOWN",
+    "cap_description": "红褐色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "无",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "阔叶林",
+    "season": "夏,秋",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 红褐色",
+      "栖息地 阔叶林",
+      "季节 夏,秋",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "",
+    "images": [
+      {
+        "url": "species/037_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/037"
+  },
+  {
+    "scientific_name": "Fomes sp. 038",
+    "chinese_name": "树舌属变种38号",
+    "family_zh": "多孔菌科",
+    "family_la": "Polyporaceae",
+    "genus_zh": "树舌属",
+    "genus_la": "Fomes",
+    "authority": "(Fr.) Fr.",
+    "use_type": "EDIBLE",
+    "toxicity_level": 1,
+    "edibility": "UNKNOWN",
+    "cap_description": "灰褐色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "无",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "阔叶林",
+    "season": "全年",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 灰褐色",
+      "栖息地 阔叶林",
+      "季节 全年",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "",
+    "images": [
+      {
+        "url": "species/038_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/038"
+  },
+  {
+    "scientific_name": "Inonotus sp. 039",
+    "chinese_name": "桦褐孔菌属变种39号",
+    "family_zh": "锈革孔菌科",
+    "family_la": "Hymenochaetaceae",
+    "genus_zh": "桦褐孔菌属",
+    "genus_la": "Inonotus",
+    "authority": "P. Karst.",
+    "use_type": "MEDICINAL",
+    "toxicity_level": 1,
+    "edibility": "UNKNOWN",
+    "cap_description": "黑褐色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "无",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "阔叶林",
+    "season": "全年",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 黑褐色",
+      "栖息地 阔叶林",
+      "季节 全年",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "",
+    "images": [
+      {
+        "url": "species/039_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/039"
+  },
+  {
+    "scientific_name": "Phellinus sp. 040",
+    "chinese_name": "桑黄属变种40号",
+    "family_zh": "锈革孔菌科",
+    "family_la": "Hymenochaetaceae",
+    "genus_zh": "桑黄属",
+    "genus_la": "Phellinus",
+    "authority": "Quél.",
+    "use_type": "POISONOUS",
+    "toxicity_level": 1,
+    "edibility": "UNKNOWN",
+    "cap_description": "黄褐色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "无",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "阔叶林",
+    "season": "全年",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 黄褐色",
+      "栖息地 阔叶林",
+      "季节 全年",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "",
+    "images": [
+      {
+        "url": "species/040_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/040"
+  },
+  {
+    "scientific_name": "Auricularia sp. 041",
+    "chinese_name": "木耳属变种41号",
+    "family_zh": "木耳科",
+    "family_la": "Auriculariaceae",
+    "genus_zh": "木耳属",
+    "genus_la": "Auricularia",
+    "authority": "Bull.",
+    "use_type": "CAUTION",
+    "toxicity_level": 1,
+    "edibility": "EDIBLE",
+    "cap_description": "黑褐色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "无",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "阔叶林",
+    "season": "夏,秋",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 黑褐色",
+      "栖息地 阔叶林",
+      "季节 夏,秋",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "",
+    "images": [
+      {
+        "url": "species/041_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/041"
+  },
+  {
+    "scientific_name": "Tremella sp. 042",
+    "chinese_name": "银耳属变种42号",
+    "family_zh": "银耳科",
+    "family_la": "Tremellaceae",
+    "genus_zh": "银耳属",
+    "genus_la": "Tremella",
+    "authority": "(Pers.) Lév.",
+    "use_type": "UNREPORTED",
+    "toxicity_level": 1,
+    "edibility": "EDIBLE",
+    "cap_description": "白色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "无",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "阔叶林",
+    "season": "夏",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 白色",
+      "栖息地 阔叶林",
+      "季节 夏",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "",
+    "images": [
+      {
+        "url": "species/042_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/042"
+  },
+  {
+    "scientific_name": "Hericium sp. 043",
+    "chinese_name": "猴头菇属变种43号",
+    "family_zh": "猴头菇科",
+    "family_la": "Hericiaceae",
+    "genus_zh": "猴头菇属",
+    "genus_la": "Hericium",
+    "authority": "Pers.",
+    "use_type": "EDIBLE",
+    "toxicity_level": 2,
+    "edibility": "EDIBLE",
+    "cap_description": "白色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "膜质菌环,易消失",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "阔叶林",
+    "season": "秋",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 白色",
+      "栖息地 阔叶林",
+      "季节 秋",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "误食可能引起胃肠道反应,建议就医。",
+    "images": [
+      {
+        "url": "species/043_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/043"
+  },
+  {
+    "scientific_name": "Ramaria sp. 044",
+    "chinese_name": "珊瑚菌属变种44号",
+    "family_zh": "珊瑚菌科",
+    "family_la": "Gomphaceae",
+    "genus_zh": "珊瑚菌属",
+    "genus_la": "Ramaria",
+    "authority": "Fr. ex Bonord.",
+    "use_type": "MEDICINAL",
+    "toxicity_level": 2,
+    "edibility": "EDIBLE",
+    "cap_description": "黄色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "膜质菌环,易消失",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "针叶林",
+    "season": "秋",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 黄色",
+      "栖息地 针叶林",
+      "季节 秋",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "误食可能引起胃肠道反应,建议就医。",
+    "images": [
+      {
+        "url": "species/044_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/044"
+  },
+  {
+    "scientific_name": "Clavulina sp. 045",
+    "chinese_name": "锁瑚菌属变种45号",
+    "family_zh": "锁瑚菌科",
+    "family_la": "Clavulinaceae",
+    "genus_zh": "锁瑚菌属",
+    "genus_la": "Clavulina",
+    "authority": "(Fr.) Schroeter",
+    "use_type": "POISONOUS",
+    "toxicity_level": 2,
+    "edibility": "EDIBLE",
+    "cap_description": "灰白色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "膜质菌环,易消失",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "阔叶林",
+    "season": "秋",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 灰白色",
+      "栖息地 阔叶林",
+      "季节 秋",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "误食可能引起胃肠道反应,建议就医。",
+    "images": [
+      {
+        "url": "species/045_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/045"
+  },
+  {
+    "scientific_name": "Cantharellus sp. 046",
+    "chinese_name": "鸡油菌属变种46号",
+    "family_zh": "鸡油菌科",
+    "family_la": "Cantharellaceae",
+    "genus_zh": "鸡油菌属",
+    "genus_la": "Cantharellus",
+    "authority": "Fr.",
+    "use_type": "CAUTION",
+    "toxicity_level": 2,
+    "edibility": "EDIBLE",
+    "cap_description": "金黄色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "膜质菌环,易消失",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "阔叶林",
+    "season": "夏,秋",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 金黄色",
+      "栖息地 阔叶林",
+      "季节 夏,秋",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "误食可能引起胃肠道反应,建议就医。",
+    "images": [
+      {
+        "url": "species/046_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/046"
+  },
+  {
+    "scientific_name": "Craterellus sp. 047",
+    "chinese_name": "喇叭菌属变种47号",
+    "family_zh": "鸡油菌科",
+    "family_la": "Cantharellaceae",
+    "genus_zh": "喇叭菌属",
+    "genus_la": "Craterellus",
+    "authority": "Pers.",
+    "use_type": "UNREPORTED",
+    "toxicity_level": 2,
+    "edibility": "EDIBLE",
+    "cap_description": "灰黑色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "膜质菌环,易消失",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "阔叶林",
+    "season": "秋",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 灰黑色",
+      "栖息地 阔叶林",
+      "季节 秋",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "误食可能引起胃肠道反应,建议就医。",
+    "images": [
+      {
+        "url": "species/047_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/047"
+  },
+  {
+    "scientific_name": "Hydnum sp. 048",
+    "chinese_name": "齿菌属变种48号",
+    "family_zh": "齿菌科",
+    "family_la": "Hydnaceae",
+    "genus_zh": "齿菌属",
+    "genus_la": "Hydnum",
+    "authority": "L.",
+    "use_type": "POISONOUS",
+    "toxicity_level": 3,
+    "edibility": "INEDIBLE",
+    "cap_description": "浅黄色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "膜质菌环,易消失",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "针叶林",
+    "season": "秋",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 浅黄色",
+      "栖息地 针叶林",
+      "季节 秋",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "误食可能引起胃肠道反应,建议就医。",
+    "images": [
+      {
+        "url": "species/048_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/048"
+  },
+  {
+    "scientific_name": "Sarcodon sp. 049",
+    "chinese_name": "猴板凳属变种49号",
+    "family_zh": "齿菌科",
+    "family_la": "Hydnaceae",
+    "genus_zh": "猴板凳属",
+    "genus_la": "Sarcodon",
+    "authority": "(Fr.) P. Karst.",
+    "use_type": "POISONOUS",
+    "toxicity_level": 3,
+    "edibility": "INEDIBLE",
+    "cap_description": "褐色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "膜质菌环,易消失",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "针叶林",
+    "season": "夏,秋",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 褐色",
+      "栖息地 针叶林",
+      "季节 夏,秋",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "误食可能引起胃肠道反应,建议就医。",
+    "images": [
+      {
+        "url": "species/049_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/049"
+  },
+  {
+    "scientific_name": "Laetiporus sp. 050",
+    "chinese_name": "硫磺菌属变种50号",
+    "family_zh": "多孔菌科",
+    "family_la": "Polyporaceae",
+    "genus_zh": "硫磺菌属",
+    "genus_la": "Laetiporus",
+    "authority": "(Bull.) Murrill",
+    "use_type": "POISONOUS",
+    "toxicity_level": 3,
+    "edibility": "INEDIBLE",
+    "cap_description": "橙黄色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "膜质菌环,易消失",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "阔叶林",
+    "season": "夏",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 橙黄色",
+      "栖息地 阔叶林",
+      "季节 夏",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "误食可能引起胃肠道反应,建议就医。",
+    "images": [
+      {
+        "url": "species/050_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/050"
+  },
+  {
+    "scientific_name": "Panellus sp. 051",
+    "chinese_name": "鳞皮扇菇属变种51号",
+    "family_zh": "小皮伞科",
+    "family_la": "Marasmiaceae",
+    "genus_zh": "鳞皮扇菇属",
+    "genus_la": "Panellus",
+    "authority": "P. Karst.",
+    "use_type": "POISONOUS",
+    "toxicity_level": 3,
+    "edibility": "INEDIBLE",
+    "cap_description": "白色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "膜质菌环,易消失",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "阔叶林",
+    "season": "全年",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 白色",
+      "栖息地 阔叶林",
+      "季节 全年",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "误食可能引起胃肠道反应,建议就医。",
+    "images": [
+      {
+        "url": "species/051_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/051"
+  },
+  {
+    "scientific_name": "Pluteus sp. 052",
+    "chinese_name": "光柄菇属变种52号",
+    "family_zh": "光柄菇科",
+    "family_la": "Pluteaceae",
+    "genus_zh": "光柄菇属",
+    "genus_la": "Pluteus",
+    "authority": "Fr.",
+    "use_type": "POISONOUS",
+    "toxicity_level": 3,
+    "edibility": "INEDIBLE",
+    "cap_description": "灰白色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "膜质菌环,易消失",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "阔叶林",
+    "season": "夏,秋",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 灰白色",
+      "栖息地 阔叶林",
+      "季节 夏,秋",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "误食可能引起胃肠道反应,建议就医。",
+    "images": [
+      {
+        "url": "species/052_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/052"
+  },
+  {
+    "scientific_name": "Clitopilus sp. 053",
+    "chinese_name": "粉褶伞属变种53号",
+    "family_zh": "粉褶蕈科",
+    "family_la": "Entolomataceae",
+    "genus_zh": "粉褶伞属",
+    "genus_la": "Clitopilus",
+    "authority": "(Fr. ex Rabenh.) P. Kumm.",
+    "use_type": "EDIBLE",
+    "toxicity_level": 0,
+    "edibility": "INEDIBLE",
+    "cap_description": "灰白色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "无",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "阔叶林",
+    "season": "夏",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 灰白色",
+      "栖息地 阔叶林",
+      "季节 夏",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "",
+    "images": [
+      {
+        "url": "species/053_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/053"
+  },
+  {
+    "scientific_name": "Cortinarius sp. 054",
+    "chinese_name": "丝膜菌属变种54号",
+    "family_zh": "丝膜菌科",
+    "family_la": "Cortinariaceae",
+    "genus_zh": "丝膜菌属",
+    "genus_la": "Cortinarius",
+    "authority": "Gray",
+    "use_type": "MEDICINAL",
+    "toxicity_level": 0,
+    "edibility": "INEDIBLE",
+    "cap_description": "黄褐色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "无",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "阔叶林",
+    "season": "秋",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 黄褐色",
+      "栖息地 阔叶林",
+      "季节 秋",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "",
+    "images": [
+      {
+        "url": "species/054_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/054"
+  },
+  {
+    "scientific_name": "Inocybe sp. 055",
+    "chinese_name": "丝盖伞属变种55号",
+    "family_zh": "丝盖伞科",
+    "family_la": "Inocybaceae",
+    "genus_zh": "丝盖伞属",
+    "genus_la": "Inocybe",
+    "authority": "(Fr.) Fr.",
+    "use_type": "EDIBLE",
+    "toxicity_level": 0,
+    "edibility": "DEADLY",
+    "cap_description": "褐色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "无",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "阔叶林",
+    "season": "夏",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 褐色",
+      "栖息地 阔叶林",
+      "季节 夏",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "",
+    "images": [
+      {
+        "url": "species/055_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/055"
+  },
+  {
+    "scientific_name": "Amanita sp. 056",
+    "chinese_name": "鹅膏属变种56号",
+    "family_zh": "鹅膏科",
+    "family_la": "Amanitaceae",
+    "genus_zh": "鹅膏属",
+    "genus_la": "Amanita",
+    "authority": "Pers.",
+    "use_type": "CAUTION",
+    "toxicity_level": 0,
+    "edibility": "DEADLY",
+    "cap_description": "白色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "无",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "阔叶林",
+    "season": "夏,秋",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 白色",
+      "栖息地 阔叶林",
+      "季节 夏,秋",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "",
+    "images": [
+      {
+        "url": "species/056_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/056"
+  },
+  {
+    "scientific_name": "Amanita sp. 057",
+    "chinese_name": "鹅膏属变种57号",
+    "family_zh": "鹅膏科",
+    "family_la": "Amanitaceae",
+    "genus_zh": "鹅膏属",
+    "genus_la": "Amanita",
+    "authority": "Pers.",
+    "use_type": "UNREPORTED",
+    "toxicity_level": 0,
+    "edibility": "DEADLY",
+    "cap_description": "灰褐色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "无",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "阔叶林",
+    "season": "夏,秋",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 灰褐色",
+      "栖息地 阔叶林",
+      "季节 夏,秋",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "",
+    "images": [
+      {
+        "url": "species/057_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/057"
+  },
+  {
+    "scientific_name": "Amanita sp. 058",
+    "chinese_name": "鹅膏属变种58号",
+    "family_zh": "鹅膏科",
+    "family_la": "Amanitaceae",
+    "genus_zh": "鹅膏属",
+    "genus_la": "Amanita",
+    "authority": "Pers.",
+    "use_type": "EDIBLE",
+    "toxicity_level": 1,
+    "edibility": "DEADLY",
+    "cap_description": "橙黄色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "无",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "阔叶林",
+    "season": "夏",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 橙黄色",
+      "栖息地 阔叶林",
+      "季节 夏",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "",
+    "images": [
+      {
+        "url": "species/058_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/058"
+  },
+  {
+    "scientific_name": "Lepiota sp. 059",
+    "chinese_name": "环柄菇属变种59号",
+    "family_zh": "蘑菇科",
+    "family_la": "Agaricaceae",
+    "genus_zh": "环柄菇属",
+    "genus_la": "Lepiota",
+    "authority": "(Pers.) Gray",
+    "use_type": "MEDICINAL",
+    "toxicity_level": 1,
+    "edibility": "DEADLY",
+    "cap_description": "白色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "无",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "阔叶林",
+    "season": "夏,秋",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 白色",
+      "栖息地 阔叶林",
+      "季节 夏,秋",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "",
+    "images": [
+      {
+        "url": "species/059_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/059"
+  },
+  {
+    "scientific_name": "Leucoagaricus sp. 060",
+    "chinese_name": "白环蘑属变种60号",
+    "family_zh": "蘑菇科",
+    "family_la": "Agaricaceae",
+    "genus_zh": "白环蘑属",
+    "genus_la": "Leucoagaricus",
+    "authority": "(Locq.) Singer",
+    "use_type": "POISONOUS",
+    "toxicity_level": 1,
+    "edibility": "DEADLY",
+    "cap_description": "白色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "无",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "草地",
+    "season": "夏",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 白色",
+      "栖息地 草地",
+      "季节 夏",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "",
+    "images": [
+      {
+        "url": "species/060_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/060"
+  },
+  {
+    "scientific_name": "Macrolepiota sp. 061",
+    "chinese_name": "高大环柄菇属变种61号",
+    "family_zh": "蘑菇科",
+    "family_la": "Agaricaceae",
+    "genus_zh": "高大环柄菇属",
+    "genus_la": "Macrolepiota",
+    "authority": "Singer",
+    "use_type": "CAUTION",
+    "toxicity_level": 1,
+    "edibility": "DEADLY",
+    "cap_description": "白色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "无",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "阔叶林",
+    "season": "夏,秋",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 白色",
+      "栖息地 阔叶林",
+      "季节 夏,秋",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "",
+    "images": [
+      {
+        "url": "species/061_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/061"
+  },
+  {
+    "scientific_name": "Agaricus sp. 062",
+    "chinese_name": "蘑菇属变种62号",
+    "family_zh": "蘑菇科",
+    "family_la": "Agaricaceae",
+    "genus_zh": "蘑菇属",
+    "genus_la": "Agaricus",
+    "authority": "L.",
+    "use_type": "UNREPORTED",
+    "toxicity_level": 1,
+    "edibility": "UNKNOWN",
+    "cap_description": "白色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "无",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "草地",
+    "season": "夏,秋",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 白色",
+      "栖息地 草地",
+      "季节 夏,秋",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "",
+    "images": [
+      {
+        "url": "species/062_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/062"
+  },
+  {
+    "scientific_name": "Agaricus sp. 063",
+    "chinese_name": "蘑菇属变种63号",
+    "family_zh": "蘑菇科",
+    "family_la": "Agaricaceae",
+    "genus_zh": "蘑菇属",
+    "genus_la": "Agaricus",
+    "authority": "L.",
+    "use_type": "EDIBLE",
+    "toxicity_level": 2,
+    "edibility": "UNKNOWN",
+    "cap_description": "褐色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "膜质菌环,易消失",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "草地",
+    "season": "夏,秋",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 褐色",
+      "栖息地 草地",
+      "季节 夏,秋",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "误食可能引起胃肠道反应,建议就医。",
+    "images": [
+      {
+        "url": "species/063_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/063"
+  },
+  {
+    "scientific_name": "Helvella sp. 064",
+    "chinese_name": "马鞍菌属变种64号",
+    "family_zh": "马鞍菌科",
+    "family_la": "Helvellaceae",
+    "genus_zh": "马鞍菌属",
+    "genus_la": "Helvella",
+    "authority": "L.",
+    "use_type": "MEDICINAL",
+    "toxicity_level": 2,
+    "edibility": "UNKNOWN",
+    "cap_description": "褐色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "膜质菌环,易消失",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "阔叶林",
+    "season": "春,夏",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 褐色",
+      "栖息地 阔叶林",
+      "季节 春,夏",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "误食可能引起胃肠道反应,建议就医。",
+    "images": [
+      {
+        "url": "species/064_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/064"
+  },
+  {
+    "scientific_name": "Morchella sp. 065",
+    "chinese_name": "羊肚菌属变种65号",
+    "family_zh": "羊肚菌科",
+    "family_la": "Morchellaceae",
+    "genus_zh": "羊肚菌属",
+    "genus_la": "Morchella",
+    "authority": "Dill. ex Pers.",
+    "use_type": "POISONOUS",
+    "toxicity_level": 2,
+    "edibility": "UNKNOWN",
+    "cap_description": "黄褐色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "膜质菌环,易消失",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "阔叶林",
+    "season": "春",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 黄褐色",
+      "栖息地 阔叶林",
+      "季节 春",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "误食可能引起胃肠道反应,建议就医。",
+    "images": [
+      {
+        "url": "species/065_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/065"
+  },
+  {
+    "scientific_name": "Xylaria sp. 066",
+    "chinese_name": "鹿角菌属变种66号",
+    "family_zh": "鹿角菌科",
+    "family_la": "Xylariaceae",
+    "genus_zh": "鹿角菌属",
+    "genus_la": "Xylaria",
+    "authority": "Hill ex Schrank",
+    "use_type": "CAUTION",
+    "toxicity_level": 2,
+    "edibility": "UNKNOWN",
+    "cap_description": "黑色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "膜质菌环,易消失",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "阔叶林",
+    "season": "全年",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 黑色",
+      "栖息地 阔叶林",
+      "季节 全年",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "误食可能引起胃肠道反应,建议就医。",
+    "images": [
+      {
+        "url": "species/066_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/066"
+  },
+  {
+    "scientific_name": "Sclerotinia sp. 067",
+    "chinese_name": "核盘菌属变种67号",
+    "family_zh": "核盘菌科",
+    "family_la": "Sclerotiniaceae",
+    "genus_zh": "核盘菌属",
+    "genus_la": "Sclerotinia",
+    "authority": "Fuckel",
+    "use_type": "UNREPORTED",
+    "toxicity_level": 2,
+    "edibility": "UNKNOWN",
+    "cap_description": "褐色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "膜质菌环,易消失",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "草地",
+    "season": "春",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 褐色",
+      "栖息地 草地",
+      "季节 春",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "误食可能引起胃肠道反应,建议就医。",
+    "images": [
+      {
+        "url": "species/067_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/067"
+  },
+  {
+    "scientific_name": "Cordyceps sp. 068",
+    "chinese_name": "虫草属变种68号",
+    "family_zh": "麦角菌科",
+    "family_la": "Clavicipitaceae",
+    "genus_zh": "虫草属",
+    "genus_la": "Cordyceps",
+    "authority": "Fr.",
+    "use_type": "POISONOUS",
+    "toxicity_level": 3,
+    "edibility": "UNKNOWN",
+    "cap_description": "橙黄色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "膜质菌环,易消失",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "针叶林",
+    "season": "夏,秋",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 橙黄色",
+      "栖息地 针叶林",
+      "季节 夏,秋",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "误食可能引起胃肠道反应,建议就医。",
+    "images": [
+      {
+        "url": "species/068_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/068"
+  },
+  {
+    "scientific_name": "Fuligo sp. 069",
+    "chinese_name": "鹅绒菌属变种69号",
+    "family_zh": "绒泡菌科",
+    "family_la": "Physaraceae",
+    "genus_zh": "鹅绒菌属",
+    "genus_la": "Fuligo",
+    "authority": "Hall",
+    "use_type": "POISONOUS",
+    "toxicity_level": 3,
+    "edibility": "EDIBLE",
+    "cap_description": "黄色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "膜质菌环,易消失",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "阔叶林",
+    "season": "夏",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 黄色",
+      "栖息地 阔叶林",
+      "季节 夏",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "误食可能引起胃肠道反应,建议就医。",
+    "images": [
+      {
+        "url": "species/069_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/069"
+  },
+  {
+    "scientific_name": "Fuligo sp. 070",
+    "chinese_name": "煤绒菌属变种70号",
+    "family_zh": "绒泡菌科",
+    "family_la": "Physaraceae",
+    "genus_zh": "煤绒菌属",
+    "genus_la": "Fuligo",
+    "authority": "Hall",
+    "use_type": "POISONOUS",
+    "toxicity_level": 3,
+    "edibility": "EDIBLE",
+    "cap_description": "白色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "膜质菌环,易消失",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "阔叶林",
+    "season": "夏",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 白色",
+      "栖息地 阔叶林",
+      "季节 夏",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "误食可能引起胃肠道反应,建议就医。",
+    "images": [
+      {
+        "url": "species/070_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/070"
+  },
+  {
+    "scientific_name": "Stemonitis sp. 071",
+    "chinese_name": "发网菌属变种71号",
+    "family_zh": "发网菌科",
+    "family_la": "Stemonitidaceae",
+    "genus_zh": "发网菌属",
+    "genus_la": "Stemonitis",
+    "authority": "Gled.",
+    "use_type": "POISONOUS",
+    "toxicity_level": 3,
+    "edibility": "EDIBLE",
+    "cap_description": "褐色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "膜质菌环,易消失",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "阔叶林",
+    "season": "夏",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 褐色",
+      "栖息地 阔叶林",
+      "季节 夏",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "误食可能引起胃肠道反应,建议就医。",
+    "images": [
+      {
+        "url": "species/071_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/071"
+  },
+  {
+    "scientific_name": "Tulostoma sp. 072",
+    "chinese_name": "灰锤属变种72号",
+    "family_zh": "灰锤科",
+    "family_la": "Tulostomataceae",
+    "genus_zh": "灰锤属",
+    "genus_la": "Tulostoma",
+    "authority": "Pers.",
+    "use_type": "POISONOUS",
+    "toxicity_level": 3,
+    "edibility": "EDIBLE",
+    "cap_description": "灰白色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "膜质菌环,易消失",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "草地",
+    "season": "秋",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 灰白色",
+      "栖息地 草地",
+      "季节 秋",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "误食可能引起胃肠道反应,建议就医。",
+    "images": [
+      {
+        "url": "species/072_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/072"
+  },
+  {
+    "scientific_name": "Scleroderma sp. 073",
+    "chinese_name": "硬皮马勃属变种73号",
+    "family_zh": "硬皮马勃科",
+    "family_la": "Sclerodermataceae",
+    "genus_zh": "硬皮马勃属",
+    "genus_la": "Scleroderma",
+    "authority": "Pers.",
+    "use_type": "EDIBLE",
+    "toxicity_level": 0,
+    "edibility": "EDIBLE",
+    "cap_description": "黄褐色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "无",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "阔叶林",
+    "season": "夏,秋",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 黄褐色",
+      "栖息地 阔叶林",
+      "季节 夏,秋",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "",
+    "images": [
+      {
+        "url": "species/073_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/073"
+  },
+  {
+    "scientific_name": "Pisolithus sp. 074",
+    "chinese_name": "豆马勃属变种74号",
+    "family_zh": "硬皮马勃科",
+    "family_la": "Sclerodermataceae",
+    "genus_zh": "豆马勃属",
+    "genus_la": "Pisolithus",
+    "authority": "Alb. & Schwein.",
+    "use_type": "MEDICINAL",
+    "toxicity_level": 0,
+    "edibility": "EDIBLE",
+    "cap_description": "黑褐色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "无",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "阔叶林",
+    "season": "夏,秋",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 黑褐色",
+      "栖息地 阔叶林",
+      "季节 夏,秋",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "",
+    "images": [
+      {
+        "url": "species/074_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/074"
+  },
+  {
+    "scientific_name": "Cyathus sp. 075",
+    "chinese_name": "鸟巢菌属变种75号",
+    "family_zh": "鸟巢菌科",
+    "family_la": "Nidulariaceae",
+    "genus_zh": "鸟巢菌属",
+    "genus_la": "Cyathus",
+    "authority": "Haller",
+    "use_type": "EDIBLE",
+    "toxicity_level": 0,
+    "edibility": "EDIBLE",
+    "cap_description": "灰褐色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "无",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "腐木",
+    "season": "夏,秋",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 灰褐色",
+      "栖息地 腐木",
+      "季节 夏,秋",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "",
+    "images": [
+      {
+        "url": "species/075_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/075"
+  },
+  {
+    "scientific_name": "Crucibulum sp. 076",
+    "chinese_name": "白蛋巢属变种76号",
+    "family_zh": "鸟巢菌科",
+    "family_la": "Nidulariaceae",
+    "genus_zh": "白蛋巢属",
+    "genus_la": "Crucibulum",
+    "authority": "Tul. & C. Tul.",
+    "use_type": "CAUTION",
+    "toxicity_level": 0,
+    "edibility": "INEDIBLE",
+    "cap_description": "黄褐色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "无",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "腐木",
+    "season": "夏,秋",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 黄褐色",
+      "栖息地 腐木",
+      "季节 夏,秋",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "",
+    "images": [
+      {
+        "url": "species/076_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/076"
+  },
+  {
+    "scientific_name": "Gomphus sp. 077",
+    "chinese_name": "钉菇属变种77号",
+    "family_zh": "钉菇科",
+    "family_la": "Gomphaceae",
+    "genus_zh": "钉菇属",
+    "genus_la": "Gomphus",
+    "authority": "(Pers.) Pers.",
+    "use_type": "UNREPORTED",
+    "toxicity_level": 0,
+    "edibility": "INEDIBLE",
+    "cap_description": "紫红色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "无",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "针叶林",
+    "season": "夏,秋",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 紫红色",
+      "栖息地 针叶林",
+      "季节 夏,秋",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "",
+    "images": [
+      {
+        "url": "species/077_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/077"
+  },
+  {
+    "scientific_name": "Clavariadelphus sp. 078",
+    "chinese_name": "棒瑚菌属变种78号",
+    "family_zh": "棒瑚菌科",
+    "family_la": "Clavariadelphaceae",
+    "genus_zh": "棒瑚菌属",
+    "genus_la": "Clavariadelphus",
+    "authority": "Donk",
+    "use_type": "EDIBLE",
+    "toxicity_level": 1,
+    "edibility": "INEDIBLE",
+    "cap_description": "黄褐色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "无",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "针叶林",
+    "season": "秋",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 黄褐色",
+      "栖息地 针叶林",
+      "季节 秋",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "",
+    "images": [
+      {
+        "url": "species/078_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/078"
+  },
+  {
+    "scientific_name": "Spathularia sp. 079",
+    "chinese_name": "地匙菌属变种79号",
+    "family_zh": "地匙菌科",
+    "family_la": "Cudoniaceae",
+    "genus_zh": "地匙菌属",
+    "genus_la": "Spathularia",
+    "authority": "Pers.",
+    "use_type": "MEDICINAL",
+    "toxicity_level": 1,
+    "edibility": "INEDIBLE",
+    "cap_description": "黄褐色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "无",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "针叶林",
+    "season": "夏,秋",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 黄褐色",
+      "栖息地 针叶林",
+      "季节 夏,秋",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "",
+    "images": [
+      {
+        "url": "species/079_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/079"
+  },
+  {
+    "scientific_name": "Laccaria sp. 080",
+    "chinese_name": "蜡蘑属变种80号",
+    "family_zh": "蜡蘑科",
+    "family_la": "Hydnangiaceae",
+    "genus_zh": "蜡蘑属",
+    "genus_la": "Laccaria",
+    "authority": "Berk. & Broome",
+    "use_type": "POISONOUS",
+    "toxicity_level": 1,
+    "edibility": "INEDIBLE",
+    "cap_description": "紫红色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "无",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "阔叶林",
+    "season": "夏,秋",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 紫红色",
+      "栖息地 阔叶林",
+      "季节 夏,秋",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "",
+    "images": [
+      {
+        "url": "species/080_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/080"
+  },
+  {
+    "scientific_name": "Lepista sp. 081",
+    "chinese_name": "紫晶蘑属变种81号",
+    "family_zh": "口蘑科",
+    "family_la": "Tricholomataceae",
+    "genus_zh": "紫晶蘑属",
+    "genus_la": "Lepista",
+    "authority": "(Fr.) W.G. Sm.",
+    "use_type": "CAUTION",
+    "toxicity_level": 1,
+    "edibility": "INEDIBLE",
+    "cap_description": "紫色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "无",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "阔叶林",
+    "season": "秋",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 紫色",
+      "栖息地 阔叶林",
+      "季节 秋",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "",
+    "images": [
+      {
+        "url": "species/081_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/081"
+  },
+  {
+    "scientific_name": "Leucopaxillus sp. 082",
+    "chinese_name": "白桩菇属变种82号",
+    "family_zh": "口蘑科",
+    "family_la": "Tricholomataceae",
+    "genus_zh": "白桩菇属",
+    "genus_la": "Leucopaxillus",
+    "authority": "Boursier",
+    "use_type": "UNREPORTED",
+    "toxicity_level": 1,
+    "edibility": "INEDIBLE",
+    "cap_description": "白色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "无",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "针叶林",
+    "season": "秋",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 白色",
+      "栖息地 针叶林",
+      "季节 秋",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "",
+    "images": [
+      {
+        "url": "species/082_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/082"
+  },
+  {
+    "scientific_name": "Tricholoma sp. 083",
+    "chinese_name": "口蘑属变种83号",
+    "family_zh": "口蘑科",
+    "family_la": "Tricholomataceae",
+    "genus_zh": "口蘑属",
+    "genus_la": "Tricholoma",
+    "authority": "(Fr.) Staude",
+    "use_type": "EDIBLE",
+    "toxicity_level": 2,
+    "edibility": "DEADLY",
+    "cap_description": "白色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "膜质菌环,易消失",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "针叶林",
+    "season": "秋",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 白色",
+      "栖息地 针叶林",
+      "季节 秋",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "误食可能引起胃肠道反应,建议就医。",
+    "images": [
+      {
+        "url": "species/083_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/083"
+  },
+  {
+    "scientific_name": "Tricholoma sp. 084",
+    "chinese_name": "口蘑属变种84号",
+    "family_zh": "口蘑科",
+    "family_la": "Tricholomataceae",
+    "genus_zh": "口蘑属",
+    "genus_la": "Tricholoma",
+    "authority": "(Fr.) Staude",
+    "use_type": "MEDICINAL",
+    "toxicity_level": 2,
+    "edibility": "DEADLY",
+    "cap_description": "灰褐色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "膜质菌环,易消失",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "针叶林",
+    "season": "秋",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 灰褐色",
+      "栖息地 针叶林",
+      "季节 秋",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "误食可能引起胃肠道反应,建议就医。",
+    "images": [
+      {
+        "url": "species/084_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/084"
+  },
+  {
+    "scientific_name": "Tricholomopsis sp. 085",
+    "chinese_name": "松茸属变种85号",
+    "family_zh": "口蘑科",
+    "family_la": "Tricholomataceae",
+    "genus_zh": "松茸属",
+    "genus_la": "Tricholomopsis",
+    "authority": "Singer",
+    "use_type": "POISONOUS",
+    "toxicity_level": 2,
+    "edibility": "DEADLY",
+    "cap_description": "黄褐色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "膜质菌环,易消失",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "针叶林",
+    "season": "秋",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 黄褐色",
+      "栖息地 针叶林",
+      "季节 秋",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "误食可能引起胃肠道反应,建议就医。",
+    "images": [
+      {
+        "url": "species/085_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/085"
+  },
+  {
+    "scientific_name": "Tricholomopsis sp. 086",
+    "chinese_name": "拟口蘑属变种86号",
+    "family_zh": "口蘑科",
+    "family_la": "Tricholomataceae",
+    "genus_zh": "拟口蘑属",
+    "genus_la": "Tricholomopsis",
+    "authority": "Singer",
+    "use_type": "CAUTION",
+    "toxicity_level": 2,
+    "edibility": "DEADLY",
+    "cap_description": "紫色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "膜质菌环,易消失",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "针叶林",
+    "season": "秋",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 紫色",
+      "栖息地 针叶林",
+      "季节 秋",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "误食可能引起胃肠道反应,建议就医。",
+    "images": [
+      {
+        "url": "species/086_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/086"
+  },
+  {
+    "scientific_name": "Melanoleuca sp. 087",
+    "chinese_name": "褐褶边菇属变种87号",
+    "family_zh": "口蘑科",
+    "family_la": "Tricholomataceae",
+    "genus_zh": "褐褶边菇属",
+    "genus_la": "Melanoleuca",
+    "authority": "Pat.",
+    "use_type": "UNREPORTED",
+    "toxicity_level": 2,
+    "edibility": "DEADLY",
+    "cap_description": "灰褐色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "膜质菌环,易消失",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "草地",
+    "season": "夏",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 灰褐色",
+      "栖息地 草地",
+      "季节 夏",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "误食可能引起胃肠道反应,建议就医。",
+    "images": [
+      {
+        "url": "species/087_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/087"
+  },
+  {
+    "scientific_name": "Pseudocraterellus sp. 088",
+    "chinese_name": "灰喇叭菌属变种88号",
+    "family_zh": "鸡油菌科",
+    "family_la": "Cantharellaceae",
+    "genus_zh": "灰喇叭菌属",
+    "genus_la": "Pseudocraterellus",
+    "authority": "Corner",
+    "use_type": "POISONOUS",
+    "toxicity_level": 3,
+    "edibility": "DEADLY",
+    "cap_description": "灰黑色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "膜质菌环,易消失",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "阔叶林",
+    "season": "秋",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 灰黑色",
+      "栖息地 阔叶林",
+      "季节 秋",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "误食可能引起胃肠道反应,建议就医。",
+    "images": [
+      {
+        "url": "species/088_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/088"
+  },
+  {
+    "scientific_name": "Xerocomus sp. 089",
+    "chinese_name": "黄牛肝菌属变种89号",
+    "family_zh": "牛肝菌科",
+    "family_la": "Boletaceae",
+    "genus_zh": "黄牛肝菌属",
+    "genus_la": "Xerocomus",
+    "authority": "Quél.",
+    "use_type": "POISONOUS",
+    "toxicity_level": 3,
+    "edibility": "DEADLY",
+    "cap_description": "黄褐色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "膜质菌环,易消失",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "阔叶林",
+    "season": "夏",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 黄褐色",
+      "栖息地 阔叶林",
+      "季节 夏",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "误食可能引起胃肠道反应,建议就医。",
+    "images": [
+      {
+        "url": "species/089_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/089"
+  },
+  {
+    "scientific_name": "Xerocomellus sp. 090",
+    "chinese_name": "红线盖牛肝菌属变种90号",
+    "family_zh": "牛肝菌科",
+    "family_la": "Boletaceae",
+    "genus_zh": "红线盖牛肝菌属",
+    "genus_la": "Xerocomellus",
+    "authority": "Šutara",
+    "use_type": "POISONOUS",
+    "toxicity_level": 3,
+    "edibility": "UNKNOWN",
+    "cap_description": "红色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "膜质菌环,易消失",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "阔叶林",
+    "season": "夏",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 红色",
+      "栖息地 阔叶林",
+      "季节 夏",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "误食可能引起胃肠道反应,建议就医。",
+    "images": [
+      {
+        "url": "species/090_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/090"
+  },
+  {
+    "scientific_name": "Strobilomyces sp. 091",
+    "chinese_name": "松塔牛肝菌属变种91号",
+    "family_zh": "牛肝菌科",
+    "family_la": "Boletaceae",
+    "genus_zh": "松塔牛肝菌属",
+    "genus_la": "Strobilomyces",
+    "authority": "Berk.",
+    "use_type": "POISONOUS",
+    "toxicity_level": 3,
+    "edibility": "UNKNOWN",
+    "cap_description": "灰黑色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "膜质菌环,易消失",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "阔叶林",
+    "season": "夏",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 灰黑色",
+      "栖息地 阔叶林",
+      "季节 夏",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "误食可能引起胃肠道反应,建议就医。",
+    "images": [
+      {
+        "url": "species/091_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/091"
+  },
+  {
+    "scientific_name": "Gyroporus sp. 092",
+    "chinese_name": "圆孔牛肝菌属变种92号",
+    "family_zh": "牛肝菌科",
+    "family_la": "Boletaceae",
+    "genus_zh": "圆孔牛肝菌属",
+    "genus_la": "Gyroporus",
+    "authority": "Quél.",
+    "use_type": "POISONOUS",
+    "toxicity_level": 3,
+    "edibility": "UNKNOWN",
+    "cap_description": "黄褐色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "膜质菌环,易消失",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "阔叶林",
+    "season": "夏,秋",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 黄褐色",
+      "栖息地 阔叶林",
+      "季节 夏,秋",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "误食可能引起胃肠道反应,建议就医。",
+    "images": [
+      {
+        "url": "species/092_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/092"
+  },
+  {
+    "scientific_name": "Tylopilus sp. 093",
+    "chinese_name": "刺孢牛肝菌属变种93号",
+    "family_zh": "牛肝菌科",
+    "family_la": "Boletaceae",
+    "genus_zh": "刺孢牛肝菌属",
+    "genus_la": "Tylopilus",
+    "authority": "P. Karst.",
+    "use_type": "EDIBLE",
+    "toxicity_level": 0,
+    "edibility": "UNKNOWN",
+    "cap_description": "褐色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "无",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "阔叶林",
+    "season": "夏",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 褐色",
+      "栖息地 阔叶林",
+      "季节 夏",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "",
+    "images": [
+      {
+        "url": "species/093_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/093"
+  },
+  {
+    "scientific_name": "Postia sp. 094",
+    "chinese_name": "苦白蹄属变种94号",
+    "family_zh": "多孔菌科",
+    "family_la": "Polyporaceae",
+    "genus_zh": "苦白蹄属",
+    "genus_la": "Postia",
+    "authority": "Fr.",
+    "use_type": "MEDICINAL",
+    "toxicity_level": 0,
+    "edibility": "UNKNOWN",
+    "cap_description": "白色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "无",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "针叶林",
+    "season": "秋",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 白色",
+      "栖息地 针叶林",
+      "季节 秋",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "",
+    "images": [
+      {
+        "url": "species/094_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/094"
+  },
+  {
+    "scientific_name": "Irpex sp. 095",
+    "chinese_name": "白囊耙齿菌属变种95号",
+    "family_zh": "皱孔菌科",
+    "family_la": "Meruliaceae",
+    "genus_zh": "白囊耙齿菌属",
+    "genus_la": "Irpex",
+    "authority": "Fr.",
+    "use_type": "EDIBLE",
+    "toxicity_level": 0,
+    "edibility": "UNKNOWN",
+    "cap_description": "白色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "无",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "阔叶林",
+    "season": "全年",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 白色",
+      "栖息地 阔叶林",
+      "季节 全年",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "",
+    "images": [
+      {
+        "url": "species/095_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/095"
+  },
+  {
+    "scientific_name": "Schizophyllum sp. 096",
+    "chinese_name": "裂褶菌属变种96号",
+    "family_zh": "裂褶菌科",
+    "family_la": "Schizophyllaceae",
+    "genus_zh": "裂褶菌属",
+    "genus_la": "Schizophyllum",
+    "authority": "Fr.",
+    "use_type": "CAUTION",
+    "toxicity_level": 0,
+    "edibility": "UNKNOWN",
+    "cap_description": "灰白色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "无",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "阔叶林",
+    "season": "全年",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 灰白色",
+      "栖息地 阔叶林",
+      "季节 全年",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "",
+    "images": [
+      {
+        "url": "species/096_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/096"
+  },
+  {
+    "scientific_name": "Micromphale sp. 097",
+    "chinese_name": "针叶小皮伞属变种97号",
+    "family_zh": "小皮伞科",
+    "family_la": "Marasmiaceae",
+    "genus_zh": "针叶小皮伞属",
+    "genus_la": "Micromphale",
+    "authority": "Gray",
+    "use_type": "UNREPORTED",
+    "toxicity_level": 0,
+    "edibility": "EDIBLE",
+    "cap_description": "褐色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "无",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "针叶林",
+    "season": "夏,秋",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 褐色",
+      "栖息地 针叶林",
+      "季节 夏,秋",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "",
+    "images": [
+      {
+        "url": "species/097_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/097"
+  },
+  {
+    "scientific_name": "Crepidotus sp. 098",
+    "chinese_name": "靴耳属变种98号",
+    "family_zh": "靴耳科",
+    "family_la": "Crepidotaceae",
+    "genus_zh": "靴耳属",
+    "genus_la": "Crepidotus",
+    "authority": "(Fr.) Staude",
+    "use_type": "EDIBLE",
+    "toxicity_level": 1,
+    "edibility": "EDIBLE",
+    "cap_description": "白色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "无",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "阔叶林",
+    "season": "夏,秋",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 白色",
+      "栖息地 阔叶林",
+      "季节 夏,秋",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "",
+    "images": [
+      {
+        "url": "species/098_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/098"
+  },
+  {
+    "scientific_name": "Descolea sp. 099",
+    "chinese_name": "丝球属变种99号",
+    "family_zh": "丝膜菌科",
+    "family_la": "Cortinariaceae",
+    "genus_zh": "丝球属",
+    "genus_la": "Descolea",
+    "authority": "Singer",
+    "use_type": "MEDICINAL",
+    "toxicity_level": 1,
+    "edibility": "EDIBLE",
+    "cap_description": "黄褐色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "无",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "针叶林",
+    "season": "秋",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 黄褐色",
+      "栖息地 针叶林",
+      "季节 秋",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "",
+    "images": [
+      {
+        "url": "species/099_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/099"
+  },
+  {
+    "scientific_name": "Panaeolus sp. 100",
+    "chinese_name": "假黑伞属变种100号",
+    "family_zh": "粪锈伞科",
+    "family_la": "Bolbitiaceae",
+    "genus_zh": "假黑伞属",
+    "genus_la": "Panaeolus",
+    "authority": "(Fr.) Quél.",
+    "use_type": "POISONOUS",
+    "toxicity_level": 1,
+    "edibility": "EDIBLE",
+    "cap_description": "灰黑色,直径 3-8 cm,表面光滑至具细微纤维",
+    "gill_description": "白色至浅色,弯生至离生,密",
+    "stipe_description": "白色至浅色,中生,长 3-10 cm",
+    "ring_description": "无",
+    "volva_description": "无",
+    "spore_description": "孢子印白色,孢子椭圆形 6-10μm",
+    "habitat": "草地",
+    "season": "夏",
+    "distribution": "云南,四川,贵州",
+    "altitude_range": "海拔 500-2500m",
+    "identification_points": [
+      "菌盖 灰黑色",
+      "栖息地 草地",
+      "季节 夏",
+      "孢子印白色"
+    ],
+    "look_alike_ids": [],
+    "toxicity_symptoms": "",
+    "images": [
+      {
+        "url": "species/100_01.jpg",
+        "caption": "标准形态",
+        "photographer": "中科院昆明植物所",
+        "license": "CC-BY-4.0",
+        "captured_at": "2024-08-01"
+      }
+    ],
+    "source_url": "https://mushroom.iflora.cn/species/100"
+  }
+]

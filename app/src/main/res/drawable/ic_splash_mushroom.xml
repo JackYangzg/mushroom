@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Stylized mushroom vector for the splash screen icon (Android 12+).
+  Cap: forest green. Stem: cream. 108x108 dp adaptive-icon safe area.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:fillColor="#2E5D3A"
+        android:pathData="M54,30 m-26,0 a26,18 0 1,0 52,0 a26,18 0 1,0 -52,0 z" />
+    <path
+        android:fillColor="#FAF8F3"
+        android:pathData="M40,46 L68,46 L64,76 a4,4 0 0,1 -4,4 L48,80 a4,4 0 0,1 -4,-4 z" />
+    <path
+        android:fillColor="#2E5D3A"
+        android:pathData="M48,46 L60,46 L60,52 L48,52 z" />
+    <path
+        android:fillColor="#D4A574"
+        android:pathData="M40,46 L68,46 L68,50 L40,50 z" />
+</vector>

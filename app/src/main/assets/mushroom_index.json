@@ -1,0 +1,202 @@
+[
+  {
+    "scientificName": "Amanita muscaria",
+    "commonName": "毒蝇伞",
+    "shortDesc": "经典红白点毒蘑菇，含毒蝇蕈醇与鹅膏蕈氨酸，致幻觉与严重胃肠反应。",
+    "detailRemotePath": "https://mushroom.iflora.cn/?search=Amanita%20muscaria",
+    "previewImages": [],
+    "has3D": true,
+    "edibility": "POISONOUS",
+    "toxicityLevel": 2
+  },
+  {
+    "scientificName": "Amanita virosa",
+    "commonName": "致命白毒伞",
+    "shortDesc": "剧毒鹅膏菌，含 α-鹅膏蕈碱，致死量约 0.1mg/kg。",
+    "detailRemotePath": "https://mushroom.iflora.cn/?search=Amanita%20virosa",
+    "previewImages": [],
+    "has3D": true,
+    "edibility": "DEADLY",
+    "toxicityLevel": 3
+  },
+  {
+    "scientificName": "Amanita phalloides",
+    "commonName": "死帽蕈",
+    "shortDesc": "世界最毒蘑菇之一，鹅膏毒素破坏肝脏，欧洲蘑菇中毒死亡主因。",
+    "detailRemotePath": "https://mushroom.iflora.cn/?search=Amanita%20phalloides",
+    "previewImages": [],
+    "has3D": true,
+    "edibility": "DEADLY",
+    "toxicityLevel": 3
+  },
+  {
+    "scientificName": "Boletus edulis",
+    "commonName": "美味牛肝菌",
+    "shortDesc": "可食优质菌，又称白牛肝菌，菌肉厚实气味香。",
+    "detailRemotePath": "https://mushroom.iflora.cn/?search=Boletus%20edulis",
+    "previewImages": [],
+    "has3D": true,
+    "edibility": "EDIBLE",
+    "toxicityLevel": 0
+  },
+  {
+    "scientificName": "Cantharellus cibarius",
+    "commonName": "鸡油菌",
+    "shortDesc": "可食著名菌，杏黄色，具杏仁香味，含维生素 A 前体。",
+    "detailRemotePath": "https://mushroom.iflora.cn/?search=Cantharellus%20cibarius",
+    "previewImages": [],
+    "has3D": true,
+    "edibility": "EDIBLE",
+    "toxicityLevel": 0
+  },
+  {
+    "scientificName": "Russula virescens",
+    "commonName": "绿菇",
+    "shortDesc": "可食绿盖菇，菌盖有深绿色龟裂纹，云南常见食用菌。",
+    "detailRemotePath": "https://mushroom.iflora.cn/?search=Russula%20virescens",
+    "previewImages": [],
+    "has3D": true,
+    "edibility": "EDIBLE",
+    "toxicityLevel": 0
+  },
+  {
+    "scientificName": "Lentinula edodes",
+    "commonName": "香菇",
+    "shortDesc": "东亚最常见食用菌，含香菇多糖，具免疫调节作用。",
+    "detailRemotePath": "https://mushroom.iflora.cn/?search=Lentinula%20edodes",
+    "previewImages": [],
+    "has3D": true,
+    "edibility": "EDIBLE",
+    "toxicityLevel": 0
+  },
+  {
+    "scientificName": "Pleurotus ostreatus",
+    "commonName": "平菇",
+    "shortDesc": "可食木腐菌，扇贝形，常见于阔叶树桩，全球广布。",
+    "detailRemotePath": "https://mushroom.iflora.cn/?search=Pleurotus%20ostreatus",
+    "previewImages": [],
+    "has3D": true,
+    "edibility": "EDIBLE",
+    "toxicityLevel": 0
+  },
+  {
+    "scientificName": "Ganoderma lucidum",
+    "commonName": "赤芝",
+    "shortDesc": "传统药用菌，含灵芝多糖与三萜类，具免疫调节功效。",
+    "detailRemotePath": "https://mushroom.iflora.cn/?search=Ganoderma%20lucidum",
+    "previewImages": [],
+    "has3D": true,
+    "edibility": "MEDICINAL",
+    "toxicityLevel": 0
+  },
+  {
+    "scientificName": "Hericium erinaceus",
+    "commonName": "猴头菇",
+    "shortDesc": "可食兼药用，具神经生长因子刺激作用，研究用于认知健康。",
+    "detailRemotePath": "https://mushroom.iflora.cn/?search=Hericium%20erinaceus",
+    "previewImages": [],
+    "has3D": true,
+    "edibility": "EDIBLE",
+    "toxicityLevel": 0
+  },
+  {
+    "scientificName": "Trametes versicolor",
+    "commonName": "云芝",
+    "shortDesc": "药用多孔菌，含 PSK / PSP 多糖，研究用于肿瘤辅助治疗。",
+    "detailRemotePath": "https://mushroom.iflora.cn/?search=Trametes%20versicolor",
+    "previewImages": [],
+    "has3D": true,
+    "edibility": "MEDICINAL",
+    "toxicityLevel": 0
+  },
+  {
+    "scientificName": "Coprinus comatus",
+    "commonName": "毛头鬼伞",
+    "shortDesc": "可食菌，幼时白色蛋形，成熟后黑化自溶，俗称鸡腿菇。",
+    "detailRemotePath": "https://mushroom.iflora.cn/?search=Coprinus%20comatus",
+    "previewImages": [],
+    "has3D": true,
+    "edibility": "EDIBLE",
+    "toxicityLevel": 0
+  },
+  {
+    "scientificName": "Morchella esculenta",
+    "commonName": "羊肚菌",
+    "shortDesc": "珍贵食用菌，菌盖蜂窝状，春季短窗口期采收，价格高。",
+    "detailRemotePath": "https://mushroom.iflora.cn/?search=Morchella%20esculenta",
+    "previewImages": [],
+    "has3D": true,
+    "edibility": "EDIBLE",
+    "toxicityLevel": 0
+  },
+  {
+    "scientificName": "Ophiocordyceps sinensis",
+    "commonName": "冬虫夏草",
+    "shortDesc": "虫草属真菌寄生于蝙蝠蛾幼虫，名贵中药材，分布于青藏高原。",
+    "detailRemotePath": "https://mushroom.iflora.cn/?search=Ophiocordyceps%20sinensis",
+    "previewImages": [],
+    "has3D": true,
+    "edibility": "MEDICINAL",
+    "toxicityLevel": 0
+  },
+  {
+    "scientificName": "Tricholoma matsutake",
+    "commonName": "松茸",
+    "shortDesc": "东亚顶级食用菌，与赤松、华山松共生，秋季短暂出菇。",
+    "detailRemotePath": "https://mushroom.iflora.cn/?search=Tricholoma%20matsutake",
+    "previewImages": [],
+    "has3D": true,
+    "edibility": "EDIBLE",
+    "toxicityLevel": 0
+  },
+  {
+    "scientificName": "Inocybe erubescens",
+    "commonName": "丝盖伞",
+    "shortDesc": "有毒丝盖伞属，含高浓度毒蝇碱，致严重出汗型中毒。",
+    "detailRemotePath": "https://mushroom.iflora.cn/?search=Inocybe%20erubescens",
+    "previewImages": [],
+    "has3D": true,
+    "edibility": "POISONOUS",
+    "toxicityLevel": 2
+  },
+  {
+    "scientificName": "Cortinarius rubellus",
+    "commonName": "红褐丝膜菌",
+    "shortDesc": "欧洲剧毒丝膜菌，致不可逆肾损伤，含奥来毒素。",
+    "detailRemotePath": "https://mushroom.iflora.cn/?search=Cortinarius%20rubellus",
+    "previewImages": [],
+    "has3D": true,
+    "edibility": "DEADLY",
+    "toxicityLevel": 3
+  },
+  {
+    "scientificName": "Psilocybe semilanceata",
+    "commonName": "半裸盖菇",
+    "shortDesc": "神经致幻型菌，含裸盖菇素，多数国家列为管制。",
+    "detailRemotePath": "https://mushroom.iflora.cn/?search=Psilocybe%20semilanceata",
+    "previewImages": [],
+    "has3D": true,
+    "edibility": "PSYCHOACTIVE",
+    "toxicityLevel": 1
+  },
+  {
+    "scientificName": "Gyromitra esculenta",
+    "commonName": "鹿花菌",
+    "shortDesc": "含 gyromitrin 生毒（生食或处理不当致肝损伤），处理后可食。",
+    "detailRemotePath": "https://mushroom.iflora.cn/?search=Gyromitra%20esculenta",
+    "previewImages": [],
+    "has3D": true,
+    "edibility": "EDIBLE_WHEN_COOKED",
+    "toxicityLevel": 2
+  },
+  {
+    "scientificName": "Grifola frondosa",
+    "commonName": "灰树花",
+    "shortDesc": "可食兼药用多孔菌，秋季丛生于栎树桩，含 β-葡聚糖。",
+    "detailRemotePath": "https://mushroom.iflora.cn/?search=Grifola%20frondosa",
+    "previewImages": [],
+    "has3D": true,
+    "edibility": "EDIBLE",
+    "toxicityLevel": 0
+  }
+]
