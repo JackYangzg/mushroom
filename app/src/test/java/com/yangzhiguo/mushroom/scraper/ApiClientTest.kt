@@ -12,6 +12,16 @@ import java.io.File
 class ApiClientTest {
 
     @Test
+    fun legacyCloudFileHttpUrlIsUpgradedToHttps() {
+        assertEquals(
+            "https://cloudfile.biotracks.cn/user_thumb/a.jpg!bio123456",
+            ApiClient.normalizeImageUrl(
+                "http://cloudfile.biotracks.cn/user_thumb/a.jpg!bio123456",
+            ),
+        )
+    }
+
+    @Test
     fun imageSignatureValidationRejectsHtmlErrorPages() {
         assertFalse(ApiClient.isSupportedImage("<html>not found</html>".toByteArray()))
         assertTrue(
@@ -204,10 +214,10 @@ class ApiClientTest {
 
             assertEquals(
                 listOf(
-                    "http://cloudfile.biotracks.cn/a.jpg",
-                    "http://cloudfile.biotracks.cn/b.jpg",
-                    "http://cloudfile.biotracks.cn/c.jpg",
-                    "http://cloudfile.biotracks.cn/d.jpg",
+                    "https://cloudfile.biotracks.cn/a.jpg",
+                    "https://cloudfile.biotracks.cn/b.jpg",
+                    "https://cloudfile.biotracks.cn/c.jpg",
+                    "https://cloudfile.biotracks.cn/d.jpg",
                 ),
                 imageUrls,
             )

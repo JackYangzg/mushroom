@@ -22,11 +22,24 @@ object DatabaseModule {
     @Singleton
     fun provideDatabase(@ApplicationContext context: Context): AppDatabase =
         Room.databaseBuilder(context, AppDatabase::class.java, AppDatabase.DB_NAME)
-            .fallbackToDestructiveMigration()
+            .createFromAsset("mushroom.db")  // 首次安装把 assets/mushroom.db 拷到 /data/data/.../databases/
+            .fallbackToDestructiveMigration()  // dev 阶段:v5→v6 直接重建
             .build()
 
     @Provides
     fun provideSpeciesDao(db: AppDatabase): SpeciesDao = db.speciesDao()
+
+    @Provides
+    fun provideSpecimenDao(db: AppDatabase): com.yangzhiguo.mushroom.data.local.SpecimenDao = db.specimenDao()
+
+    @Provides
+    fun provideDnaBarcodeDao(db: AppDatabase): com.yangzhiguo.mushroom.data.local.DnaBarcodeDao = db.dnaBarcodeDao()
+
+    @Provides
+    fun provideDistributionPointDao(db: AppDatabase): com.yangzhiguo.mushroom.data.local.DistributionPointDao = db.distributionPointDao()
+
+    @Provides
+    fun provideSpeciesImageDao(db: AppDatabase): com.yangzhiguo.mushroom.data.local.SpeciesImageDao = db.speciesImageDao()
 }
 
 @Module

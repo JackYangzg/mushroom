@@ -1,28 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Adaptive launcher foreground — the mushroom glyph itself.
-  Adaptive icon safe zone: 66dp circle centered in 108dp viewport.
-  We use 60dp cap (radius 24) and 36dp stem so the whole glyph sits inside the safe circle.
+  Adaptive launcher foreground — mushroom + magnifier.
+  Viewport 108x108 dp; adaptive safe zone = 66dp circle centered at (54, 54).
+  All glyph elements stay within that circle (radius 33).
+
+  Visual semantics:
+    蘑菇 = 主体识别物（app 主题）
+    放大镜 = 识别 / 鉴定（app 核心能力：拍照识蘑菇 + 图鉴检索）
+  放大镜镜片压在菌盖上，象征「正在鉴菌」。
 -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
-    <!-- Cap (forest green) -->
+
+    <!-- 菌盖（forest green）— 蘑菇上半圆顶 -->
     <path
         android:fillColor="#2E5D3A"
-        android:pathData="M30,52 a24,18 0 1,1 48,0 z" />
-    <!-- Stem (cream) -->
-    <path
-        android:fillColor="#FAF8F3"
-        android:pathData="M42,52 L66,52 L62,78 a3,3 0 0,1 -3,3 L48,81 a3,3 0 0,1 -3,-3 z" />
-    <!-- Cap-stem join shadow band (mushroom tan) -->
+        android:pathData="M30,52 a22,17 0 1,1 44,0 z" />
+
+    <!-- 菌盖-菌柄连接处暗带（mushroom tan）— 给蘑菇增加层次 -->
     <path
         android:fillColor="#D4A574"
-        android:pathData="M42,52 L66,52 L66,55 L42,55 z" />
-    <!-- Gill hint (small dark stripe) -->
+        android:pathData="M30,52 L74,52 L74,55 L30,55 z" />
+
+    <!-- 菌柄（cream）— 蘑菇下半柱 -->
+    <path
+        android:fillColor="#FAF8F3"
+        android:pathData="M40,55 L64,55 L60,76 a3,3 0 0,1 -3,3 L47,79 a3,3 0 0,1 -3,-3 z" />
+
+    <!-- 菌盖上的小斑点（forest green 略深）— 让蘑菇更生动 -->
+    <path
+        android:fillColor="#1F4528"
+        android:pathData="M40,42 m-3,0 a3,2 0 1,0 6,0 a3,2 0 1,0 -6,0 z" />
+    <path
+        android:fillColor="#1F4528"
+        android:pathData="M58,38 m-2.5,0 a2.5,1.5 0 1,0 5,0 a2.5,1.5 0 1,0 -5,0 z" />
+
+    <!-- 放大镜镜片（白色半透明，绿色描边）— 压在菌盖右上 -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:fillAlpha="0.85"
+        android:pathData="M70,40 m-14,0 a14,14 0 1,0 28,0 a14,14 0 1,0 -28,0 z" />
+    <!-- 放大镜描边（深绿） -->
+    <path
+        android:strokeColor="#1F4528"
+        android:strokeWidth="3"
+        android:fillColor="#00000000"
+        android:pathData="M70,40 m-14,0 a14,14 0 1,0 28,0 a14,14 0 1,0 -28,0 z" />
+
+    <!-- 放大镜镜片高光 — 拟玻璃质感 -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:fillAlpha="0.7"
+        android:pathData="M62,34 m-3,0 a3,2 0 1,0 6,0 a3,2 0 1,0 -6,0 z" />
+
+    <!-- 放大镜镜片中央的「菌盖局部放大」— 暗示正在鉴菌 -->
     <path
         android:fillColor="#2E5D3A"
-        android:pathData="M50,56 L58,56 L58,60 L50,60 z" />
+        android:pathData="M70,40 m-7,0 a7,5 0 1,0 14,0 a7,5 0 1,0 -14,0 z" />
+
+    <!-- 放大镜手柄（深绿）— 从镜片右下 45° 伸出 -->
+    <path
+        android:fillColor="#1F4528"
+        android:pathData="M80.5,50.5 L92,62 a2.5,2.5 0 0,1 -3.5,3.5 L77,54 z" />
 </vector>

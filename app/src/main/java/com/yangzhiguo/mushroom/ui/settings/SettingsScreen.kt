@@ -41,6 +41,7 @@ fun SettingsScreen(
     viewModel: SettingsViewModel = hiltViewModel(),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val databaseCount by viewModel.databaseCount.collectAsStateWithLifecycle()
 
     Scaffold(
         topBar = {
@@ -90,6 +91,11 @@ fun SettingsScreen(
                     }
                     Text(
                         "数据源：fungi.iflora.cn",
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+                    )
+                    Text(
+                        "数据库中：${databaseCount} 条",
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
                     )

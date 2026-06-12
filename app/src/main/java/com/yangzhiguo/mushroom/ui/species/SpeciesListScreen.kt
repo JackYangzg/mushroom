@@ -19,9 +19,15 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -43,6 +49,18 @@ fun SpeciesListScreen(
         UseType.CAUTION to R.string.species_filter_caution,
     )
 
+    // 用 TextFieldValue 携带 selection 信息，避免 VM 回推 state.query 时
+    // 触发重组导致光标被重置到开头。IME 输入时直接保留 IME 给的 selection。
+    var queryField by rememberSaveable(stateSaver = TextFieldValue.Saver) {
+        mutableStateOf(TextFieldValue("", TextRange(0)))
+    }
+    LaunchedEffect(state.query) {
+        if (queryField.text != state.query) {
+            // 仅在 VM 端外部更新 query 时同步（光标放到末尾）
+            queryField = TextFieldValue(state.query, TextRange(state.query.length))
+        }
+    }
+
     Scaffold(containerColor = MaterialTheme.colorScheme.background) { padding ->
         Column(
             modifier = Modifier
@@ -55,8 +73,11 @@ fun SpeciesListScreen(
                 modifier = Modifier.padding(horizontal = 20.dp, vertical = 20.dp),
             )
             OutlinedTextField(
-                value = state.query,
-                onValueChange = viewModel::setQuery,
+                value = queryField,
+                onValueChange = { newValue ->
+                    queryField = newValue  // 保留 IME 推过来的 selection（光标跟随输入）
+                    viewModel.setQuery(newValue.text)
+                },
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp),

@@ -8,37 +8,53 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface SpeciesDao {
-    @Query("SELECT * FROM mushroom_species ORDER BY id ASC")
+    /**
+     * 图鉴默认视图：只展示爬取自 `general_directory` 名录的数据。
+     * `species_specimen` 标本记录不在此处显示，但用户仍可搜索到（见 [searchByName]）。
+     */
+    @Query("""
+        SELECT * FROM mushroom_species
+        WHERE scraw_source = 'general_directory'
+        ORDER BY id ASC
+    """)
     fun observeAll(): Flow<List<SpeciesEntity>>
 
     @Query("""
         SELECT * FROM mushroom_species
-        WHERE instr(',' || source_types || ',', ',EDIBLE,') > 0
+        WHERE scraw_source = 'general_directory'
+          AND instr(',' || source_types || ',', ',EDIBLE,') > 0
         ORDER BY id ASC
     """)
     fun filterEdible(): Flow<List<SpeciesEntity>>
 
     @Query("""
         SELECT * FROM mushroom_species
-        WHERE instr(',' || source_types || ',', ',MEDICINAL,') > 0
+        WHERE scraw_source = 'general_directory'
+          AND instr(',' || source_types || ',', ',MEDICINAL,') > 0
         ORDER BY id ASC
     """)
     fun filterMedicinal(): Flow<List<SpeciesEntity>>
 
     @Query("""
         SELECT * FROM mushroom_species
-        WHERE instr(',' || source_types || ',', ',POISONOUS,') > 0
+        WHERE scraw_source = 'general_directory'
+          AND instr(',' || source_types || ',', ',POISONOUS,') > 0
         ORDER BY toxicity_level DESC, id ASC
     """)
     fun filterPoisonous(): Flow<List<SpeciesEntity>>
 
     @Query("""
         SELECT * FROM mushroom_species
-        WHERE instr(',' || source_types || ',', ',CAUTION,') > 0
+        WHERE scraw_source = 'general_directory'
+          AND instr(',' || source_types || ',', ',CAUTION,') > 0
         ORDER BY id ASC
     """)
     fun filterCaution(): Flow<List<SpeciesEntity>>
 
+    /**
+     * 检索：跨全数据库（不限 `scraw_source`），让用户能找到标本记录与名录记录。
+     * 与图鉴默认视图的「只看名录」相反——这是显式设计。
+     */
     @Query("""
         SELECT * FROM mushroom_species
         WHERE chinese_name LIKE '%' || :query || '%' COLLATE NOCASE

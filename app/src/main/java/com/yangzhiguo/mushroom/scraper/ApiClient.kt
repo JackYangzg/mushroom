@@ -55,6 +55,12 @@ class ApiClient(
                     "page" to page.toString(),
                     "pageSize" to pageSize.toString(),
                 )
+                source.filter?.takeIf { it.isNotBlank() }?.let { kv ->
+                    val idx = kv.indexOf('=')
+                    if (idx > 0) {
+                        params[kv.substring(0, idx)] = kv.substring(idx + 1)
+                    }
+                }
                 val query = params.entries.joinToString("&") { (key, value) ->
                     "${encode(key)}=${encode(value)}"
                 }
@@ -160,7 +166,7 @@ class ApiClient(
      * 内部自动跟随 HTTP→HTTPS 重定向。
      */
     suspend fun downloadBytes(remoteUrl: String, dest: java.io.File): Long = withContext(Dispatchers.IO) {
-        val fullUrl = if (remoteUrl.startsWith("http")) remoteUrl else baseUrl + remoteUrl
+        val fullUrl = normalizeImageUrl(remoteUrl, baseUrl)
         val bytes = doGet(fullUrl, accept = "image/avif,image/webp,image/png,image/jpeg,image/*;q=0.8,*/*;q=0.5") {
             conn -> conn.inputStream.use { it.readBytes() }
         }
@@ -185,9 +191,9 @@ class ApiClient(
                         obj[key]?.let { value ->
                             (value as? JsonPrimitive)?.content
                         }?.takeIf { it.isNotBlank() }
-                    }
+                }
                 if (path != null) {
-                    result += if (path.startsWith("http")) path else "$baseUrl$path"
+                    result += normalizeImageUrl(path, baseUrl)
                 }
             }
         }
@@ -238,6 +244,17 @@ class ApiClient(
     }
 
     companion object {
+        internal fun normalizeImageUrl(raw: String, baseUrl: String = "https://fungi.iflora.cn"): String {
+            val trimmed = raw.trim()
+            return when {
+                trimmed.startsWith(CLOUD_FILE_HTTP, ignoreCase = true) ->
+                    "https://${trimmed.substringAfter("://")}"
+                trimmed.startsWith("http://", ignoreCase = true) ||
+                    trimmed.startsWith("https://", ignoreCase = true) -> trimmed
+                else -> "${baseUrl.trimEnd('/')}/${trimmed.trimStart('/')}"
+            }
+        }
+
         internal fun isSupportedImage(bytes: ByteArray): Boolean {
             if (bytes.size < 4) return false
             return isJpeg(bytes) ||
@@ -271,5 +288,7 @@ class ApiClient(
 
         private fun isBmp(bytes: ByteArray): Boolean =
             bytes[0] == 'B'.code.toByte() && bytes[1] == 'M'.code.toByte()
+
+        private const val CLOUD_FILE_HTTP = "http://cloudfile.biotracks.cn/"
     }
 }

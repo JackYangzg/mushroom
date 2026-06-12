@@ -126,11 +126,11 @@ fun SpeciesDetailScreen(
                             if (points.isEmpty()) Text("暂无辨识要点", color = MaterialTheme.colorScheme.onSurfaceVariant)
                         }
                         DetailSection("形态特征") {
-                            FeatureLine("菌盖", current.capDescription)
-                            FeatureLine("菌褶", current.gillDescription)
-                            FeatureLine("菌柄", current.stipeDescription)
-                            FeatureLine("菌环", current.ringDescription)
-                            FeatureLine("菌托", current.volvaDescription)
+                            FeatureLine("菌盖", current.capDescription.orEmpty())
+                            FeatureLine("菌褶", current.lamellaDescription.orEmpty())
+                            FeatureLine("菌柄", current.stipeDescription.orEmpty())
+                            FeatureLine("菌环", current.ringDescription.orEmpty())
+                            FeatureLine("菌托", current.volvaDescription.orEmpty())
                         }
                         DetailSection("生境与季节") {
                             FeatureLine(stringResource(R.string.species_habitat), current.habitat)

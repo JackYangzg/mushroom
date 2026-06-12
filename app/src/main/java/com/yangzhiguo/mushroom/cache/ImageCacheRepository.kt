@@ -100,7 +100,9 @@ class ImageCacheRepository @Inject constructor(
         val persisted = decodePersistedImages(entity)
         // 兜底：单图 entity.imageUrl + 调用方临时传入的 remoteUrl。
         val singleHints = listOfNotNull(entity?.imageUrl, remoteUrl).filter { it.isNotBlank() }
-        val localKnown = (persisted + singleHints).distinct()
+        val localKnown = (persisted + singleHints)
+            .map { ApiClient.normalizeImageUrl(it) }
+            .distinct()
 
         // 只在本地完全没有线索时，或本地只有单图时才上网补图——避免每次详情页都打一次 API。
         val shouldDiscover = !scientificName.isNullOrBlank() && localKnown.size < MIN_LOCAL_BEFORE_NETWORK
@@ -112,7 +114,7 @@ class ImageCacheRepository @Inject constructor(
             emptyList()
         }
         // 本地的排前面（缓存路径稳定），网络新发现的接后面用于补全。
-        return (localKnown + discovered).distinct()
+        return (localKnown + discovered.map { ApiClient.normalizeImageUrl(it) }).distinct()
     }
 
     private fun decodePersistedImages(entity: SpeciesEntity?): List<String> {

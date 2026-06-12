@@ -38,6 +38,8 @@ class DataSourceTest {
             setOf(
                 DataSource.SPECIMEN,
                 DataSource.GENERAL_DIRECTORY,
+                DataSource.EDIBLE_FUNGI,
+                DataSource.TOXIC_FUNGI,
             ),
             DataSource.entries.toSet(),
         )
