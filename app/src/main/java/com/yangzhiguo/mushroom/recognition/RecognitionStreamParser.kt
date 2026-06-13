@@ -22,11 +22,12 @@ class RecognitionStreamParser(
 ) {
     private val buffer = StringBuilder()
     private var emittedFinal = false
+    private var emittedThinkingLength = 0
 
     /**
      * 消费一个 delta，返回 0..2 个事件：
-     *  - 在未找到完整数组前：返回 [ThinkingChunk(delta)]
-     *  - 找到完整数组的当帧：返回 [ThinkingChunk(累积思考), FinalCandidates(列表)]
+     *  - 在未找到完整数组前：返回尚未发送的安全思考片段
+     *  - 找到完整数组的当帧：返回 [ThinkingChunk(未发送前缀), FinalCandidates(列表)]
      *  - emittedFinal 之后 / 空 delta：返回 emptyList()
      */
     fun consume(delta: String): List<StreamEvent> {
@@ -36,11 +37,23 @@ class RecognitionStreamParser(
         val finalEvents = tryEmitFinalArray()
         if (finalEvents != null) return finalEvents
 
-        return listOf(StreamEvent.ThinkingChunk(delta))
+        return emitSafeThinking()
     }
 
     /** 供测试 / 上层收尾时调用：流被中断（无 finish_reason）时尝试一次终态解析。 */
-    fun flush(): List<StreamEvent> = consume("")
+    fun flush(): List<StreamEvent> {
+        if (emittedFinal) return emptyList()
+        val finalEvents = tryEmitFinalArray()
+        if (finalEvents != null) return finalEvents
+
+        val remaining = buffer.substring(emittedThinkingLength)
+        emittedThinkingLength = buffer.length
+        return if (remaining.isEmpty()) {
+            emptyList()
+        } else {
+            listOf(StreamEvent.ThinkingChunk(remaining))
+        }
+    }
 
     private fun tryEmitFinalArray(): List<StreamEvent>? {
         val text = buffer.toString()
@@ -55,10 +68,11 @@ class RecognitionStreamParser(
             if (parsed != null) {
                 emittedFinal = true
                 val events = mutableListOf<StreamEvent>()
-                val beforeText = text.substring(0, start).trim()
+                val beforeText = text.substring(emittedThinkingLength, start)
                 if (beforeText.isNotEmpty()) {
                     events.add(StreamEvent.ThinkingChunk(beforeText))
                 }
+                emittedThinkingLength = start
                 events.add(StreamEvent.FinalCandidates(parsed))
                 return events
             }
@@ -66,6 +80,31 @@ class RecognitionStreamParser(
             cursor = end + 1
         }
         return null
+    }
+
+    /**
+     * 保留最后一个未闭合的 `[` 之后的内容。它可能是跨 delta 的候选 JSON，
+     * 等闭合后再决定解析为候选还是普通 Markdown。
+     */
+    private fun emitSafeThinking(): List<StreamEvent> {
+        val text = buffer.toString()
+        var cursor = emittedThinkingLength
+        var safeEnd = text.length
+        while (cursor < text.length) {
+            val start = text.indexOf('[', cursor)
+            if (start < 0) break
+            val end = findMatchingBracket(text, start)
+            if (end == null) {
+                safeEnd = start
+                break
+            }
+            cursor = end + 1
+        }
+
+        if (safeEnd <= emittedThinkingLength) return emptyList()
+        val chunk = text.substring(emittedThinkingLength, safeEnd)
+        emittedThinkingLength = safeEnd
+        return listOf(StreamEvent.ThinkingChunk(chunk))
     }
 
     /**

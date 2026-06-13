@@ -55,6 +55,25 @@ class RecognitionStreamParserTest {
         assertEquals(0.42, second.candidates[0].confidence!!, 0.001)
     }
 
+    @Test
+    fun `final array does not repeat thinking already emitted`() {
+        val parser = RecognitionStreamParser()
+
+        assertEquals(
+            listOf(StreamEvent.ThinkingChunk("先观察菌盖。")),
+            parser.consume("先观察菌盖。"),
+        )
+        val finalEvents = parser.consume(
+            """再观察菌褶。[{"scientificName":"Amanita test"}]""",
+        )
+
+        assertEquals(
+            listOf(StreamEvent.ThinkingChunk("再观察菌褶。")),
+            finalEvents.filterIsInstance<StreamEvent.ThinkingChunk>(),
+        )
+        assertEquals(1, finalEvents.filterIsInstance<StreamEvent.FinalCandidates>().size)
+    }
+
     // --- 3. 跨多个 delta 流式到达 ---
 
     @Test
@@ -70,17 +89,13 @@ class RecognitionStreamParserTest {
         // 前两段是 thinking
         assertEquals(listOf(StreamEvent.ThinkingChunk("分析菌褶排列，")), d1)
         assertEquals(listOf(StreamEvent.ThinkingChunk("再观察菌柄。候选：")), d2)
-        // d3 是 partial，没有完整数组，继续 thinking
-        assertEquals(listOf(StreamEvent.ThinkingChunk("""[{"scientificName":"Amanita""")), d3)
+        // d3 是 partial，先暂存，避免半截 JSON 出现在思考区
+        assertTrue(d3.isEmpty())
 
-        // d4 完成数组：emit accumulated thinking + FinalCandidates
+        // d4 完成数组：前面的 thinking 已发出，只 emit FinalCandidates
         val finalEvents = d4
-        assertEquals(2, finalEvents.size)
-        val thinking = finalEvents[0] as StreamEvent.ThinkingChunk
-        // 累积的 thinking 包含前面所有
-        assertTrue(thinking.delta.contains("分析菌褶排列"))
-        assertTrue(thinking.delta.contains("再观察菌柄"))
-        val final = finalEvents[1] as StreamEvent.FinalCandidates
+        assertEquals(1, finalEvents.size)
+        val final = finalEvents[0] as StreamEvent.FinalCandidates
         assertEquals(1, final.candidates.size)
         assertEquals("Amanita muscaria", final.candidates[0].scientificName)
         assertEquals("毒蝇伞", final.candidates[0].commonName)
@@ -93,10 +108,16 @@ class RecognitionStreamParserTest {
         val parser = RecognitionStreamParser()
         val delta = """某品种，[{"scientificName":"Boletus edulis"""  // 缺 ]
 
-        val events = parser.consume(delta)
-        // 找不到完整数组 → 整体作为 thinking
-        assertEquals(1, events.size)
-        assertTrue(events[0] is StreamEvent.ThinkingChunk)
+        val streamingEvents = parser.consume(delta)
+        assertEquals(listOf(StreamEvent.ThinkingChunk("某品种，")), streamingEvents)
+
+        val flushEvents = parser.flush()
+        assertEquals(
+            delta,
+            (streamingEvents + flushEvents)
+                .filterIsInstance<StreamEvent.ThinkingChunk>()
+                .joinToString(separator = "") { it.delta },
+        )
     }
 
     @Test
