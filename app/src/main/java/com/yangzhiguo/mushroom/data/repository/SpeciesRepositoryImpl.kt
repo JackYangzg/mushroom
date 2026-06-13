@@ -65,21 +65,7 @@ class SpeciesRepositoryImpl @Inject constructor(
             sourceUrl = current.sourceUrl,
         )
         val batch = ScraperToRoomMapper.toBatch(record = record)
-        val refreshed = batch.species.single().copy(
-            mushroomId = current.mushroomId,
-            scrawSource = current.scrawSource,
-            isFavorite = false,
-            model3dUrl = current.model3dUrl,
-            identificationPoints = current.identificationPoints,
-            lookAlikeIds = current.lookAlikeIds,
-            toxicitySymptoms = current.toxicitySymptoms,
-            season = current.season,
-            sourceUrl = current.sourceUrl,
-            sourceTypes = (current.sourceTypes.split(",") + batch.species.single().sourceTypes.split(","))
-                .filter { it.isNotBlank() }
-                .distinct()
-                .joinToString(","),
-        )
+        val refreshed = mergeDetailRefresh(current, batch.species.single())
         dao.upsertAll(listOf(refreshed))
         return refreshed.withFavoriteState()
     }
@@ -97,3 +83,23 @@ class SpeciesRepositoryImpl @Inject constructor(
     private fun SpeciesEntity.withFavoriteState(): SpeciesEntity =
         copy(isFavorite = favoriteStore.isFavorite(mushroomId))
 }
+
+internal fun mergeDetailRefresh(
+    current: SpeciesEntity,
+    remote: SpeciesEntity,
+): SpeciesEntity = remote.copy(
+    mushroomId = current.mushroomId,
+    scrawSource = current.scrawSource,
+    aliasNames = current.aliasNames,
+    isFavorite = false,
+    model3dUrl = current.model3dUrl,
+    identificationPoints = current.identificationPoints,
+    lookAlikeIds = current.lookAlikeIds,
+    toxicitySymptoms = current.toxicitySymptoms,
+    season = current.season,
+    sourceUrl = current.sourceUrl,
+    sourceTypes = (current.sourceTypes.split(",") + remote.sourceTypes.split(","))
+        .filter { it.isNotBlank() }
+        .distinct()
+        .joinToString(","),
+)

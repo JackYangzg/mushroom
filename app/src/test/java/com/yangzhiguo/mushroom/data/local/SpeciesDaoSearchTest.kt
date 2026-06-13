@@ -3,6 +3,7 @@ package com.yangzhiguo.mushroom.data.local
 import android.content.Context
 import androidx.room.Room
 import androidx.test.core.app.ApplicationProvider
+import com.yangzhiguo.mushroom.data.repository.mergeDetailRefresh
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import org.junit.After
@@ -147,5 +148,34 @@ class SpeciesDaoSearchTest {
             "specimen row must surface in search, got $hitSources",
             SpeciesEntity.SCRAW_SOURCE_SPECIES_SPECIMEN in hitSources,
         )
+    }
+
+    @Test
+    fun searchByAlias_stillFindsSpeciesAfterDetailRefresh() = runBlocking {
+        val alias = "松口蘑"
+        val current = SpeciesEntity(
+            mushroomId = 200,
+            scrawSource = SpeciesEntity.SCRAW_SOURCE_GENERAL_DIRECTORY,
+            lastUpdated = 1L,
+            scientificName = "Tricholoma matsutake",
+            chineseName = "松茸",
+            aliasNames = listOf(alias),
+            sourceUrl = "https://example.com/speciesDetail/200",
+            sourceTypes = "GENERAL_DIRECTORY",
+        )
+        db.speciesDao().upsertAll(listOf(current))
+        assertEquals(listOf(200), db.speciesDao().searchByName(alias).first().map { it.mushroomId })
+
+        val remoteDetail = current.copy(
+            lastUpdated = 2L,
+            aliasNames = emptyList(),
+            habitat = "针叶林地",
+        )
+        db.speciesDao().upsertAll(listOf(mergeDetailRefresh(current, remoteDetail)))
+
+        val hitsAfterRefresh = db.speciesDao().searchByName(alias).first()
+        assertEquals(listOf(200), hitsAfterRefresh.map { it.mushroomId })
+        assertEquals(listOf(alias), hitsAfterRefresh.single().aliasNames)
+        assertEquals("针叶林地", hitsAfterRefresh.single().habitat)
     }
 }
