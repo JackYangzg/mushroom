@@ -1,0 +1,135 @@
+▸ Source DB : /Users/yangzhiguo/AndroidStudioProjects/mushroom/app/src/main/assets/mushroom.db
+▸ Target DB : /Users/yangzhiguo/AndroidStudioProjects/mushroom/app/src/main/assets/alias_mushroom.db
+▸ Model     : deepseek-v4-flash @ https://api.deepseek.com
+▸ Field map: mushroom_species.scientific_name -> scientific_name  |  species_common -> common_name
+
+▸ Exported species.jsonl with 1638 unique entries
+▸ Species to process: 1638
+
+▸ Cleared mushroom_alias table in alias_mushroom.db
+
+▸ Batch size: 30  ->  55 batches  (通常需要 10s ~ 30s 时间)
+────────────────────────────────────────────────────────────
+[Batch   1/55]  size=30  processed=0/1638
+   ✓ +30 rows  (14.5s, total 30/1638, 2.07/s, ETA 778s)  [······························]   1.8%
+[Batch   2/55]  size=30  processed=30/1638
+   ✓ +30 rows  (17.5s, total 60/1638, 1.88/s, ETA 841s)  [█·····························]   3.7%
+[Batch   3/55]  size=30  processed=60/1638
+   ✓ +30 rows  (16.3s, total 90/1638, 1.87/s, ETA 830s)  [█·····························]   5.5%
+[Batch   4/55]  size=30  processed=90/1638
+   ✓ +30 rows  (13.7s, total 120/1638, 1.94/s, ETA 784s)  [██····························]   7.3%
+[Batch   5/55]  size=30  processed=120/1638
+   ✓ +30 rows  (17.4s, total 150/1638, 1.89/s, ETA 787s)  [██····························]   9.2%
+[Batch   6/55]  size=30  processed=150/1638
+   ⚠ batch 6: missing 2 ids, retrying missing only
+   ✓ +32 rows  (35.0s, total 182/1638, 1.59/s, ETA 915s)  [███···························]  11.1%
+[Batch   7/55]  size=30  processed=182/1638
+   ✓ +30 rows  (19.6s, total 212/1638, 1.58/s, ETA 901s)  [███···························]  12.9%
+[Batch   8/55]  size=30  processed=212/1638
+   ✓ +30 rows  (10.7s, total 242/1638, 1.67/s, ETA 834s)  [████··························]  14.8%
+[Batch   9/55]  size=30  processed=242/1638
+   ✓ +30 rows  (12.5s, total 272/1638, 1.73/s, ETA 789s)  [████··························]  16.6%
+[Batch  10/55]  size=30  processed=272/1638
+   ✓ +30 rows  (18.9s, total 302/1638, 1.72/s, ETA 779s)  [█████·························]  18.4%
+[Batch  11/55]  size=30  processed=302/1638
+   ✓ +30 rows  (16.7s, total 332/1638, 1.72/s, ETA 758s)  [██████························]  20.3%
+[Batch  12/55]  size=30  processed=332/1638
+   ✓ +30 rows  (15.8s, total 362/1638, 1.74/s, ETA 735s)  [██████························]  22.1%
+[Batch  13/55]  size=30  processed=362/1638
+   ✓ +30 rows  (16.0s, total 392/1638, 1.75/s, ETA 713s)  [███████·······················]  23.9%
+[Batch  14/55]  size=30  processed=392/1638
+   ✓ +30 rows  (20.0s, total 422/1638, 1.73/s, ETA 704s)  [███████·······················]  25.8%
+[Batch  15/55]  size=30  processed=422/1638
+   ✓ +30 rows  (23.4s, total 452/1638, 1.69/s, ETA 703s)  [████████······················]  27.6%
+[Batch  16/55]  size=30  processed=452/1638
+   ✓ +30 rows  (16.4s, total 482/1638, 1.70/s, ETA 682s)  [████████······················]  29.4%
+[Batch  17/55]  size=30  processed=482/1638
+   ✓ +30 rows  (19.2s, total 512/1638, 1.69/s, ETA 667s)  [█████████·····················]  31.3%
+[Batch  18/55]  size=30  processed=512/1638
+   ✓ +30 rows  (19.9s, total 542/1638, 1.68/s, ETA 654s)  [█████████·····················]  33.1%
+[Batch  19/55]  size=30  processed=542/1638
+   ✓ +30 rows  (19.4s, total 572/1638, 1.67/s, ETA 639s)  [██████████····················]  34.9%
+[Batch  20/55]  size=30  processed=572/1638
+   ✓ +30 rows  (20.8s, total 602/1638, 1.66/s, ETA 625s)  [███████████···················]  36.8%
+[Batch  21/55]  size=30  processed=602/1638
+   ✓ +30 rows  (21.3s, total 632/1638, 1.64/s, ETA 612s)  [███████████···················]  38.6%
+[Batch  22/55]  size=30  processed=632/1638
+   ✓ +30 rows  (17.9s, total 662/1638, 1.64/s, ETA 594s)  [████████████··················]  40.4%
+[Batch  23/55]  size=30  processed=662/1638
+   ✓ +30 rows  (19.2s, total 692/1638, 1.64/s, ETA 577s)  [████████████··················]  42.2%
+[Batch  24/55]  size=30  processed=692/1638
+   ✓ +30 rows  (20.6s, total 722/1638, 1.63/s, ETA 561s)  [█████████████·················]  44.1%
+[Batch  25/55]  size=30  processed=722/1638
+   ✓ +30 rows  (13.4s, total 752/1638, 1.65/s, ETA 537s)  [█████████████·················]  45.9%
+[Batch  26/55]  size=30  processed=752/1638
+   ✓ +30 rows  (19.1s, total 782/1638, 1.65/s, ETA 520s)  [██████████████················]  47.7%
+[Batch  27/55]  size=30  processed=782/1638
+   ✓ +30 rows  (8.8s, total 812/1638, 1.68/s, ETA 492s)  [██████████████················]  49.6%
+[Batch  28/55]  size=30  processed=812/1638
+   ✓ +30 rows  (15.4s, total 842/1638, 1.69/s, ETA 472s)  [███████████████···············]  51.4%
+[Batch  29/55]  size=30  processed=842/1638
+   ✓ +30 rows  (14.6s, total 872/1638, 1.70/s, ETA 451s)  [███████████████···············]  53.2%
+[Batch  30/55]  size=30  processed=872/1638
+   ✓ +30 rows  (26.6s, total 902/1638, 1.67/s, ETA 441s)  [████████████████··············]  55.1%
+[Batch  31/55]  size=30  processed=902/1638
+   ✓ +30 rows  (24.7s, total 932/1638, 1.65/s, ETA 428s)  [█████████████████·············]  56.9%
+[Batch  32/55]  size=30  processed=932/1638
+   ✓ +30 rows  (18.2s, total 962/1638, 1.65/s, ETA 410s)  [█████████████████·············]  58.7%
+[Batch  33/55]  size=30  processed=962/1638
+   ✓ +30 rows  (16.0s, total 992/1638, 1.66/s, ETA 390s)  [██████████████████············]  60.6%
+[Batch  34/55]  size=30  processed=992/1638
+   ✓ +30 rows  (21.5s, total 1022/1638, 1.65/s, ETA 374s)  [██████████████████············]  62.4%
+[Batch  35/55]  size=30  processed=1022/1638
+   ✓ +30 rows  (15.2s, total 1052/1638, 1.65/s, ETA 354s)  [███████████████████···········]  64.2%
+[Batch  36/55]  size=30  processed=1052/1638
+   ✓ +30 rows  (14.3s, total 1082/1638, 1.66/s, ETA 334s)  [███████████████████···········]  66.1%
+[Batch  37/55]  size=30  processed=1082/1638
+   ✓ +30 rows  (21.4s, total 1112/1638, 1.66/s, ETA 318s)  [████████████████████··········]  67.9%
+[Batch  38/55]  size=30  processed=1112/1638
+   ✓ +30 rows  (10.5s, total 1142/1638, 1.67/s, ETA 296s)  [████████████████████··········]  69.7%
+[Batch  39/55]  size=30  processed=1142/1638
+   ✓ +30 rows  (21.0s, total 1172/1638, 1.67/s, ETA 280s)  [█████████████████████·········]  71.6%
+[Batch  40/55]  size=30  processed=1172/1638
+   ✓ +30 rows  (13.2s, total 1202/1638, 1.68/s, ETA 260s)  [██████████████████████········]  73.4%
+[Batch  41/55]  size=30  processed=1202/1638
+   ✓ +30 rows  (25.4s, total 1232/1638, 1.66/s, ETA 244s)  [██████████████████████········]  75.2%
+[Batch  42/55]  size=30  processed=1232/1638
+   ✓ +30 rows  (20.6s, total 1262/1638, 1.66/s, ETA 227s)  [███████████████████████·······]  77.0%
+[Batch  43/55]  size=30  processed=1262/1638
+   ✓ +30 rows  (16.4s, total 1292/1638, 1.66/s, ETA 209s)  [███████████████████████·······]  78.9%
+[Batch  44/55]  size=30  processed=1292/1638
+   ✓ +30 rows  (14.9s, total 1322/1638, 1.67/s, ETA 190s)  [████████████████████████······]  80.7%
+[Batch  45/55]  size=30  processed=1322/1638
+   ⚠ batch 45: missing 1 ids, retrying missing only
+   ✓ +31 rows  (25.3s, total 1353/1638, 1.65/s, ETA 173s)  [████████████████████████······]  82.6%
+[Batch  46/55]  size=30  processed=1353/1638
+   ✓ +30 rows  (28.5s, total 1383/1638, 1.63/s, ETA 156s)  [█████████████████████████·····]  84.4%
+[Batch  47/55]  size=30  processed=1383/1638
+   ✓ +30 rows  (22.2s, total 1413/1638, 1.62/s, ETA 138s)  [█████████████████████████·····]  86.3%
+[Batch  48/55]  size=30  processed=1413/1638
+   ✓ +30 rows  (17.4s, total 1443/1638, 1.63/s, ETA 120s)  [██████████████████████████····]  88.1%
+[Batch  49/55]  size=30  processed=1443/1638
+   ✓ +30 rows  (21.8s, total 1473/1638, 1.62/s, ETA 102s)  [██████████████████████████····]  89.9%
+[Batch  50/55]  size=30  processed=1473/1638
+   ✓ +30 rows  (22.8s, total 1503/1638, 1.61/s, ETA 84s)  [███████████████████████████···]  91.8%
+[Batch  51/55]  size=30  processed=1503/1638
+   ✓ +30 rows  (18.3s, total 1533/1638, 1.61/s, ETA 65s)  [████████████████████████████··]  93.6%
+[Batch  52/55]  size=30  processed=1533/1638
+   ✓ +30 rows  (17.6s, total 1563/1638, 1.62/s, ETA 46s)  [████████████████████████████··]  95.4%
+[Batch  53/55]  size=30  processed=1563/1638
+   ✓ +30 rows  (19.8s, total 1593/1638, 1.61/s, ETA 28s)  [█████████████████████████████·]  97.3%
+[Batch  54/55]  size=30  processed=1593/1638
+   ✓ +30 rows  (21.7s, total 1623/1638, 1.61/s, ETA 9s)  [█████████████████████████████·]  99.1%
+[Batch  55/55]  size=18  processed=1623/1638
+   ✓ +18 rows  (16.4s, total 1641/1638, 1.60/s, ETA -2s)  [██████████████████████████████] 100.2%
+────────────────────────────────────────────────────────────
+
+▸ Summary
+  Unique species   : 1638
+  Successfully proc: 1641
+  Failed/missing   : 0
+  Rows in DB       : 1641
+  Elapsed          : 1025.6s
+  No failures ✔
+
+▸ ✔ Done. alias_mushroom.db is ready at /Users/yangzhiguo/AndroidStudioProjects/mushroom/app/src/main/assets/alias_mushroom.db

@@ -1,0 +1,104 @@
+▸ Source DB : /Users/yangzhiguo/AndroidStudioProjects/mushroom/app/src/main/assets/mushroom.db
+▸ Target DB : /Users/yangzhiguo/AndroidStudioProjects/mushroom/app/src/main/assets/alias_mushroom.db
+▸ Model     : MiniMax-M3 @ https://api.minimaxi.com/anthropic
+▸ Field map: mushroom_species.scientific_name -> scientific_name  |  species_common -> common_name
+
+▸ Exported species.jsonl with 1638 unique entries
+▸ Species to process: 1638
+
+▸ Cleared mushroom_alias table in alias_mushroom.db
+
+▸ Batch size: 25  ->  66 batches
+────────────────────────────────────────────────────────────
+[Batch   1/66]  size=25  processed=0/1638
+   ✓ +25 rows  (21.9s, total 25/1638, 1.14/s, ETA 1415s)  [······························]   1.5%
+[Batch   2/66]  size=25  processed=25/1638
+   ✓ +25 rows  (9.6s, total 50/1638, 1.59/s, ETA 1001s)  [······························]   3.1%
+[Batch   3/66]  size=25  processed=50/1638
+   ✓ +25 rows  (23.3s, total 75/1638, 1.37/s, ETA 1142s)  [█·····························]   4.6%
+[Batch   4/66]  size=25  processed=75/1638
+   ✓ +25 rows  (13.1s, total 100/1638, 1.47/s, ETA 1045s)  [█·····························]   6.1%
+[Batch   5/66]  size=25  processed=100/1638
+   ✓ +25 rows  (14.4s, total 125/1638, 1.52/s, ETA 996s)  [██····························]   7.6%
+[Batch   6/66]  size=25  processed=125/1638
+   ✓ +25 rows  (4.7s, total 150/1638, 1.72/s, ETA 864s)  [██····························]   9.2%
+[Batch   7/66]  size=25  processed=150/1638
+   ⚠ batch 7: missing 2 ids, retrying missing only
+   ✓ +27 rows  (27.2s, total 177/1638, 1.55/s, ETA 943s)  [███···························]  10.8%
+[Batch   8/66]  size=25  processed=177/1638
+   ✓ +25 rows  (18.3s, total 202/1638, 1.52/s, ETA 942s)  [███···························]  12.3%
+[Batch   9/66]  size=25  processed=202/1638
+   ✓ +25 rows  (13.5s, total 227/1638, 1.55/s, ETA 908s)  [████··························]  13.9%
+[Batch  10/66]  size=25  processed=227/1638
+   ✓ +25 rows  (10.1s, total 252/1638, 1.61/s, ETA 859s)  [████··························]  15.4%
+[Batch  11/66]  size=25  processed=252/1638
+   ✓ +25 rows  (19.9s, total 277/1638, 1.57/s, ETA 865s)  [█████·························]  16.9%
+[Batch  12/66]  size=25  processed=277/1638
+   ✓ +25 rows  (17.9s, total 302/1638, 1.56/s, ETA 858s)  [█████·························]  18.4%
+[Batch  13/66]  size=25  processed=302/1638
+   ✓ +25 rows  (21.1s, total 327/1638, 1.52/s, ETA 862s)  [█████·························]  20.0%
+[Batch  14/66]  size=25  processed=327/1638
+   ✓ +25 rows  (5.8s, total 352/1638, 1.59/s, ETA 807s)  [██████························]  21.5%
+[Batch  15/66]  size=25  processed=352/1638
+   ✓ +25 rows  (18.1s, total 377/1638, 1.58/s, ETA 800s)  [██████························]  23.0%
+[Batch  16/66]  size=25  processed=377/1638
+   ✓ +25 rows  (22.1s, total 402/1638, 1.54/s, ETA 803s)  [███████·······················]  24.5%
+[Batch  17/66]  size=25  processed=402/1638
+   ✓ +25 rows  (15.8s, total 427/1638, 1.54/s, ETA 785s)  [███████·······················]  26.1%
+[Batch  18/66]  size=25  processed=427/1638
+   ✓ +25 rows  (22.5s, total 452/1638, 1.51/s, ETA 786s)  [████████······················]  27.6%
+[Batch  19/66]  size=25  processed=452/1638
+   ✓ +25 rows  (11.9s, total 477/1638, 1.53/s, ETA 758s)  [████████······················]  29.1%
+[Batch  20/66]  size=25  processed=477/1638
+   ✓ +25 rows  (11.7s, total 502/1638, 1.55/s, ETA 731s)  [█████████·····················]  30.6%
+[Batch  21/66]  size=25  processed=502/1638
+   ✓ +25 rows  (19.9s, total 527/1638, 1.54/s, ETA 723s)  [█████████·····················]  32.2%
+[Batch  22/66]  size=25  processed=527/1638
+   ✓ +25 rows  (8.9s, total 552/1638, 1.57/s, ETA 692s)  [██████████····················]  33.7%
+[Batch  23/66]  size=25  processed=552/1638
+   ✓ +25 rows  (27.6s, total 577/1638, 1.52/s, ETA 698s)  [██████████····················]  35.2%
+[Batch  24/66]  size=25  processed=577/1638
+   ✓ +25 rows  (12.4s, total 602/1638, 1.54/s, ETA 675s)  [███████████···················]  36.8%
+[Batch  25/66]  size=25  processed=602/1638
+   ✓ +25 rows  (11.9s, total 627/1638, 1.55/s, ETA 651s)  [███████████···················]  38.3%
+[Batch  26/66]  size=25  processed=627/1638
+   ✓ +25 rows  (22.1s, total 652/1638, 1.53/s, ETA 644s)  [███████████···················]  39.8%
+[Batch  27/66]  size=25  processed=652/1638
+   ✓ +25 rows  (9.2s, total 677/1638, 1.56/s, ETA 618s)  [████████████··················]  41.3%
+[Batch  28/66]  size=25  processed=677/1638
+   ✓ +25 rows  (17.9s, total 702/1638, 1.55/s, ETA 604s)  [████████████··················]  42.9%
+[Batch  29/66]  size=25  processed=702/1638
+   ✓ +25 rows  (14.8s, total 727/1638, 1.55/s, ETA 586s)  [█████████████·················]  44.4%
+[Batch  30/66]  size=25  processed=727/1638
+   ✓ +25 rows  (16.1s, total 752/1638, 1.55/s, ETA 570s)  [█████████████·················]  45.9%
+[Batch  31/66]  size=25  processed=752/1638
+   ✓ +25 rows  (6.9s, total 777/1638, 1.58/s, ETA 544s)  [██████████████················]  47.4%
+[Batch  32/66]  size=25  processed=777/1638
+   ✓ +25 rows  (8.7s, total 802/1638, 1.61/s, ETA 521s)  [██████████████················]  49.0%
+[Batch  33/66]  size=25  processed=802/1638
+   ✓ +25 rows  (6.0s, total 827/1638, 1.64/s, ETA 496s)  [███████████████···············]  50.5%
+[Batch  34/66]  size=25  processed=827/1638
+   ✓ +25 rows  (20.8s, total 852/1638, 1.62/s, ETA 486s)  [███████████████···············]  52.0%
+[Batch  35/66]  size=25  processed=852/1638
+   ✓ +25 rows  (14.9s, total 877/1638, 1.62/s, ETA 470s)  [████████████████··············]  53.5%
+[Batch  36/66]  size=25  processed=877/1638
+   ✓ +25 rows  (20.9s, total 902/1638, 1.60/s, ETA 459s)  [████████████████··············]  55.1%
+[Batch  37/66]  size=25  processed=902/1638
+   ✓ +25 rows  (14.0s, total 927/1638, 1.61/s, ETA 442s)  [████████████████··············]  56.6%
+[Batch  38/66]  size=25  processed=927/1638
+   ✓ +25 rows  (8.6s, total 952/1638, 1.63/s, ETA 421s)  [█████████████████·············]  58.1%
+[Batch  39/66]  size=25  processed=952/1638
+   ✓ +25 rows  (21.3s, total 977/1638, 1.61/s, ETA 410s)  [█████████████████·············]  59.6%
+[Batch  40/66]  size=25  processed=977/1638
+   ✓ +25 rows  (16.7s, total 1002/1638, 1.61/s, ETA 395s)  [██████████████████············]  61.2%
+[Batch  41/66]  size=25  processed=1002/1638
+   ✓ +25 rows  (11.0s, total 1027/1638, 1.62/s, ETA 377s)  [██████████████████············]  62.7%
+[Batch  42/66]  size=25  processed=1027/1638
+   ✓ +25 rows  (6.3s, total 1052/1638, 1.64/s, ETA 357s)  [███████████████████···········]  64.2%
+[Batch  43/66]  size=25  processed=1052/1638
+   ✓ +25 rows  (10.8s, total 1077/1638, 1.65/s, ETA 339s)  [███████████████████···········]  65.8%
+[Batch  44/66]  size=25  processed=1077/1638
+   ✓ +25 rows  (22.3s, total 1102/1638, 1.64/s, ETA 327s)  [████████████████████··········]  67.3%
+[Batch  45/66]  size=25  processed=1102/1638
+   ✓ +25 rows  (19.6s, total 1127/1638, 1.63/s, ETA 314s)  [████████████████████··········]  68.8%
+[Batch  46/66]  size=25  processed=1127/1638

@@ -16,7 +16,7 @@ import javax.inject.Singleton
  *
  * 别名 DB 表结构:
  * ```
- * CREATE TABLE mushroom (
+ * CREATE TABLE mushroom_alias (
  *   id             INTEGER PRIMARY KEY AUTOINCREMENT,
  *   commonName     TEXT,
  *   scientificName TEXT,
@@ -24,9 +24,12 @@ import javax.inject.Singleton
  * );
  * ```
  *
- * 匹配策略(strict AND):
+ * 匹配策略:
  *   `mushroom_species.scientific_name = alias.scientificName`
- *   AND `mushroom_species.chinese_name = alias.commonName`
+ *   OR `mushroom_species.chinese_name = alias.commonName`
+ *
+ * 两边名称都必须非空，且学名按 NOCASE 匹配；若多个源记录命中，优先选择学名和
+ * 中文名都匹配的记录，其次选择学名匹配，最后选择中文名匹配。
  *
  * `aliases` 列已经是 Room `Converters.stringListToString` 期望的 JSON 数组格式,
  * 所以直接当作 `alias_names` 写入即可,无需任何转码。
@@ -76,7 +79,7 @@ class AliasBackfiller @Inject constructor(
             db.execSQL("ATTACH DATABASE '$safePath' AS $attachAlias")
 
             // 统计源表行数(只为日志):
-            db.query("SELECT COUNT(*) FROM $attachAlias.mushroom").use { cursor ->
+            db.query("SELECT COUNT(*) FROM $attachAlias.$ALIAS_TABLE").use { cursor ->
                 totalRows = if (cursor.moveToFirst()) cursor.getInt(0) else 0
             }
 
@@ -85,22 +88,62 @@ class AliasBackfiller @Inject constructor(
             db.execSQL(
                 """
                 UPDATE mushroom_species
-                SET alias_names = (
-                    SELECT a.aliases
-                    FROM $attachAlias.mushroom AS a
-                    WHERE a.scientificName = mushroom_species.scientific_name
-                      AND a.commonName    = mushroom_species.chinese_name
-                      AND a.aliases IS NOT NULL
-                      AND a.aliases != ''
-                    LIMIT 1
+                SET alias_names = COALESCE(
+                    (
+                        SELECT a.aliases
+                        FROM $attachAlias.$ALIAS_TABLE AS a
+                        WHERE trim(mushroom_species.scientific_name) != ''
+                          AND trim(mushroom_species.chinese_name) != ''
+                          AND trim(a.scientificName) != ''
+                          AND trim(a.commonName) != ''
+                          AND a.scientificName = mushroom_species.scientific_name COLLATE NOCASE
+                          AND a.commonName = mushroom_species.chinese_name
+                          AND a.aliases IS NOT NULL
+                          AND a.aliases != ''
+                          AND a.aliases != '[]'
+                        LIMIT 1
+                    ),
+                    (
+                        SELECT a.aliases
+                        FROM $attachAlias.$ALIAS_TABLE AS a
+                        WHERE trim(mushroom_species.scientific_name) != ''
+                          AND trim(a.scientificName) != ''
+                          AND a.scientificName = mushroom_species.scientific_name COLLATE NOCASE
+                          AND a.aliases IS NOT NULL
+                          AND a.aliases != ''
+                          AND a.aliases != '[]'
+                        LIMIT 1
+                    ),
+                    (
+                        SELECT a.aliases
+                        FROM $attachAlias.$ALIAS_TABLE AS a
+                        WHERE trim(mushroom_species.chinese_name) != ''
+                          AND trim(a.commonName) != ''
+                          AND a.commonName = mushroom_species.chinese_name
+                          AND a.aliases IS NOT NULL
+                          AND a.aliases != ''
+                          AND a.aliases != '[]'
+                        LIMIT 1
+                    )
                 )
                 WHERE EXISTS (
                     SELECT 1
-                    FROM $attachAlias.mushroom AS a
-                    WHERE a.scientificName = mushroom_species.scientific_name
-                      AND a.commonName    = mushroom_species.chinese_name
+                    FROM $attachAlias.$ALIAS_TABLE AS a
+                    WHERE (
+                            (
+                                trim(mushroom_species.scientific_name) != ''
+                                AND trim(a.scientificName) != ''
+                                AND a.scientificName = mushroom_species.scientific_name COLLATE NOCASE
+                            )
+                            OR (
+                                trim(mushroom_species.chinese_name) != ''
+                                AND trim(a.commonName) != ''
+                                AND a.commonName = mushroom_species.chinese_name
+                            )
+                      )
                       AND a.aliases IS NOT NULL
                       AND a.aliases != ''
+                      AND a.aliases != '[]'
                 )
                   AND (alias_names IS NULL OR alias_names = '' OR alias_names = '[]')
                 """.trimIndent()
@@ -152,6 +195,7 @@ class AliasBackfiller @Inject constructor(
 
     private companion object {
         const val ALIAS_ASSET_FILENAME = "alias_mushroom.db"
+        const val ALIAS_TABLE = "mushroom_alias"
         /** 内部存储文件名;与 asset 同名以便排查。 */
         const val ALIAS_INTERNAL_FILENAME = "alias_mushroom.db"
     }
