@@ -40,6 +40,7 @@ class SpeciesThumbnailViewModel @Inject constructor(
             try {
                 imageFile = imageCache.getOrFetchThumbnail(
                     mushroomId = species.mushroomId,
+                    scrawSource = species.scrawSource,
                     remoteUrl = species.imageUrl,
                     scientificName = species.scientificName,
                     sourceUrl = species.sourceUrl,
@@ -55,9 +56,11 @@ class SpeciesThumbnailViewModel @Inject constructor(
 fun SpeciesThumbnail(
     species: SpeciesEntity,
     modifier: Modifier = Modifier,
-    viewModel: SpeciesThumbnailViewModel = hiltViewModel(key = "species-thumbnail-${species.mushroomId}"),
+    viewModel: SpeciesThumbnailViewModel = hiltViewModel(
+        key = "species-thumbnail-${species.mushroomId}-${species.scrawSource}",
+    ),
 ) {
-    LaunchedEffect(species.mushroomId) { viewModel.load(species) }
+    LaunchedEffect(species.mushroomId, species.scrawSource) { viewModel.load(species) }
     Box(modifier = modifier, contentAlignment = Alignment.Center) {
         val file = viewModel.imageFile
         when {

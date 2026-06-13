@@ -3,6 +3,7 @@ package com.yangzhiguo.mushroom.sync
 import android.content.Context
 import android.util.Log
 import com.yangzhiguo.mushroom.data.local.AppDatabase
+import com.yangzhiguo.mushroom.data.local.SpeciesEntity
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -154,4 +155,122 @@ class AliasBackfiller @Inject constructor(
         /** 内部存储文件名;与 asset 同名以便排查。 */
         const val ALIAS_INTERNAL_FILENAME = "alias_mushroom.db"
     }
+
+    // ════════════════════════════════════════════════════════════════════
+    //  簇内别名合并(与 `scripts/backfill_plan.sql` 同语义)
+    // ════════════════════════════════════════════════════════════════════
+
+    /**
+     * 簇内别名合并结果。
+     *
+     * @param clusters 总簇数(连通分量,含孤立点)
+     * @param multiClusters 大小 ≥2 的簇数
+     * @param mergedRecords 被写入新别名 JSON 的记录数(供体也写入以保证幂等)
+     */
+    data class ClusterResult(
+        val totalRecords: Int,
+        val clusters: Int,
+        val multiClusters: Int,
+        val mergedRecords: Int,
+    )
+
+    /**
+     * 在 [SyncRepository.runFullSync] 末尾、`backfill()` 之后再调一次。
+     *
+     * 逻辑(与 `scripts/cluster_details.py` 完全一致):
+     *  1. 读全部 SpeciesEntity,做名称规范化:TRIM + 拉丁 LOWERCASE。
+     *  2. 全局 token 索引:每个 token → 出现该 token 的 entityId 集合。
+     *  3. Union-Find:同 token 跨 ≥2 条记录则 union。
+     *  4. 对每个 ≥2 簇:把所有成员的 alias_names 取并集去重,写回所有成员(幂等)。
+     *  5. 单条记录没有同 token 时不动。
+     *
+     * 复用 Room DAO 写入,不直连 SQLite;也不需要外部 asset。
+     */
+    suspend fun backfillClusters(): ClusterResult = withContext(Dispatchers.IO) {
+        val dao = roomDb.speciesDao()
+        val all = dao.getAllForSync()
+        if (all.isEmpty()) {
+            return@withContext ClusterResult(0, 0, 0, 0)
+        }
+
+        // 规范化 & 解析 alias
+        val rows = all.map { e ->
+            val sci = (e.scientificName ?: "").trim().lowercase()
+            val chn = (e.chineseName ?: "").trim()
+            // aliasNames 已经是 List<String>(Room Converters 负责序列化),无需 JSON 中转。
+            Normalized(e.aliasNames, sci, chn, e.aliasNames)
+        }
+
+        val n = rows.size
+        val parent = IntArray(n) { it }
+        fun find(x: Int): Int {
+            var r = x
+            while (parent[r] != r) { parent[r] = parent[parent[r]]; r = parent[r] }
+            return r
+        }
+        fun union(a: Int, b: Int) {
+            val ra = find(a); val rb = find(b)
+            if (ra != rb) parent[ra] = rb
+        }
+
+        // token → id 集合
+        val token2ids = HashMap<String, HashSet<Int>>()
+        for ((idx, r) in rows.withIndex()) {
+            if (r.sciNorm.isNotEmpty()) token2ids.getOrPut(r.sciNorm) { HashSet() }.add(idx)
+            if (r.chnNorm.isNotEmpty()) token2ids.getOrPut(r.chnNorm) { HashSet() }.add(idx)
+            for (a in r.aliases) token2ids.getOrPut(a) { HashSet() }.add(idx)
+        }
+        for ((_, ids) in token2ids) {
+            if (ids.size < 2) continue
+            val head = ids.iterator().next()
+            for (o in ids) if (o != head) union(head, o)
+        }
+
+        // 按 root 分组
+        val groups = HashMap<Int, MutableList<Int>>()
+        for (idx in 0 until n) groups.getOrPut(find(idx)) { ArrayList() }.add(idx)
+
+        val multiGroups = groups.values.filter { it.size >= 2 }
+
+        // 计算每个簇的合并别名,收集需写入的实体
+        val updates = ArrayList<SpeciesEntity>(n)
+        for (memberIdxs in multiGroups) {
+            val merged = LinkedHashSet<String>()
+            for (i in memberIdxs) for (a in rows[i].aliases) merged.add(a)
+            if (merged.isEmpty()) continue
+            val newAliases = merged.toList()
+            for (i in memberIdxs) {
+                val r = rows[i]
+                if (r.rawAlias != newAliases) {
+                    updates += all[i].copy(aliasNames = newAliases)
+                }
+            }
+        }
+
+        if (updates.isNotEmpty()) {
+            dao.upsertAll(updates)
+        }
+
+        val result = ClusterResult(
+            totalRecords = n,
+            clusters = groups.size,
+            multiClusters = multiGroups.size,
+            mergedRecords = updates.size,
+        )
+        Log.i(
+            tag,
+            "Cluster backfill done: total=${result.totalRecords}, " +
+                "clusters=${result.clusters}, multi=${result.multiClusters}, " +
+                "merged=${result.mergedRecords}",
+        )
+        result
+    }
+
+    /** 内部规范化结果,避免每轮重新解析。 */
+    private data class Normalized(
+        val rawAlias: List<String>,
+        val sciNorm: String,
+        val chnNorm: String,
+        val aliases: List<String>,
+    )
 }

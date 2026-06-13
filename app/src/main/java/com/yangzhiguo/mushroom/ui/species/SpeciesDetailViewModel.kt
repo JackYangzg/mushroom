@@ -34,13 +34,15 @@ class SpeciesDetailViewModel @Inject constructor(
             _state.value = local
             val sp = runCatching { repo.refreshDetails(mushroomId) }.getOrNull() ?: local
             _state.value = sp
+            if (sp == null) return@launch
             _imageLoading.value = true
             try {
                 _imageFiles.value = imageCache.getOrFetchAll(
                     mushroomId = mushroomId,
-                    remoteUrl = sp?.imageUrl,
-                    scientificName = sp?.scientificName,
-                    sourceUrl = sp?.sourceUrl,
+                    scrawSource = sp.scrawSource,
+                    remoteUrl = sp.imageUrl,
+                    scientificName = sp.scientificName,
+                    sourceUrl = sp.sourceUrl,
                 )
             } finally {
                 _imageLoading.value = false

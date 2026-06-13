@@ -1,7 +1,6 @@
 package com.yangzhiguo.mushroom.sync
 
 import com.yangzhiguo.mushroom.data.local.SpeciesEntity
-import com.yangzhiguo.mushroom.data.local.SpeciesImageEntity
 import com.yangzhiguo.mushroom.domain.model.Edibility
 import com.yangzhiguo.mushroom.domain.model.ToxicityLevel
 import com.yangzhiguo.mushroom.domain.model.UseType
@@ -339,61 +338,9 @@ class ScraperToRoomMapperTest {
         val specimen = Specimen(id = 33L, speciesLatin = "Amanita muscaria")
         val entity = ScraperToRoomMapper.toEntity(specimen, now = 1L)
         assertEquals(33, entity.mushroomId)
-        assertEquals(0L, entity.id)  // SQLite 自增,新行 id 默认 0 由 Room 接管
     }
 
-    // ── 新:extractImages 保留元数据 ──────────────────────────────────────
-
-    @Test
-    fun extractImages_preservesUfIdAndFilename() {
-        val specimen = specimenWithImages(
-            id = 31L,
-            sysFileListJson = "[]",
-            kibSpeciesPicturesJson = """
-                [
-                  {"uf_id":"5496357","uf_name":"GLG-FXP855 (2).JPG","uf_src":"http://cloudfile.biotracks.cn/a.jpg!bio","uf_size":"7917005","ident":""}
-                ]
-            """.trimIndent(),
-        )
-
-        val images = ScraperToRoomMapper.extractImages(specimen, mushroomId = 31)
-
-        assertEquals(1, images.size)
-        assertEquals(31, images[0].mushroomId)
-        assertEquals("5496357", images[0].ufId)
-        assertEquals("GLG-FXP855 (2).JPG", images[0].ufName)
-        assertEquals(7917005L, images[0].ufSize)
-        assertEquals("https://cloudfile.biotracks.cn/a.jpg!bio", images[0].ufSrc)
-        assertEquals(SpeciesImageEntity.SOURCE_KIB_PICTURES, images[0].source)
-        assertEquals(0, images[0].sortOrder)
-    }
-
-    @Test
-    fun extractImages_keepsSysFileListBeforeKibPictures_andAssignsSequentialOrder() {
-        val specimen = specimenWithImages(
-            id = 31L,
-            sysFileListJson = """
-                [
-                  {"id":"2064183905124171777","fileName":"sys1.jpg","url":"/admin/sys-file/local/sys1.jpg"},
-                  {"id":"2064183905124171778","fileName":"sys2.jpg","url":"/admin/sys-file/local/sys2.jpg"}
-                ]
-            """.trimIndent(),
-            kibSpeciesPicturesJson = """
-                [
-                  {"uf_id":"5496357","uf_name":"kib1.jpg","uf_src":"/admin/sys-file/local/kib1.jpg"}
-                ]
-            """.trimIndent(),
-        )
-        val images = ScraperToRoomMapper.extractImages(specimen, mushroomId = 31)
-
-        assertEquals(3, images.size)
-        assertEquals(SpeciesImageEntity.SOURCE_SYS_FILE, images[0].source)
-        assertEquals(SpeciesImageEntity.SOURCE_SYS_FILE, images[1].source)
-        assertEquals(SpeciesImageEntity.SOURCE_KIB_PICTURES, images[2].source)
-        assertEquals(listOf(0, 1, 2), images.map { it.sortOrder })
-    }
-
-    // ── 新:toBatch 只产 species + images ──────────────────────────────
+    // ── 新:toBatch 只产 species,图片写入主表 ───────────────────────────
 
     @Test
     fun toBatch_emitsSpeciesAndImagesOnly() {
@@ -424,9 +371,11 @@ class ScraperToRoomMapperTest {
         assertEquals(UseType.EDIBLE, batch.species[0].useType)
         assertEquals(31, batch.species[0].mushroomId)
 
-        assertEquals(2, batch.images.size)
-        assertEquals(setOf("5496357", "5496358"), batch.images.map { it.ufId }.toSet())
-        assertTrue(batch.images.all { it.mushroomId == 31 })
+        assertEquals(
+            listOf("http://x/k1.jpg", "http://x/k2.jpg"),
+            ScraperToRoomMapper.extractAllImageUrls(specimen),
+        )
+        assertTrue(batch.species.single().images.contains("http://x/k1.jpg"))
     }
 
     // ── 测试工具 ───────────────────────────────────────────────────────

@@ -18,9 +18,8 @@ import javax.inject.Singleton
 /**
  * 图片缓存仓库。
  *
- * v10:把 [specimenId] 全部改名 [mushroomId],语义是 iflora 业务 id 而非 Room PK。
- * 缓存目录命名仍用业务 id 作为命名空间(`specimen_images_v2/{mushroomId}/`),保证
- * resync 时 PK 变了但业务 id 不变,缓存文件继续命中。
+ * 缓存和数据库更新都使用 `(mushroomId, scrawSource)`，避免同一业务 id 的不同
+ * 来源互相覆盖图片。
  */
 @Singleton
 class ImageCacheRepository @Inject constructor(
@@ -29,20 +28,21 @@ class ImageCacheRepository @Inject constructor(
     private val dao: SpeciesDao,
 ) {
     private val tag = "ImageCache"
-    private val inflight = mutableMapOf<Int, Mutex>()
+    private val inflight = mutableMapOf<String, Mutex>()
 
     suspend fun getOrFetchThumbnail(
         mushroomId: Int,
+        scrawSource: String,
         remoteUrl: String?,
         scientificName: String?,
         sourceUrl: String?,
-    ): File? = withSpeciesLock(mushroomId) {
-        cachedFiles(mushroomId).firstOrNull()?.let { return@withSpeciesLock it }
-        val urls = resolveRemoteUrls(mushroomId, remoteUrl, scientificName, sourceUrl)
+    ): File? = withSpeciesLock(mushroomId, scrawSource) {
+        cachedFiles(mushroomId, scrawSource).firstOrNull()?.let { return@withSpeciesLock it }
+        val urls = resolveRemoteUrls(mushroomId, scrawSource, remoteUrl, scientificName, sourceUrl)
         urls.forEachIndexed { index, url ->
-            download(mushroomId, url, index)?.let { file ->
-                dao.updateImageUrl(mushroomId, url)
-                dao.updateImagePath(mushroomId, relativePath(file))
+            download(mushroomId, scrawSource, url, index)?.let { file ->
+                dao.updateImageUrl(mushroomId, scrawSource, url)
+                dao.updateImagePath(mushroomId, scrawSource, relativePath(file))
                 return@withSpeciesLock file
             }
         }
@@ -51,58 +51,61 @@ class ImageCacheRepository @Inject constructor(
 
     suspend fun getOrFetchAll(
         mushroomId: Int,
+        scrawSource: String,
         remoteUrl: String?,
         scientificName: String?,
         sourceUrl: String?,
-    ): List<File> = withSpeciesLock(mushroomId) {
-        val cached = cachedFiles(mushroomId)
-        if (completionMarker(mushroomId).exists() && cached.isNotEmpty()) {
+    ): List<File> = withSpeciesLock(mushroomId, scrawSource) {
+        val cached = cachedFiles(mushroomId, scrawSource)
+        if (completionMarker(mushroomId, scrawSource).exists() && cached.isNotEmpty()) {
             return@withSpeciesLock cached
         }
 
-        val urls = resolveRemoteUrls(mushroomId, remoteUrl, scientificName, sourceUrl)
+        val urls = resolveRemoteUrls(mushroomId, scrawSource, remoteUrl, scientificName, sourceUrl)
         if (urls.isEmpty()) return@withSpeciesLock cached
 
         val downloaded = urls.mapIndexedNotNull { index, url ->
-            val target = targetFile(mushroomId, url, index)
+            val target = targetFile(mushroomId, scrawSource, url, index)
             val file = when {
                 target.exists() && target.length() > 0 -> target
-                else -> download(mushroomId, url, index)
+                else -> download(mushroomId, scrawSource, url, index)
             }
             file?.let { url to it }
         }
         if (downloaded.size == urls.size && downloaded.isNotEmpty()) {
-            completionMarker(mushroomId).apply {
+            completionMarker(mushroomId, scrawSource).apply {
                 parentFile?.mkdirs()
                 writeText(urls.joinToString("\n"))
             }
         } else {
-            completionMarker(mushroomId).delete()
+            completionMarker(mushroomId, scrawSource).delete()
         }
         if (downloaded.isNotEmpty()) {
             val (successfulUrl, firstFile) = downloaded.first()
-            dao.updateImageUrl(mushroomId, successfulUrl)
-            dao.updateImagePath(mushroomId, relativePath(firstFile))
+            dao.updateImageUrl(mushroomId, scrawSource, successfulUrl)
+            dao.updateImagePath(mushroomId, scrawSource, relativePath(firstFile))
         }
         val files = downloaded.map { it.second }
-        files.ifEmpty { cachedFiles(mushroomId) }
+        files.ifEmpty { cachedFiles(mushroomId, scrawSource) }
     }
 
     /** Compatibility for older single-image callers. */
     suspend fun getOrFetch(
         mushroomId: Int,
+        scrawSource: String,
         remoteUrl: String?,
         scientificName: String? = null,
         sourceUrl: String? = null,
-    ): File? = getOrFetchThumbnail(mushroomId, remoteUrl, scientificName, sourceUrl)
+    ): File? = getOrFetchThumbnail(mushroomId, scrawSource, remoteUrl, scientificName, sourceUrl)
 
     private suspend fun resolveRemoteUrls(
         mushroomId: Int,
+        scrawSource: String,
         remoteUrl: String?,
         scientificName: String?,
         sourceUrl: String?,
     ): List<String> {
-        val entity = dao.findByMushroomId(mushroomId)
+        val entity = dao.findByIdentity(mushroomId, scrawSource)
         // 优先:同步时已经写入 entity.images 的多图数组(离线可用)。
         val persisted = decodePersistedImages(entity)
         // 兜底:单图 entity.imageUrl + 调用方临时传入的 remoteUrl。
@@ -130,7 +133,12 @@ class ImageCacheRepository @Inject constructor(
             val arr = JSONArray(raw)
             buildList(arr.length()) {
                 for (i in 0 until arr.length()) {
-                    val url = arr.optString(i).takeIf { it.isNotBlank() } ?: continue
+                    val item = arr.opt(i)
+                    val url = when (item) {
+                        is String -> item
+                        is org.json.JSONObject -> item.optString("url")
+                        else -> ""
+                    }.takeIf { it.isNotBlank() } ?: continue
                     add(url)
                 }
             }
@@ -139,8 +147,8 @@ class ImageCacheRepository @Inject constructor(
         }.getOrDefault(emptyList())
     }
 
-    private suspend fun download(mushroomId: Int, url: String, index: Int): File? {
-        val target = targetFile(mushroomId, url, index)
+    private suspend fun download(mushroomId: Int, scrawSource: String, url: String, index: Int): File? {
+        val target = targetFile(mushroomId, scrawSource, url, index)
         return try {
             api.downloadBytes(url, target)
             if (target.length() > 0) {
@@ -157,8 +165,8 @@ class ImageCacheRepository @Inject constructor(
         }
     }
 
-    private fun cachedFiles(mushroomId: Int): List<File> =
-        cacheDir(mushroomId)
+    private fun cachedFiles(mushroomId: Int, scrawSource: String): List<File> =
+        cacheDir(mushroomId, scrawSource)
             .listFiles()
             .orEmpty()
             .filter { it.isFile && !it.name.startsWith(".") }
@@ -181,40 +189,43 @@ class ImageCacheRepository @Inject constructor(
         }.getOrDefault(false)
     }
 
-    private fun targetFile(mushroomId: Int, url: String, index: Int): File {
+    private fun targetFile(mushroomId: Int, scrawSource: String, url: String, index: Int): File {
         val extension = url.substringBefore('?')
             .substringBefore('#')
             .substringAfterLast('.', "jpg")
             .lowercase()
             .takeIf { it.length in 2..5 && it.all(Char::isLetterOrDigit) }
             ?: "jpg"
-        return File(cacheDir(mushroomId), "%03d_%08x.%s".format(index, url.hashCode(), extension))
+        return File(cacheDir(mushroomId, scrawSource), "%03d_%08x.%s".format(index, url.hashCode(), extension))
     }
 
-    private fun cacheDir(mushroomId: Int): File =
-        File(context.filesDir, "$CACHE_NAMESPACE/$mushroomId").apply { mkdirs() }
+    private fun cacheDir(mushroomId: Int, scrawSource: String): File =
+        File(context.filesDir, "$CACHE_NAMESPACE/${mushroomId}_${scrawSource.safePathSegment()}").apply { mkdirs() }
 
-    private fun completionMarker(mushroomId: Int): File =
-        File(cacheDir(mushroomId), ".complete")
+    private fun completionMarker(mushroomId: Int, scrawSource: String): File =
+        File(cacheDir(mushroomId, scrawSource), ".complete")
 
     private fun relativePath(file: File): String =
         file.relativeTo(context.filesDir).path
 
-    private suspend fun <T> withSpeciesLock(mushroomId: Int, block: suspend () -> T): T =
+    private suspend fun <T> withSpeciesLock(mushroomId: Int, scrawSource: String, block: suspend () -> T): T =
         withContext(Dispatchers.IO) {
+            val identity = "$mushroomId:$scrawSource"
             val mutex = synchronized(inflight) {
-                inflight.getOrPut(mushroomId) { Mutex() }
+                inflight.getOrPut(identity) { Mutex() }
             }
             mutex.withLock { block() }
         }
 
+    private fun String.safePathSegment(): String =
+        map { if (it.isLetterOrDigit() || it == '_' || it == '-') it else '_' }.joinToString("")
+
     companion object {
         /**
-         * v1/v2 缓存可能存在 PK 漂移造成的目录,但目录命名用了业务 id,resync
-         * 时业务 id 不变 → 文件继续命中。命名空间保留 `specimen_images_v2`
-         * 是为兼容已下载的旧版本缓存文件(避免重新下载)。
+         * v1/v2 缓存可能包含错误详情接口返回的图片。v3 主动换命名空间，
+         * 避免修复后继续命中历史错图。
          */
-        private const val CACHE_NAMESPACE = "specimen_images_v2"
+        private const val CACHE_NAMESPACE = "species_images_v4"
 
         /**
          * 本地已知 URL 至少有这个数量时跳过网络回源。设成 2 而不是 1,是因为

@@ -11,7 +11,6 @@ import androidx.work.OneTimeWorkRequestBuilder
 import androidx.work.WorkManager
 import com.yangzhiguo.mushroom.data.local.AppDatabase
 import com.yangzhiguo.mushroom.data.local.SpeciesDao
-import com.yangzhiguo.mushroom.data.local.SpeciesImageDao
 import com.yangzhiguo.mushroom.scraper.DataSource
 import com.yangzhiguo.mushroom.scraper.ScrapedRecord
 import com.yangzhiguo.mushroom.scraper.Scraper
@@ -48,7 +47,7 @@ sealed interface SyncState {
  *     WorkManager → [MushroomSyncWorker])。**首次启动不再自动同步**,APP 启动只
  *     读 assets 里 ship 的 `mushroom.db`,不主动联网。
  *   - **按 source 粒度入库**:一个 scraw_source 抓完所有页 → 立即 merge + 一次性
- *     upsert 到 Room(2 张表)。后续 source 失败不影响已完成 source 的数据。
+ *     upsert 到 Room。后续 source 失败不影响已完成 source 的数据。
  *   - **4 source 全部完成**才发出 `SyncState.Success`,并在 Success 之前用
  *     [AliasBackfiller] 从 `assets/alias_mushroom.db` 回填 `alias_names` 字段。
  *   - **断点续传**:SharedPreferences 存「已完成 source 集合」;中途中断后,下次同步
@@ -60,7 +59,6 @@ sealed interface SyncState {
 class SyncRepository @Inject constructor(
     @ApplicationContext private val context: Context,
     private val speciesDao: SpeciesDao,
-    private val speciesImageDao: SpeciesImageDao,
     private val roomDb: AppDatabase,
     private val aliasBackfiller: AliasBackfiller,
 ) {
@@ -138,7 +136,6 @@ class SyncRepository @Inject constructor(
             // 上次已正常结束(或从未同步过):清 checkpoint,wipe 一次 DB,从 source=0 全量开始
             clearCheckpoints()
             roomDb.withTransaction {
-                speciesImageDao.deleteAll()
                 speciesDao.deleteAll()
             }
             emptySet()
@@ -205,6 +202,20 @@ class SyncRepository @Inject constructor(
                 }
                 .onFailure { Log.w(tag, "Alias backfill failed; continuing", it) }
 
+            // ★ 簇内别名合并:在 alias_mushroom.db 回填之后再做一次,
+            //   让同 cn/sci/alias 的记录之间也能互借别名(语义与 scripts/backfill_plan.sql 一致)。
+            //   幂等:同 JSON 不写,只在 aliasNames 实际变化时才 upsert。
+            runCatching { aliasBackfiller.backfillClusters() }
+                .onSuccess { r ->
+                    Log.i(
+                        tag,
+                        "Cluster backfill: total=${r.totalRecords}, " +
+                            "clusters=${r.clusters}, multi=${r.multiClusters}, " +
+                            "merged=${r.mergedRecords}",
+                    )
+                }
+                .onFailure { Log.w(tag, "Cluster backfill failed; continuing", it) }
+
             prefs.edit()
                 .putLong(KEY_LAST_SYNC_AT, System.currentTimeMillis())
                 .putInt(KEY_LAST_SYNC_COUNT, databaseCount)
@@ -218,7 +229,7 @@ class SyncRepository @Inject constructor(
     }
 
     /**
-     * 把一个 source 抓到的所有 records 入库(2 张表)。
+     * 把一个 source 抓到的所有 records 入库。
      * 同 source 同 scientific name 的 records 由 [CatalogRecordMerger] 折叠,
      * sourceTypes 累加;每个 unique mushroom 写一行 species + 关联 images。
      */
@@ -238,7 +249,6 @@ class SyncRepository @Inject constructor(
                     sourceTypes = m.sourceTypes.distinct().joinToString(","),
                 )
                 speciesDao.upsertAll(listOf(species))
-                if (batch.images.isNotEmpty()) speciesImageDao.upsertAll(batch.images)
             }
         }
     }

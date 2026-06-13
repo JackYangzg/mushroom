@@ -31,8 +31,15 @@ class SpeciesIdentityTest {
         assertFalse(SpeciesIdentity.matches(current, detail))
     }
 
+    @Test
+    fun negativeLocalIdentifierMatchesPositiveSpecimenId() {
+        val current = species(mushroomId = -24, scientificName = "Amanita farinosa")
+        val detail = Specimen(id = 24, speciesLatin = "Amanita farinosa")
+
+        assertTrue(SpeciesIdentity.matches(current, detail))
+    }
+
     private fun species(mushroomId: Int, scientificName: String) = SpeciesEntity(
-        id = 0L,
         mushroomId = mushroomId,
         scientificName = scientificName,
         lastUpdated = 1L,

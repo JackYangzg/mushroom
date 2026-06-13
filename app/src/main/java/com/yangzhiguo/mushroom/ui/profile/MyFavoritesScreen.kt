@@ -38,7 +38,7 @@ import com.yangzhiguo.mushroom.ui.components.SpeciesRow
 /**
  * 我的收藏(子页)。
  *
- * 数据源:SpeciesRepository.observeFavorites()(DAO 过滤 is_favorite=1,按 last_updated DESC)。
+ * 数据源:SpeciesRepository.observeFavorites()(独立 favorites.json 与图鉴数据合并)。
  * 空态:从未收藏任何蘑菇时,显示引导文案。
  */
 @OptIn(ExperimentalMaterial3Api::class)

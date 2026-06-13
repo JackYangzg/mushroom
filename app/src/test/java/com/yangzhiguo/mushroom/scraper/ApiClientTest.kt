@@ -170,24 +170,26 @@ class ApiClientTest {
     @Test
     fun findPrimaryImageUrl_usesSpecimenIdFromDatabaseSourceLinkFirst() = runBlocking {
         val server = MockWebServer()
-        server.enqueue(
-            MockResponse().setBody(
-                """
-                {
-                  "code": 0,
-                  "data": {
-                    "id": 9458,
-                    "speciesLatin": "Amanita virosa",
-                    "sysFileList": [
-                      {"url": "/admin/sys-file/local/from-detail-link.jpg"},
-                      {"url": "/admin/sys-file/local/second-image.jpg"}
-                    ],
-                    "kibSpeciesPictures": [
-                      {"uf_src": "/admin/sys-file/local/from-detail-link.jpg"}
-                    ]
-                  }
-                }
-                """.trimIndent(),
+            server.enqueue(
+                MockResponse().setBody(
+                    """
+                    {
+                      "code": 0,
+                      "data": {
+                        "kibSpecimen": {
+                          "id": 9458,
+                          "speciesLatin": "Amanita virosa",
+                          "sysFileList": [
+                            {"url": "/admin/sys-file/local/from-detail-link.jpg"},
+                            {"url": "/admin/sys-file/local/second-image.jpg"}
+                          ],
+                          "kibSpeciesPictures": [
+                            {"uf_src": "/admin/sys-file/local/from-detail-link.jpg"}
+                          ]
+                        }
+                      }
+                    }
+                    """.trimIndent(),
             ),
         )
         server.start()
@@ -214,7 +216,10 @@ class ApiClientTest {
                 ),
                 imageUrls,
             )
-            assertEquals("/admin/kibspecimen/9458", server.takeRequest().path)
+            assertEquals(
+                "/admin/kibHome/getSpeciesInfoBySpeciesLatin?speciesId=9458",
+                server.takeRequest().path,
+            )
             assertEquals(1, server.requestCount)
         } finally {
             server.shutdown()
@@ -276,6 +281,43 @@ class ApiClientTest {
             )
             assertEquals("/admin/kibspecimen/33", server.takeRequest().path)
             assertEquals(1, server.requestCount)
+        } finally {
+            server.shutdown()
+        }
+    }
+
+    @Test
+    fun fetchSpecimenDetail_usesSpecimenIdFromSourceUrl() = runBlocking {
+        val server = MockWebServer()
+        server.enqueue(
+            MockResponse().setBody(
+                """
+                {
+                  "code": 0,
+                  "data": {
+                    "id": 33,
+                    "speciesLatin": "Inocybe assimilata",
+                    "speciesChinese": "拟丝盖伞"
+                  }
+                }
+                """.trimIndent(),
+            ),
+        )
+        server.start()
+
+        try {
+            val client = ApiClient(
+                baseUrl = server.url("/").toString().removeSuffix("/"),
+                maxRetries = 0,
+            )
+
+            val detail = client.fetchSpecimenDetail(
+                "https://fungi.iflora.cn/#/specimenDetail/33",
+            )
+
+            assertEquals(33L, detail?.id)
+            assertEquals("Inocybe assimilata", detail?.speciesLatin)
+            assertEquals("/admin/kibspecimen/33", server.takeRequest().path)
         } finally {
             server.shutdown()
         }

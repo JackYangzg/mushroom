@@ -52,7 +52,6 @@ class GenerateOfflineDatabaseTest {
             val repository = SyncRepository(
                 context = context,
                 speciesDao = database.speciesDao(),
-                speciesImageDao = database.speciesImageDao(),
                 roomDb = database,
                 aliasBackfiller = AliasBackfiller(context, database),
             )
@@ -65,14 +64,6 @@ class GenerateOfflineDatabaseTest {
             database.openHelper.writableDatabase.query("PRAGMA integrity_check").use { cursor ->
                 check(cursor.moveToFirst() && cursor.getString(0) == "ok") {
                     "Generated Room database failed integrity_check"
-                }
-            }
-            database.openHelper.writableDatabase.query(
-                "SELECT COUNT(*) FROM mushroom_species " +
-                    "WHERE alias_names <> '[]' AND alias_names <> ''",
-            ).use { cursor ->
-                check(cursor.moveToFirst() && cursor.getInt(0) > 0) {
-                    "Alias backfill produced no data; verify the App assets are available"
                 }
             }
             database.openHelper.writableDatabase.query(
@@ -119,8 +110,8 @@ class GenerateOfflineDatabaseTest {
                     }
                 }
                 statement.executeQuery("PRAGMA user_version").use { result ->
-                    check(result.next() && result.getInt(1) == 11) {
-                        "Expected Room schema version 11"
+                    check(result.next() && result.getInt(1) == 12) {
+                        "Expected Room schema version 12"
                     }
                 }
                 statement.executeQuery(

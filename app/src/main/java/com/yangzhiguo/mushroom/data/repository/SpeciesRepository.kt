@@ -1,7 +1,6 @@
 package com.yangzhiguo.mushroom.data.repository
 
 import com.yangzhiguo.mushroom.data.local.SpeciesEntity
-import com.yangzhiguo.mushroom.data.local.SpeciesImageEntity
 import com.yangzhiguo.mushroom.domain.model.UseType
 import kotlinx.coroutines.flow.Flow
 
@@ -19,9 +18,6 @@ interface SpeciesRepository {
 
     /** 按业务 id 刷新详情(从远端拉最新一次,合并图片/字段)。返回合并后的 entity。 */
     suspend fun refreshDetails(mushroomId: Int): SpeciesEntity?
-
-    /** 按业务 id 取该蘑菇的所有图片。 */
-    suspend fun findImages(mushroomId: Int): List<SpeciesImageEntity>
 
     suspend fun toggleFavorite(mushroomId: Int)
 }

@@ -1,7 +1,6 @@
 package com.yangzhiguo.mushroom.sync
 
 import com.yangzhiguo.mushroom.data.local.SpeciesEntity
-import com.yangzhiguo.mushroom.data.local.SpeciesImageEntity
 import com.yangzhiguo.mushroom.domain.model.Edibility
 import com.yangzhiguo.mushroom.domain.model.ToxicityLevel
 import com.yangzhiguo.mushroom.domain.model.UseType
@@ -18,17 +17,16 @@ import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 
 /**
- * Mapper: iflora.cn 全字段 Specimen → Room `mushroom_species` + `mushroom_image`。
+ * Mapper: iflora.cn 全字段 Specimen → Room `mushroom_species`。
  *
  * v10 简化:
  * - 删 `extractBarcodes` / `mapSpecimen` / `DistributionPoint` / `extraSpecimens`
  *   / `extraDistributionPoints` / `firstFileMetadata` 等 specimen/DNA/distribution 子表相关代码。
- * - 主表 speciesEntity 写入 `mushroom_id`(= API 业务 id),`id` 由 SQLite 自增。
- * - 图片表按 `mushroom_id` 关联,跨 source 聚合。
+ * - 主表 speciesEntity 写入 `(mushroom_id, scraw_source)` 复合主键。
+ * - 图片 URL 直接写入当前来源行的 `image_url` / `images`。
  *
  * 调用方: [com.yangzhiguo.mushroom.sync.SyncRepository] 在一整个 source 抓完后调
- * [toBatch],在 `withTransaction` 内 `speciesDao.upsertAll(batch.species)` →
- * `speciesImageDao.upsertAll(batch.images)`。
+ * [toBatch],在 `withTransaction` 内 `speciesDao.upsertAll(batch.species)`。
  */
 object ScraperToRoomMapper {
     private const val IFLORA_HOST = "https://fungi.iflora.cn"
@@ -52,8 +50,6 @@ object ScraperToRoomMapper {
         val imageUrls = extractAllImageUrls(s)
 
         return SpeciesEntity(
-            // 主键:SQLite 自增;业务 id 走 mushroom_id
-            id = 0L,
             mushroomId = toMushroomId(s, record),
             scrawSource = record?.let { toScrawSource(it.source) } ?: SpeciesEntity.SCRAW_SOURCE_GENERAL_DIRECTORY,
             lastUpdated = now,
@@ -138,7 +134,7 @@ object ScraperToRoomMapper {
             directoryReferences = s.directoryReferences,
             directoryGrade = s.directoryGrade,
 
-            // 图片快取(由 mushroom_image 子表聚合)
+            // 图片直接归属当前 `(mushroom_id, scraw_source)` 行
             imageUrl = imageUrls.firstOrNull(),
             imageLocalPath = null,
             images = imageUrls.toJsonArrayString(),
@@ -156,7 +152,7 @@ object ScraperToRoomMapper {
     }
 
     /**
-     * 把 [record] 转成 [SpeciesSyncBatch](1 species + N images)。
+     * 把 [record] 转成单表写入包。
      * 不再产生 specimens / barcodes / distributionPoints 子表行。
      */
     fun toBatch(
@@ -164,10 +160,8 @@ object ScraperToRoomMapper {
         now: Long = System.currentTimeMillis(),
     ): SpeciesSyncBatch {
         val species = toEntity(record.specimen, record, now)
-        val images = extractImages(record.specimen, species.mushroomId)
         return SpeciesSyncBatch(
             species = listOf(species),
-            images = images,
         )
     }
 
@@ -178,8 +172,8 @@ object ScraperToRoomMapper {
     }
 
     /**
-     * 物种目录 ID 与标本 ID 来自不同命名空间。标本使用负数 ID，避免
-     * `mushroom_image` 按 mushroom_id 聚合时与目录物种发生碰撞。
+     * 物种目录 ID 与标本 ID 来自不同命名空间。标本沿用负数 ID，保持与
+     * 已发布数据库和缓存目录兼容。
      */
     fun toMushroomId(s: Specimen, record: ScrapedRecord?): Int {
         val rawId = s.id.toInt()
@@ -242,21 +236,6 @@ object ScraperToRoomMapper {
 
     fun extractPrimaryImageUrl(s: Specimen): String? = extractAllImageUrls(s).firstOrNull()
 
-    /**
-     * 把 [extractAllImageUrls] 的 URL 列表展开成 [SpeciesImageEntity] 行。
-     *
-     * v10:[mushroomId] 是 iflora 业务 id(原 API `Specimen.id`),用于跨 source 聚合。
-     * 修复「不同蘑菇图片混到一个蘑菇下」bug:旧版用 species_id(=旧 PK)关联,resync 时
-     * PK 重分配会让图片错位;新版按业务 id 关联,resync 时业务 id 不变。
-     */
-    fun extractImages(s: Specimen, mushroomId: Int): List<SpeciesImageEntity> {
-        val out = mutableListOf<SpeciesImageEntity>()
-        var order = 0
-        order = collectImages(out, s.sysFileList, primaryKey = "url", fallbackKey = "uf_src", fieldName = "sysFileList", source = SpeciesImageEntity.SOURCE_SYS_FILE, mushroomId = mushroomId, startOrder = order)
-        order = collectImages(out, s.kibSpeciesPictures, primaryKey = "uf_src", fallbackKey = "url", fieldName = "kibSpeciesPictures", source = SpeciesImageEntity.SOURCE_KIB_PICTURES, mushroomId = mushroomId, startOrder = order)
-        return out
-    }
-
     // ── 内部工具 ─────────────────────────────────────────────────────────
 
     private fun buildSourceTypes(s: Specimen, record: ScrapedRecord?): String {
@@ -288,48 +267,6 @@ object ScraperToRoomMapper {
         }
     }
 
-    /**
-     * 收集图片条目,返回新的 `sortOrder`(写完几张后回传给调用方递增)。
-     */
-    private fun collectImages(
-        out: MutableList<SpeciesImageEntity>,
-        element: JsonElement?,
-        primaryKey: String,
-        fallbackKey: String,
-        fieldName: String,
-        source: String,
-        mushroomId: Int,
-        startOrder: Int,
-    ): Int {
-        val array = element as? JsonArray ?: return startOrder
-        var order = startOrder
-        for (item in array) {
-            val obj = item as? JsonObject ?: continue
-            val ufId = (obj["uf_id"] as? JsonPrimitive)?.content
-                ?: (obj["id"] as? JsonPrimitive)?.content
-                ?: "$source-${mushroomId}-${order}"
-            val ufSrcRaw = primitiveString(obj, primaryKey) ?: primitiveString(obj, fallbackKey) ?: continue
-            val ufName = (obj["uf_name"] as? JsonPrimitive)?.content
-                ?: (obj["fileName"] as? JsonPrimitive)?.content
-            val ufSize = (obj["uf_size"] as? JsonPrimitive)?.content?.toLongOrNull()
-                ?: (obj["fileSize"] as? JsonPrimitive)?.content?.toLongOrNull()
-            val ident = (obj["ident"] as? JsonPrimitive)?.content
-            out += SpeciesImageEntity(
-                mushroomId = mushroomId,
-                ufId = ufId,
-                ufName = ufName,
-                ufSrc = normalizeUrl(ufSrcRaw),
-                ufSize = ufSize,
-                ident = ident,
-                source = source,
-                sortOrder = order,
-                localPath = null,
-            )
-            order++
-        }
-        return order
-    }
-
     private fun primitiveString(obj: JsonObject, key: String): String? {
         val prim = obj[key] as? JsonPrimitive ?: return null
         if (!prim.isString && prim.toString() == "null") return null
@@ -343,8 +280,7 @@ object ScraperToRoomMapper {
         json.encodeToString(stringListSerializer, this)
 }
 
-/** 一份抓取记录对应的写入包(2 张表:species + image)。 */
+/** 一份抓取记录对应的单表写入包。 */
 data class SpeciesSyncBatch(
     val species: List<SpeciesEntity>,
-    val images: List<SpeciesImageEntity>,
 )

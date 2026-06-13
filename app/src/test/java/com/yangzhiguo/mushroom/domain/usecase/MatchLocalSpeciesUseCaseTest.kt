@@ -46,7 +46,7 @@ class MatchLocalSpeciesUseCaseTest {
         val hits = useCase(FeatureTraits(habitat = "松口蘑"))
 
         assertEquals(1, hits.size)
-        assertEquals(1, hits.single().id)
+        assertEquals(1, hits.single().mushroomId)
     }
 
     @Test
@@ -74,9 +74,9 @@ class MatchLocalSpeciesUseCaseTest {
         // Both rows are candidates (each scores 1 hit, sort order between
         // equal-score rows is implementation-defined).
         assertEquals(2, hits.size)
-        val ids = hits.map { it.id }.toSet()
-        assertTrue("alias-having row (id=2) must be in result", 2L in ids)
-        assertTrue("chineseName-having row (id=1) must be in result", 1L in ids)
+        val ids = hits.map { it.mushroomId }.toSet()
+        assertTrue("alias-having row (id=2) must be in result", 2 in ids)
+        assertTrue("chineseName-having row (id=1) must be in result", 1 in ids)
     }
 
     @Test
@@ -114,19 +114,18 @@ class MatchLocalSpeciesUseCaseTest {
         val hits = useCase(FeatureTraits(capColor = "红", habitat = "别"))
 
         assertEquals(2, hits.size)
-        assertEquals(2L, hits.first().id)
+        assertEquals(2, hits.first().mushroomId)
     }
 
     // ── helpers ───────────────────────────────────────────────────────
 
     private fun species(
-        id: Long,
+        id: Int,
         chineseName: String,
         identificationPoints: String = "[]",
         aliasNames: List<String> = emptyList(),
     ): SpeciesEntity = SpeciesEntity(
-        id = id,
-        mushroomId = id.toInt(),
+        mushroomId = id,
         scientificName = "Genus species$id",
         chineseName = chineseName,
         aliasNames = aliasNames,
@@ -151,7 +150,6 @@ class MatchLocalSpeciesUseCaseTest {
         override suspend fun findByMushroomIds(mushroomIds: List<Int>) =
             flow.value.filter { it.mushroomId in mushroomIds }
         override suspend fun refreshDetails(mushroomId: Int) = null
-        override suspend fun findImages(mushroomId: Int) = emptyList<com.yangzhiguo.mushroom.data.local.SpeciesImageEntity>()
         override suspend fun toggleFavorite(mushroomId: Int) = Unit
     }
 }

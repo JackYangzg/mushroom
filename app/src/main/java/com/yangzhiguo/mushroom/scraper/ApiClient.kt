@@ -87,6 +87,16 @@ class ApiClient(
         ).data?.kibSpecimen
     }
 
+    /** 标本详情,按 source_url 中的 specimen id 拉取。 */
+    suspend fun fetchSpecimenDetail(sourceUrl: String): Specimen? = withContext(Dispatchers.IO) {
+        val lookup = extractDetailLookup(sourceUrl)
+            ?.takeIf { it.kind == DetailKind.SPECIMEN }
+            ?: return@withContext null
+        json.decodeFromString<SpecimenDetailResponse>(
+            getWithRetry("$baseUrl/admin/kibspecimen/${lookup.id}"),
+        ).data
+    }
+
     suspend fun findPrimaryImageUrl(
         scientificName: String,
         sourceUrl: String? = null,
@@ -97,7 +107,7 @@ class ApiClient(
         sourceUrl: String? = null,
     ): List<String> = withContext(Dispatchers.IO) {
         if (scientificName.isBlank()) return@withContext emptyList()
-        findImagesFromSourceUrl(sourceUrl).takeIf { it.isNotEmpty() }?.let {
+        findImagesFromSourceUrl(sourceUrl, scientificName).takeIf { it.isNotEmpty() }?.let {
             return@withContext it
         }
 
@@ -218,28 +228,52 @@ class ApiClient(
         return result.distinct()
     }
 
-    private suspend fun findImagesFromSourceUrl(sourceUrl: String?): List<String> {
+    private suspend fun findImagesFromSourceUrl(
+        sourceUrl: String?,
+        expectedScientificName: String,
+    ): List<String> {
         if (sourceUrl.isNullOrBlank()) return emptyList()
-        val specimenId = extractSpecimenId(sourceUrl) ?: return emptyList()
-        val detailUrl = "$baseUrl/admin/kibspecimen/$specimenId"
+        val lookup = extractDetailLookup(sourceUrl) ?: return emptyList()
         val detail = runCatching {
-            json.decodeFromString<SpecimenDetailResponse>(getWithRetry(detailUrl))
+            when (lookup.kind) {
+                DetailKind.SPECIMEN -> json.decodeFromString<SpecimenDetailResponse>(
+                    getWithRetry("$baseUrl/admin/kibspecimen/${lookup.id}"),
+                ).data
+                DetailKind.SPECIES -> json.decodeFromString<SpeciesDetailApiResponse>(
+                    getWithRetry(
+                        "$baseUrl/admin/kibHome/getSpeciesInfoBySpeciesLatin?speciesId=${lookup.id}",
+                    ),
+                ).data?.kibSpecimen
+            }
         }.getOrNull()
-        return imageUrls(detail?.data)
+        if (!detail?.speciesLatin.normalizedNameEquals(expectedScientificName)) {
+            Log.w(
+                tag,
+                "detail lookup mismatch for $sourceUrl: expected=$expectedScientificName actual=${detail?.speciesLatin}",
+            )
+            return emptyList()
+        }
+        return imageUrls(detail)
     }
 
-    private fun extractSpecimenId(sourceUrl: String): Long? {
-        // DataSource.kt 写入的 sourceUrl 是 `/speciesDetail/{id}/...`;
-        // 兼容旧的 `/specimenDetail/{id}` / `/kibspecimen/{id}` 模式。
+    private fun extractDetailLookup(sourceUrl: String): DetailLookup? {
         val patterns = listOf(
-            Regex("""/specimenDetail/(\d+)""", RegexOption.IGNORE_CASE),
-            Regex("""/speciesDetail/(\d+)""", RegexOption.IGNORE_CASE),
-            Regex("""/kibspecimen/(\d+)""", RegexOption.IGNORE_CASE),
+            DetailKind.SPECIMEN to Regex("""/specimenDetail/(\d+)""", RegexOption.IGNORE_CASE),
+            DetailKind.SPECIMEN to Regex("""/kibspecimen/(\d+)""", RegexOption.IGNORE_CASE),
+            DetailKind.SPECIES to Regex("""/speciesDetail/(\d+)""", RegexOption.IGNORE_CASE),
         )
-        return patterns.firstNotNullOfOrNull { pattern ->
-            pattern.find(sourceUrl)?.groupValues?.getOrNull(1)?.toLongOrNull()
+        return patterns.firstNotNullOfOrNull { (kind, pattern) ->
+            pattern.find(sourceUrl)
+                ?.groupValues
+                ?.getOrNull(1)
+                ?.toLongOrNull()
+                ?.let { DetailLookup(kind, it) }
         }
     }
+
+    private fun String?.normalizedNameEquals(other: String): Boolean =
+        this.orEmpty().trim().replace(Regex("\\s+"), " ")
+            .equals(other.trim().replace(Regex("\\s+"), " "), ignoreCase = true)
 
     private suspend fun findINaturalistImageUrl(scientificName: String): String? {
         val normalized = scientificName.trim()
@@ -310,4 +344,11 @@ class ApiClient(
 
         private const val CLOUD_FILE_HTTP = "http://cloudfile.biotracks.cn/"
     }
+
+    private enum class DetailKind { SPECIMEN, SPECIES }
+
+    private data class DetailLookup(
+        val kind: DetailKind,
+        val id: Long,
+    )
 }

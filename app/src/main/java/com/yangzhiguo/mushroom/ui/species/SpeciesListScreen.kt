@@ -108,7 +108,7 @@ fun SpeciesListScreen(
                 modifier = Modifier.fillMaxSize(),
                 contentPadding = PaddingValues(horizontal = 20.dp, vertical = 4.dp),
             ) {
-                items(state.species, key = { it.mushroomId }) { species ->
+                items(state.species, key = { "${it.mushroomId}:${it.scrawSource}" }) { species ->
                     SpeciesRow(species = species, onClick = { onSpeciesClick(species.mushroomId) })
                     Divider(color = MaterialTheme.colorScheme.outlineVariant)
                 }

@@ -30,7 +30,7 @@ class SeedAssetLoader @Inject constructor(
     fun load(): List<SpeciesEntity> {
         val raw = context.assets.open(SEED_FILE_NAME).bufferedReader().use { it.readText() }
         val dtoList = json.decodeFromString<List<SeedSpeciesDto>>(raw)
-        return dtoList.map { it.toEntity() }
+        return dtoList.mapIndexed { index, dto -> dto.toEntity(mushroomId = -(index + 1)) }
     }
 
     @Serializable
@@ -62,9 +62,8 @@ class SeedAssetLoader @Inject constructor(
         val source_url: String = "",
         val scraw_source: String = SpeciesEntity.SCRAW_SOURCE_GENERAL_DIRECTORY,
     ) {
-        fun toEntity(): SpeciesEntity = SpeciesEntity(
-            id = 0L,  // SQLite 自增
-            mushroomId = 0,  // 种子数据无业务 id;SeedDataInitializer 走 INSERT OR IGNORE,允许共用 0
+        fun toEntity(mushroomId: Int): SpeciesEntity = SpeciesEntity(
+            mushroomId = mushroomId,
             scientificName = scientific_name,
             chineseName = chinese_name,
             aliasNames = alias_names,

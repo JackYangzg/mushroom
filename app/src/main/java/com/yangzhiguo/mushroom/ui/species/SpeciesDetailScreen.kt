@@ -246,7 +246,7 @@ private fun CompleteSpeciesInformation(
             "来源页面" to species.sourceUrl,
             "来源分类" to species.sourceTypes,
             "抓取来源" to species.scrawSource,
-            "蘑菇业务 ID" to species.mushroomId,
+            "蘑菇业务 ID" to species.mushroomId.takeIf { it > 0 },
             "最后更新" to species.lastUpdated,
             "三维模型" to species.model3dUrl,
         ),
