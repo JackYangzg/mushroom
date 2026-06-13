@@ -82,7 +82,7 @@ class RecognitionHistoryViewModel @Inject constructor(
                     scientificName = candidate.scientificName.trim(),
                     commonName = candidate.commonName.orEmpty().trim(),
                 )?.let {
-                    candidate.scientificName to it.id
+                    candidate.scientificName to it.mushroomId
                 }
             }.toMap()
         }

@@ -45,6 +45,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.yangzhiguo.mushroom.R
+import com.yangzhiguo.mushroom.data.local.SpeciesEntity
 import com.yangzhiguo.mushroom.ui.components.MushroomIcon
 import com.yangzhiguo.mushroom.ui.components.ToxicityBanner
 import kotlinx.serialization.builtins.ListSerializer
@@ -121,26 +122,10 @@ fun SpeciesDetailScreen(
                             chineseName = current.chineseName,
                             scientificName = current.scientificName,
                         )
-                        DetailSection("如何辨认") {
-                            points.forEach { Text("• $it", style = MaterialTheme.typography.bodyLarge) }
-                            if (points.isEmpty()) Text("暂无辨识要点", color = MaterialTheme.colorScheme.onSurfaceVariant)
-                        }
-                        DetailSection("形态特征") {
-                            FeatureLine("菌盖", current.capDescription.orEmpty())
-                            FeatureLine("菌褶", current.lamellaDescription.orEmpty())
-                            FeatureLine("菌柄", current.stipeDescription.orEmpty())
-                            FeatureLine("菌环", current.ringDescription.orEmpty())
-                            FeatureLine("菌托", current.volvaDescription.orEmpty())
-                        }
-                        DetailSection("生境与季节") {
-                            FeatureLine(stringResource(R.string.species_habitat), current.habitat)
-                            FeatureLine(stringResource(R.string.species_season), current.season)
-                        }
-                        if (current.toxicitySymptoms.isNotBlank()) {
-                            DetailSection("毒性与症状") {
-                                Text(current.toxicitySymptoms, style = MaterialTheme.typography.bodyLarge)
-                            }
-                        }
+                        CompleteSpeciesInformation(
+                            species = current,
+                            identificationPoints = points,
+                        )
                         Divider()
                         Text(
                             "仅供科普，不能作为采食建议。物种资料来自 iFlora，图片优先来自 iFlora，缺失时来自 iNaturalist。",
@@ -154,6 +139,146 @@ fun SpeciesDetailScreen(
         }
     }
 }
+
+@Composable
+private fun CompleteSpeciesInformation(
+    species: SpeciesEntity,
+    identificationPoints: List<String>,
+) {
+    InformationSection(
+        "命名与分类",
+        listOf(
+            "中文名" to species.chineseName,
+            "拉丁名" to species.scientificName,
+            "命名人" to species.authority,
+            "俗名" to species.speciesCommon,
+            "野外鉴定名" to species.fieldIdentification,
+            "界" to bilingual(species.communityZh, species.communityLa),
+            "门" to bilingual(species.phylumZh, species.phylumLa),
+            "纲" to bilingual(species.classZh, species.classLa),
+            "目" to bilingual(species.orderZh, species.orderLa),
+            "亚目" to bilingual(species.suborderZh, species.suborderLa),
+            "科" to bilingual(species.familyZh, species.familyLa),
+            "亚科" to bilingual(species.subfamilyZh, species.subfamilyLa),
+            "属" to bilingual(species.genusZh, species.genusLa),
+            "亚属" to bilingual(species.subgenusZh, species.subgenusLa),
+            "组/节" to bilingual(species.sectionZh, species.sectionLa),
+            "拉丁属名" to species.speciesLatinGenus,
+            "种加词" to species.specificEpithet,
+        ),
+    )
+
+    InformationSection(
+        "形态描述",
+        listOf(
+            "综合描述" to species.speciesDescription,
+            "菌盖" to species.capDescription,
+            "菌盖菌肉" to species.capContext,
+            "菌褶（管）" to species.lamellaDescription,
+            "菌柄" to species.stipeDescription,
+            "菌柄菌肉" to species.stipeContext,
+            "菌环" to species.ringDescription,
+            "菌托" to species.volvaDescription,
+            "气味" to species.odor,
+            "孢子" to species.sporeDescription,
+            "描述参考资料" to species.descriptionReference,
+        ),
+    )
+
+    if (identificationPoints.isNotEmpty()) {
+        DetailSection("辨识要点") {
+            identificationPoints.forEach { Text("• $it", style = MaterialTheme.typography.bodyLarge) }
+        }
+    }
+
+    InformationSection(
+        "用途与营养类型",
+        listOf(
+            "食用真菌" to species.edibleFungus,
+            "药用真菌" to species.medicinalFungus,
+            "有毒真菌" to species.toxicFungus,
+            "条件性食用/有毒" to species.conditionallyFungus,
+            "共生真菌" to species.mycorrhizalFungus,
+            "腐生真菌" to species.saprophyticFungus,
+            "寄生真菌" to species.parasiticFungus,
+            "经济用途" to species.economicUse,
+            "用途参考资料" to species.purposeReferences,
+            "毒性与症状" to species.toxicitySymptoms,
+        ),
+    )
+
+    InformationSection(
+        "生态与分布",
+        listOf(
+            "营养习性和生境" to species.habitat,
+            "基质" to species.substrate,
+            "伴生树种" to species.treeSpecies,
+            "气候带" to species.climateZone,
+            "热带物种" to species.tropicalSpecies,
+            "亚热带物种" to species.subtropicalSpecies,
+            "温带/亚高山物种" to species.temperateSpecies,
+            "西南特有" to species.southwestSpecific,
+            "云南特有" to species.yunnanSpecific,
+            "西南分布" to species.isSouthwest,
+            "西藏分布" to species.isXizang,
+            "四川/重庆分布" to species.isSichuan,
+            "贵州分布" to species.isGuizhou,
+            "高黎贡山名录" to species.isGaoligong,
+            "云南分布" to species.isYunnan,
+            "分布地点" to species.distributionLocation,
+            "海拔范围" to species.altitudeRange,
+            "季节" to species.season,
+            "生境参考资料" to species.habitReferences,
+        ),
+    )
+
+    InformationSection(
+        "名录与审核",
+        listOf(
+            "红色名录等级" to species.directoryGrade,
+            "名录参考资料" to species.directoryReferences,
+        ),
+    )
+
+    InformationSection(
+        "数据来源",
+        listOf(
+            "来源页面" to species.sourceUrl,
+            "来源分类" to species.sourceTypes,
+            "抓取来源" to species.scrawSource,
+            "蘑菇业务 ID" to species.mushroomId,
+            "最后更新" to species.lastUpdated,
+            "三维模型" to species.model3dUrl,
+        ),
+    )
+}
+
+@Composable
+private fun InformationSection(title: String, rows: List<Pair<String, Any?>>) {
+    val visibleRows = rows.filter { displayValue(it.second) != null }
+    if (visibleRows.isEmpty()) return
+    DetailSection(title) { InformationRows(visibleRows) }
+}
+
+@Composable
+private fun InformationRows(rows: List<Pair<String, Any?>>) {
+    rows.forEach { (label, rawValue) ->
+        displayValue(rawValue)?.let { FeatureLine(label, it) }
+    }
+}
+
+private fun displayValue(value: Any?): String? = when (value) {
+    null -> null
+    is String -> value.trim().takeIf { it.isNotEmpty() && it != "[]" }
+    else -> value.toString()
+}
+
+private fun bilingual(chinese: String?, latin: String?): String? =
+    listOfNotNull(
+        chinese?.trim()?.takeIf { it.isNotEmpty() },
+        latin?.trim()?.takeIf { it.isNotEmpty() },
+    ).distinct().joinToString("（", postfix = if (!chinese.isNullOrBlank() && !latin.isNullOrBlank()) "）" else "")
+        .takeIf { it.isNotBlank() }
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable

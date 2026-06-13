@@ -117,7 +117,9 @@ fun SettingsScreen(
                             }
                         }
                         is SyncState.Running -> {
-                            val pagesProgress = (s.page.toFloat() / (s.page + 50).coerceAtLeast(1))
+                            val sourcesProgress = if (s.totalSources > 0) {
+                                s.completedSources.toFloat() / s.totalSources
+                            } else 0f
                             Column(verticalArrangement = Arrangement.spacedBy(4.dp)) {
                                 Row(verticalAlignment = Alignment.CenterVertically) {
                                     CircularProgressIndicator(
@@ -125,12 +127,12 @@ fun SettingsScreen(
                                         strokeWidth = 2.dp,
                                     )
                                     Text(
-                                        "正在抓取… 已完成 ${s.page} 页 / ${s.totalSpecimens} 条",
+                                        "正在抓取… 已完成 ${s.completedSources}/${s.totalSources} 个数据源 (${s.totalSpecimens} 条)",
                                         style = MaterialTheme.typography.bodyMedium,
                                     )
                                 }
                                 LinearProgressIndicator(
-                                    progress = pagesProgress.coerceIn(0f, 1f),
+                                    progress = sourcesProgress.coerceIn(0f, 1f),
                                     modifier = Modifier.fillMaxWidth(),
                                 )
                             }

@@ -31,7 +31,11 @@ class MatchLocalSpeciesUseCase @Inject constructor(
 
         val scored = all.mapNotNull { sp ->
             val idp = sp.identificationPoints
-            val hits = keywords.count { kw -> idp.contains(kw) || sp.chineseName.contains(kw) }
+            val hits = keywords.count { kw ->
+                idp.contains(kw) ||
+                    sp.chineseName.contains(kw) ||
+                    sp.aliasNames.any { it.contains(kw) }
+            }
             if (hits == 0) null else sp to hits
         }.sortedByDescending { it.second }
         return scored.take(3).map { it.first }

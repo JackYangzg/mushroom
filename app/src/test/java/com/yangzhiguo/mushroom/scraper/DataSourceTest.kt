@@ -23,17 +23,19 @@ class DataSourceTest {
     }
 
     @Test
-    fun specimenAndSpeciesDetailLinksRemainDistinct() {
-        val specimen = Specimen(id = 5, speciesLatin = "Coltricia crassa")
-
+    fun catalogueSourceFiltersAreDistinct() {
         assertNotEquals(
-            DataSource.SPECIMEN.detailUrl(specimen),
-            DataSource.GENERAL_DIRECTORY.detailUrl(specimen),
+            DataSource.EDIBLE_FUNGI.filter,
+            DataSource.TOXIC_FUNGI.filter,
+        )
+        assertNotEquals(
+            DataSource.GENERAL_DIRECTORY.filter,
+            DataSource.EDIBLE_FUNGI.filter,
         )
     }
 
     @Test
-    fun onlyRequestedSourcesArePresent() {
+    fun allFourSourcesArePresent() {
         assertEquals(
             setOf(
                 DataSource.SPECIMEN,
@@ -46,15 +48,23 @@ class DataSourceTest {
     }
 
     @Test
-    fun sameLinkIsDuplicateRegardlessOfSourceOrName() {
+    fun specimenUsesSpecimenDetailLink() {
+        assertEquals(
+            "https://fungi.iflora.cn/#/specimenDetail/5",
+            DataSource.SPECIMEN.detailUrl(Specimen(id = 5)),
+        )
+    }
+
+    @Test
+    fun sameLinkFromDifferentSourcesKeepsSourceProvenance() {
         val specimen = Specimen(id = 5, speciesLatin = "Coltricia crassa")
         val canonical = DataSource.GENERAL_DIRECTORY.detailUrl(specimen)
 
         assertEquals(
-            1,
+            2,
             deduplicateRecords(
                 listOf(
-                    ScrapedRecord(specimen.copy(speciesLatin = "Different name"), DataSource.SPECIMEN, canonical),
+                    ScrapedRecord(specimen.copy(speciesLatin = "Different name"), DataSource.EDIBLE_FUNGI, canonical),
                     ScrapedRecord(specimen, DataSource.GENERAL_DIRECTORY, canonical),
                 ),
             ).size,

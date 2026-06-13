@@ -81,8 +81,8 @@ fun MyFavoritesScreen(
                 contentPadding = PaddingValues(16.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp),
             ) {
-                items(state.species, key = { it.id }) { sp ->
-                    SpeciesRow(species = sp, onClick = { onSpeciesClick(sp.id) })
+                items(state.species, key = { it.mushroomId }) { sp ->
+                    SpeciesRow(species = sp, onClick = { onSpeciesClick(sp.mushroomId) })
                 }
             }
         }

@@ -19,7 +19,6 @@ import java.io.File
 @OptIn(ExperimentalPermissionsApi::class)
 class CameraController internal constructor(
     val takePicture: androidx.activity.result.ActivityResultLauncher<Uri>,
-    val pickFromGallery: androidx.activity.result.ActivityResultLauncher<PickVisualMediaRequest>,
     val pickMultipleFromGallery: androidx.activity.result.ActivityResultLauncher<PickVisualMediaRequest>,
     val cameraPermission: PermissionState,
     val pendingFile: () -> File,
@@ -61,17 +60,12 @@ fun rememberCameraController(
         }
         pendingFileHolder[0] = null
     }
-    val pickFromGallery = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.PickVisualMedia(),
-    ) { uri ->
-        uri?.let { onPhotoReady(it) }
-    }
     val pickMultipleFromGallery = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.PickMultipleVisualMedia(6),
     ) { uris ->
         if (uris.isNotEmpty()) onPhotosReady(uris)
     }
     return remember {
-        CameraController(takePicture, pickFromGallery, pickMultipleFromGallery, cameraPermission, pendingFile)
+        CameraController(takePicture, pickMultipleFromGallery, cameraPermission, pendingFile)
     }
 }

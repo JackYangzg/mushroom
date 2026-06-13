@@ -66,10 +66,22 @@ fun HomeScreen(
             )
             Spacer(Modifier.height(8.dp))
             Text(
-                text = "尽量包含菌盖、菌褶和菌柄",
-                style = MaterialTheme.typography.bodyLarge,
+                text = """
+                    为了提高识别准确率，请尽量上传以下角度：
+                    ✓ 菌盖正面
+                    ✓ 菌盖侧面
+                    ✓ 菌褶特写
+                    ✓ 菌柄全景
+                    ✓ 菌柄基部（完整挖出）
+                    ✓ 生长环境
+                    ✓ 多张清晰照片
+                    特别重要：
+                    请完整拍摄菌柄基部和菌托。
+                    许多关键种类（尤其鹅膏属 Amanita）必须依赖基部结构鉴定。
+                """.trimIndent(),
+                style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
-                textAlign = TextAlign.Center,
+                modifier = Modifier.fillMaxWidth(),
             )
             Spacer(Modifier.weight(1f))
             Button(

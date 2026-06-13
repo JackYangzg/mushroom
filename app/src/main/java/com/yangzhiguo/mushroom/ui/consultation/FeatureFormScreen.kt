@@ -41,7 +41,7 @@ class FeatureFormViewModel @Inject constructor(
     private val matchLocal: MatchLocalSpeciesUseCase,
 ) : ViewModel() {
     suspend fun matchCandidates(traits: FeatureTraits): List<Int> =
-        matchLocal(traits).map { it.id }
+        matchLocal(traits).map { it.mushroomId }
 }
 
 @Composable

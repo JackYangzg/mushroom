@@ -80,8 +80,9 @@ fun RecognitionScreen(
     val candidateSpeciesIds by viewModel.candidateSpeciesIds.collectAsStateWithLifecycle()
 
     LaunchedEffect(photoUris) {
+        if (photoUris.isEmpty()) return@LaunchedEffect
         val dataUrls = photoUris.mapNotNull { photoUriToDataUrl(context, it) }
-        viewModel.startRecognition(dataUrls, photoUris)
+        viewModel.startRecognitionIfIdle(dataUrls, photoUris)
     }
 
     Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
@@ -161,7 +162,7 @@ private fun RecognitionProgress(photoUris: List<String>, title: String, body: St
             color = MaterialTheme.colorScheme.onSurfaceVariant,
         )
         Spacer(Modifier.height(8.dp))
-        Text("这通常需要几秒", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
+        Text("这通常需要10s ~ 30s时间", style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
         Spacer(Modifier.weight(1f))
         OutlinedButton(onClick = onCancel, modifier = Modifier.fillMaxWidth()) { Text("取消") }
     }

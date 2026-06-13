@@ -1,6 +1,5 @@
 package com.yangzhiguo.mushroom.sync
 
-import com.yangzhiguo.mushroom.data.local.DnaBarcodeEntity
 import com.yangzhiguo.mushroom.data.local.SpeciesEntity
 import com.yangzhiguo.mushroom.data.local.SpeciesImageEntity
 import com.yangzhiguo.mushroom.domain.model.Edibility
@@ -18,7 +17,23 @@ import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Test
 
+/**
+ * v10 简化:删除了所有 specimen / DNA / distribution 相关断言。
+ * toEntity / toBatch / extractAllImageUrls / deriveXxx 系列保留。
+ */
 class ScraperToRoomMapperTest {
+    @Test
+    fun specimenUsesNegativeMushroomIdNamespace() {
+        val specimen = Specimen(id = 42, speciesLatin = "Amanita sp.")
+        val record = ScrapedRecord(
+            specimen = specimen,
+            source = DataSource.SPECIMEN,
+            sourceUrl = DataSource.SPECIMEN.detailUrl(specimen),
+        )
+
+        assertEquals(-42, ScraperToRoomMapper.toBatch(record).species.single().mushroomId)
+    }
+
 
     private val json = Json { ignoreUnknownKeys = true; isLenient = true }
 
@@ -233,14 +248,6 @@ class ScraperToRoomMapperTest {
     // ── scraw_source 映射 ──────────────────────────────────────────────
 
     @Test
-    fun toScrawSource_mapsSpecimenSourceToSpeciesSpecimen() {
-        assertEquals(
-            SpeciesEntity.SCRAW_SOURCE_SPECIES_SPECIMEN,
-            ScraperToRoomMapper.toScrawSource(DataSource.SPECIMEN),
-        )
-    }
-
-    @Test
     fun toScrawSource_mapsGeneralDirectoryToGeneralDirectory() {
         assertEquals(
             SpeciesEntity.SCRAW_SOURCE_GENERAL_DIRECTORY,
@@ -249,26 +256,12 @@ class ScraperToRoomMapperTest {
     }
 
     @Test
-    fun toEntityFromRecord_storesScrawSourceFromSourceEnum() {
-        val specimen = Specimen(id = 11L, speciesLatin = "Amanita muscaria")
-        val record = ScrapedRecord(
-            specimen = specimen,
-            source = DataSource.SPECIMEN,
-            sourceUrl = "https://fungi.iflora.cn/#/specimenDetail/11",
-        )
-
-        val entity = ScraperToRoomMapper.toEntity(specimen, record, now = 1_700_000_000L)
-        assertEquals(SpeciesEntity.SCRAW_SOURCE_SPECIES_SPECIMEN, entity.scrawSource)
-        assertEquals(record.sourceUrl, entity.sourceUrl)
-    }
-
-    @Test
     fun toEntityFromRecord_startsSourceTypesWithSourceEnumName() {
         val specimen = Specimen(id = 11L, edibleFungus = "是")
         val record = ScrapedRecord(
             specimen = specimen,
             source = DataSource.GENERAL_DIRECTORY,
-            sourceUrl = "https://fungi.iflora.cn/#/speciesDetail/11",
+            sourceUrl = "https://fungi.iflora.cn/#/speciesDetail/11/Lactarius%20gracilis",
         )
         val entity = ScraperToRoomMapper.toEntity(specimen, record, now = 1L)
         assertTrue(entity.sourceTypes.startsWith("GENERAL_DIRECTORY"))
@@ -339,6 +332,16 @@ class ScraperToRoomMapperTest {
         assertEquals("组中文", entity.sectionZh)
     }
 
+    // ── 新:v10 mushroom_id 来自 API id ────────────────────────────────
+
+    @Test
+    fun toEntity_setsMushroomIdFromSpecimenId() {
+        val specimen = Specimen(id = 33L, speciesLatin = "Amanita muscaria")
+        val entity = ScraperToRoomMapper.toEntity(specimen, now = 1L)
+        assertEquals(33, entity.mushroomId)
+        assertEquals(0L, entity.id)  // SQLite 自增,新行 id 默认 0 由 Room 接管
+    }
+
     // ── 新:extractImages 保留元数据 ──────────────────────────────────────
 
     @Test
@@ -353,13 +356,14 @@ class ScraperToRoomMapperTest {
             """.trimIndent(),
         )
 
-        val images = ScraperToRoomMapper.extractImages(specimen, speciesId = 31)
+        val images = ScraperToRoomMapper.extractImages(specimen, mushroomId = 31)
 
         assertEquals(1, images.size)
+        assertEquals(31, images[0].mushroomId)
         assertEquals("5496357", images[0].ufId)
         assertEquals("GLG-FXP855 (2).JPG", images[0].ufName)
         assertEquals(7917005L, images[0].ufSize)
-        assertEquals("http://cloudfile.biotracks.cn/a.jpg!bio", images[0].ufSrc)
+        assertEquals("https://cloudfile.biotracks.cn/a.jpg!bio", images[0].ufSrc)
         assertEquals(SpeciesImageEntity.SOURCE_KIB_PICTURES, images[0].source)
         assertEquals(0, images[0].sortOrder)
     }
@@ -380,7 +384,7 @@ class ScraperToRoomMapperTest {
                 ]
             """.trimIndent(),
         )
-        val images = ScraperToRoomMapper.extractImages(specimen, speciesId = 31)
+        val images = ScraperToRoomMapper.extractImages(specimen, mushroomId = 31)
 
         assertEquals(3, images.size)
         assertEquals(SpeciesImageEntity.SOURCE_SYS_FILE, images[0].source)
@@ -389,106 +393,10 @@ class ScraperToRoomMapperTest {
         assertEquals(listOf(0, 1, 2), images.map { it.sortOrder })
     }
 
-    // ── 新:extractBarcodes 7 基因位点 ───────────────────────────────────
+    // ── 新:toBatch 只产 species + images ──────────────────────────────
 
     @Test
-    fun extractBarcodes_emitsAllSevenGenes_withCorrectAccessions() {
-        val specimen = Specimen(
-            id = 1925L,
-            itsGenbank = "MZ123456",
-            itsGenbankUrl = "https://www.ncbi.nlm.nih.gov/nuccore/MZ123456",
-            nrlsuGenbank = "MZ123457",
-            nrlsuGenbankUrl = null,
-            tef1Genbank = "数据暂未公开",
-            tef1GenbankUrl = null,
-            rpb1Genbank = null,
-            rpb1GenbankUrl = null,
-            rpb2Genbank = null,
-            rpb2GenbankUrl = null,
-            ssu = "数据暂未公开",
-            tub2 = "MZ999999",
-        )
-        val rows = ScraperToRoomMapper.extractBarcodes(specimen, speciesId = 31, specimenId = 1925L)
-
-        // 7 个基因位点中,只有 5 个有值(ITS/nrLSU/TEF1/SSU/tub2);RPB1/RPB2 全空被过滤
-        assertEquals(5, rows.size)
-        val byGene = rows.associateBy { it.gene }
-
-        assertEquals("MZ123456", byGene[DnaBarcodeEntity.GENE_ITS]?.accession)
-        assertTrue(byGene[DnaBarcodeEntity.GENE_ITS]!!.isPublic)
-
-        assertEquals("MZ123457", byGene[DnaBarcodeEntity.GENE_NRLSU]?.accession)
-
-        assertEquals("数据暂未公开", byGene[DnaBarcodeEntity.GENE_TEF1]?.accession)
-        assertFalse(byGene[DnaBarcodeEntity.GENE_TEF1]!!.isPublic)
-
-        assertNull(byGene[DnaBarcodeEntity.GENE_SSU]?.url)
-        assertFalse(byGene[DnaBarcodeEntity.GENE_SSU]!!.isPublic)
-
-        assertEquals("MZ999999", byGene[DnaBarcodeEntity.GENE_TUB2]?.accession)
-        assertTrue(byGene[DnaBarcodeEntity.GENE_TUB2]!!.isPublic)
-
-        // RPB1/RPB2 因 accession+url 全空被丢弃
-        assertNull(byGene[DnaBarcodeEntity.GENE_RPB1])
-        assertNull(byGene[DnaBarcodeEntity.GENE_RPB2])
-    }
-
-    @Test
-    fun extractBarcodes_skipsGenesThatAreMissing() {
-        val specimen = Specimen(id = 1L, itsGenbank = "MZ1")
-        val rows = ScraperToRoomMapper.extractBarcodes(specimen, speciesId = 1, specimenId = 1L)
-        // 只有 ITS 出现,其他 6 个基因因为 accession+url 全空被丢弃
-        assertEquals(1, rows.size)
-        assertEquals(DnaBarcodeEntity.GENE_ITS, rows[0].gene)
-    }
-
-    // ── 新:mapSpecimen 行政编码解码 ─────────────────────────────────────
-
-    @Test
-    fun mapSpecimen_resolvesProvinceAndCityFromRegionLookup() {
-        val specimen = Specimen(
-            id = 5L,
-            gatherNum = "GLG-FXP855",
-            collectionNum = "HKAS 136387",
-            collectProvince = "530000",
-            collectCity = "530500",
-            collectDistrict = "530523",
-            collectVillage = "滥澡堂",
-            latitude = "24.74",
-            longitude = "98.86",
-            altitude = "2100",
-        )
-        val lookup = ScraperToRoomMapper.RegionLookup { code ->
-            when (code) {
-                "530000" -> "云南省"
-                "530500" -> "保山市"
-                "530523" -> "龙陵县"
-                else -> null
-            }
-        }
-        val row = ScraperToRoomMapper.mapSpecimen(specimen, speciesId = 31, sourceUrl = "x", regionLookup = lookup)
-
-        assertEquals(31, row.speciesId)
-        assertEquals("云南省", row.collectProvinceZh)
-        assertEquals("保山市", row.collectCityZh)
-        assertEquals("龙陵县", row.collectDistrictZh)
-        assertEquals("24.74", row.latitude)
-        assertEquals("98.86", row.longitude)
-    }
-
-    @Test
-    fun mapSpecimen_fallsBackToNullWhenLookupCannotDecode() {
-        val specimen = Specimen(id = 9L, collectProvince = "999999")
-        val lookup = ScraperToRoomMapper.RegionLookup { null }
-        val row = ScraperToRoomMapper.mapSpecimen(specimen, speciesId = 1, sourceUrl = null, regionLookup = lookup)
-        assertEquals("999999", row.collectProvince)
-        assertNull(row.collectProvinceZh)
-    }
-
-    // ── 新:toBatch 5 表组装 ────────────────────────────────────────────
-
-    @Test
-    fun toBatch_emitsAllFiveTables() {
+    fun toBatch_emitsSpeciesAndImagesOnly() {
         val specimen = specimenWithImages(
             id = 31L,
             sysFileListJson = "[]",
@@ -502,63 +410,23 @@ class ScraperToRoomMapperTest {
             speciesLatin = "Lactarius gracilis",
             speciesChinese = "纤细乳菇",
             edibleFungus = "是",
-            itsGenbank = "MZ001",
         )
         val record = ScrapedRecord(
             specimen = specimen,
             source = DataSource.GENERAL_DIRECTORY,
             sourceUrl = "https://fungi.iflora.cn/#/speciesDetail/31/Lactarius%20gracilis",
         )
-        val extraSpec = Specimen(id = 1925L, speciesLatin = "Lactarius gracilis", itsGenbank = "MZ002")
-        val points = listOf(
-            ScraperToRoomMapper.DistributionPoint(lng = 98.15, lat = 25.22, count = 1),
-            ScraperToRoomMapper.DistributionPoint(lng = 98.35, lat = 25.32, count = 1),
-        )
 
-        val batch = ScraperToRoomMapper.toBatch(
-            record = record,
-            extraSpecimens = listOf(extraSpec),
-            extraDistributionPoints = points,
-            now = 1_700_000_000L,
-        )
+        val batch = ScraperToRoomMapper.toBatch(record = record, now = 1_700_000_000L)
 
         assertEquals(1, batch.species.size)
         assertEquals("Lactarius gracilis", batch.species[0].scientificName)
         assertEquals(UseType.EDIBLE, batch.species[0].useType)
-
-        assertEquals(2, batch.specimens.size)
-        assertEquals(setOf(31L, 1925L), batch.specimens.map { it.id }.toSet())
-        assertTrue(batch.specimens.all { it.speciesId == 31 })
+        assertEquals(31, batch.species[0].mushroomId)
 
         assertEquals(2, batch.images.size)
         assertEquals(setOf("5496357", "5496358"), batch.images.map { it.ufId }.toSet())
-
-        // DNA: 主 specimen (31) 有 1 个基因 (ITS), 额外 (1925) 有 1 个基因 (ITS)
-        assertEquals(2, batch.barcodes.size)
-        assertTrue(batch.barcodes.all { it.speciesId == 31 })
-        assertEquals(setOf(31L, 1925L), batch.barcodes.map { it.specimenId }.toSet())
-
-        assertEquals(2, batch.distributionPoints.size)
-        assertTrue(batch.distributionPoints.all { it.speciesId == 31 })
-    }
-
-    @Test
-    fun toBatch_skipsExtraSpecimensWithSameId() {
-        val specimen = Specimen(id = 31L, speciesLatin = "X")
-        val record = ScrapedRecord(
-            specimen = specimen,
-            source = DataSource.GENERAL_DIRECTORY,
-            sourceUrl = "x",
-        )
-        val batch = ScraperToRoomMapper.toBatch(
-            record = record,
-            extraSpecimens = listOf(specimen, specimen),
-            now = 1L,
-        )
-        // 主 specimen 自身 + 0 个额外 (被去重)
-        assertEquals(1, batch.specimens.size)
-        // DNA 同理,主 specimen accession 全部 null
-        assertEquals(0, batch.barcodes.size)
+        assertTrue(batch.images.all { it.mushroomId == 31 })
     }
 
     // ── 测试工具 ───────────────────────────────────────────────────────

@@ -37,6 +37,7 @@ class SeedAssetLoader @Inject constructor(
     data class SeedSpeciesDto(
         val scientific_name: String,
         val chinese_name: String,
+        val alias_names: List<String> = emptyList(),
         val family_zh: String,
         val family_la: String,
         val genus_zh: String,
@@ -62,9 +63,11 @@ class SeedAssetLoader @Inject constructor(
         val scraw_source: String = SpeciesEntity.SCRAW_SOURCE_GENERAL_DIRECTORY,
     ) {
         fun toEntity(): SpeciesEntity = SpeciesEntity(
-            id = 0,  // 种子数据由数据库 auto-increment 接管;实际写入前会被覆盖
+            id = 0L,  // SQLite 自增
+            mushroomId = 0,  // 种子数据无业务 id;SeedDataInitializer 走 INSERT OR IGNORE,允许共用 0
             scientificName = scientific_name,
             chineseName = chinese_name,
+            aliasNames = alias_names,
             familyZh = family_zh,
             familyLa = family_la,
             genusZh = genus_zh,

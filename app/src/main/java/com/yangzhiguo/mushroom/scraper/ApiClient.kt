@@ -1,10 +1,10 @@
 package com.yangzhiguo.mushroom.scraper
 
 import android.util.Log
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonArray
 import kotlinx.serialization.json.JsonObject
@@ -19,14 +19,17 @@ import java.nio.charset.StandardCharsets
 
 /**
  * 极简 HTTP 客户端。基于 JDK HttpURLConnection。
- * 特性：超时、指数退避重试、UA/Referer、跨协议 HTTP→HTTPS 重定向跟随。
+ * 特性:超时、指数退避重试、UA/Referer、跨协议 HTTP→HTTPS 重定向跟随。
+ *
+ * v10:删除 `fetchSpeciesDnaAndLib`(返回 specimen DnaLib + distribution points)。
+ * `fetchSpeciesDetail` 仍保留,被 SpeciesRepositoryImpl.refreshDetails 调用,用于拉详情刷新主表。
  */
 class ApiClient(
     private val baseUrl: String = "https://fungi.iflora.cn",
     private val iNaturalistBaseUrl: String = "https://api.inaturalist.org",
     private val maxRetries: Int = 3,
-    private val connectTimeoutMs: Int = 15_000,
-    private val readTimeoutMs: Int = 30_000,
+    private val connectTimeoutMs: Int = DEFAULT_TIMEOUT_MS,
+    private val readTimeoutMs: Int = DEFAULT_TIMEOUT_MS,
 ) {
     private val tag = "ApiClient"
 
@@ -36,20 +39,26 @@ class ApiClient(
         isLenient = true
     }
 
-    suspend fun fetchPage(current: Long, size: Int = 6): ApiResponse = withContext(Dispatchers.IO) {
-        val url = "$baseUrl/admin/kibspecimen/page?current=$current&size=$size&type=user"
-        val body = getWithRetry(url)
-        json.decodeFromString<ApiResponse>(body)
-    }
-
+    /**
+     * 按 [DataSource] 拉一页物种。
+     *
+     * SPECIMEN 走 `/admin/kibspecimen/page`;其余 source 走
+     * `/admin/kibHome/getSpeciesList`,通过 [DataSource.filter] 区分。
+     */
     suspend fun fetchPage(
         source: DataSource,
         page: Int,
         pageSize: Int = 6,
     ): List<Specimen> = withContext(Dispatchers.IO) {
         when (source.kind) {
-            DataSource.Kind.SPECIMEN ->
-                fetchPage(page.toLong(), pageSize).data?.records.orEmpty()
+            DataSource.Kind.SPECIMEN -> {
+                json.decodeFromString<ApiResponse>(
+                    getWithRetry(
+                        "$baseUrl/admin/kibspecimen/page" +
+                            "?current=$page&size=$pageSize&type=user",
+                    ),
+                ).data?.records.orEmpty()
+            }
             DataSource.Kind.SPECIES -> {
                 val params = linkedMapOf(
                     "page" to page.toString(),
@@ -69,6 +78,13 @@ class ApiClient(
                 ).data?.specimenSpeciesList.orEmpty()
             }
         }
+    }
+
+    /** 物种详情,按 mushroomId 拉 (走 `/admin/kibHome/getSpeciesInfoBySpeciesLatin`)。 */
+    suspend fun fetchSpeciesDetail(speciesId: Int): Specimen? = withContext(Dispatchers.IO) {
+        json.decodeFromString<SpeciesDetailApiResponse>(
+            getWithRetry("$baseUrl/admin/kibHome/getSpeciesInfoBySpeciesLatin?speciesId=$speciesId"),
+        ).data?.kibSpecimen
     }
 
     suspend fun findPrimaryImageUrl(
@@ -105,7 +121,8 @@ class ApiClient(
                 return doGet(url) { conn ->
                     conn.inputStream.bufferedReader(Charsets.UTF_8).use { it.readText() }
                 }
-            } catch (t: Throwable) {
+            } catch (t: Exception) {
+                if (t is CancellationException) throw t
                 lastError = t
                 val backoff = backoffMs(attempt)
                 Log.w(tag, "GET $url failed (attempt ${attempt + 1}/${maxRetries + 1}): ${t.message} — retry in ${backoff}ms")
@@ -161,8 +178,9 @@ class ApiClient(
 
     private fun encode(value: String): String =
         URLEncoder.encode(value, StandardCharsets.UTF_8.name())
+
     /**
-     * 下载远端图片字节流，写入 [dest]。失败抛异常。
+     * 下载远端图片字节流,写入 [dest]。失败抛异常。
      * 内部自动跟随 HTTP→HTTPS 重定向。
      */
     suspend fun downloadBytes(remoteUrl: String, dest: java.io.File): Long = withContext(Dispatchers.IO) {
@@ -211,9 +229,8 @@ class ApiClient(
     }
 
     private fun extractSpecimenId(sourceUrl: String): Long? {
-        // DataSource.kt 写入的 SPECIMEN URL 是 `/specimenDetail/{id}`，
-        // GENERAL_DIRECTORY 是 `/speciesDetail/{id}/...`；两种都要匹配。
-        // 之前缺 `specimenDetail` 这一条，导致 SPECIMEN 源的回源补图永远拿不到 id。
+        // DataSource.kt 写入的 sourceUrl 是 `/speciesDetail/{id}/...`;
+        // 兼容旧的 `/specimenDetail/{id}` / `/kibspecimen/{id}` 模式。
         val patterns = listOf(
             Regex("""/specimenDetail/(\d+)""", RegexOption.IGNORE_CASE),
             Regex("""/speciesDetail/(\d+)""", RegexOption.IGNORE_CASE),
@@ -230,7 +247,7 @@ class ApiClient(
             normalized.endsWith(" sp", ignoreCase = true)
         val queryName = if (isGenusQuery) normalized.substringBefore(" ") else normalized
         val rank = if (isGenusQuery) "genus" else "species"
-        val encodedName = URLEncoder.encode(queryName, StandardCharsets.UTF_8.name())
+        val encodedName = URLEncoder.encode(queryName, Charsets.UTF_8.name())
         val url = "$iNaturalistBaseUrl/v1/taxa?q=$encodedName&rank=$rank&per_page=10"
         val root = json.parseToJsonElement(getWithRetry(url)).jsonObject
         val results = root["results"]?.jsonArray.orEmpty()
@@ -244,6 +261,8 @@ class ApiClient(
     }
 
     companion object {
+        internal const val DEFAULT_TIMEOUT_MS = 15_000
+
         internal fun normalizeImageUrl(raw: String, baseUrl: String = "https://fungi.iflora.cn"): String {
             val trimmed = raw.trim()
             return when {

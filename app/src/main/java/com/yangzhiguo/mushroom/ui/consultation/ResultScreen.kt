@@ -55,8 +55,8 @@ class ResultViewModel @Inject constructor(
     private val _state = MutableStateFlow<List<SpeciesEntity>>(emptyList())
     val state: StateFlow<List<SpeciesEntity>> = _state.asStateFlow()
 
-    fun load(ids: List<Int>) {
-        viewModelScope.launch { _state.value = repo.findByIds(ids) }
+    fun load(mushroomIds: List<Int>) {
+        viewModelScope.launch { _state.value = repo.findByMushroomIds(mushroomIds) }
     }
 }
 

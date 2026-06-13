@@ -28,14 +28,16 @@ class SpeciesDetailViewModel @Inject constructor(
     private val _imageLoading = MutableStateFlow(false)
     val imageLoading: StateFlow<Boolean> = _imageLoading.asStateFlow()
 
-    fun load(id: Int) {
+    fun load(mushroomId: Int) {
         viewModelScope.launch {
-            val sp = repo.findById(id)
+            val local = repo.findByMushroomId(mushroomId)
+            _state.value = local
+            val sp = runCatching { repo.refreshDetails(mushroomId) }.getOrNull() ?: local
             _state.value = sp
             _imageLoading.value = true
             try {
                 _imageFiles.value = imageCache.getOrFetchAll(
-                    specimenId = id,
+                    mushroomId = mushroomId,
                     remoteUrl = sp?.imageUrl,
                     scientificName = sp?.scientificName,
                     sourceUrl = sp?.sourceUrl,
@@ -49,9 +51,9 @@ class SpeciesDetailViewModel @Inject constructor(
     fun toggleFavorite() {
         val current = _state.value ?: return
         viewModelScope.launch {
-            repo.toggleFavorite(current.id)
+            repo.toggleFavorite(current.mushroomId)
             // 重新拉取,让 isFavorite 通过 state 流回 UI
-            _state.value = repo.findById(current.id)
+            _state.value = repo.findByMushroomId(current.mushroomId)
         }
     }
 }

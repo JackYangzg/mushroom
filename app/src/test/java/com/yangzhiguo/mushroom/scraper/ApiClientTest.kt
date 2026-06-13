@@ -12,6 +12,60 @@ import java.io.File
 class ApiClientTest {
 
     @Test
+    fun specimenSourceUsesSpecimenPageEndpoint() = runBlocking {
+        val server = MockWebServer()
+        server.enqueue(
+            MockResponse().setBody(
+                """{"code":0,"data":{"records":[{"id":42,"speciesLatin":"Amanita sp."}]}}""",
+            ),
+        )
+        server.start()
+        try {
+            val client = ApiClient(
+                baseUrl = server.url("/").toString().removeSuffix("/"),
+                maxRetries = 0,
+            )
+
+            val records = client.fetchPage(DataSource.SPECIMEN, page = 2, pageSize = 50)
+
+            assertEquals(listOf(42L), records.map { it.id })
+            assertEquals(
+                "/admin/kibspecimen/page?current=2&size=50&type=user",
+                server.takeRequest().path,
+            )
+        } finally {
+            server.shutdown()
+        }
+    }
+
+    @Test
+    fun speciesDetail_acceptsNumericCalmSeed() = runBlocking {
+        val server = MockWebServer()
+        server.enqueue(
+            MockResponse().setBody(
+                """{"code":0,"data":{"kibSpecimen":{"id":6,"speciesLatin":"Termitomyces fragilis","calmSeed":0}}}""",
+            ),
+        )
+        server.start()
+        try {
+            val client = ApiClient(
+                baseUrl = server.url("/").toString().removeSuffix("/"),
+                maxRetries = 0,
+            )
+
+            val detail = client.fetchSpeciesDetail(6)
+
+            assertEquals("0", detail?.calmSeed)
+            assertEquals(
+                "/admin/kibHome/getSpeciesInfoBySpeciesLatin?speciesId=6",
+                server.takeRequest().path,
+            )
+        } finally {
+            server.shutdown()
+        }
+    }
+
+    @Test
     fun legacyCloudFileHttpUrlIsUpgradedToHttps() {
         assertEquals(
             "https://cloudfile.biotracks.cn/user_thumb/a.jpg!bio123456",
@@ -168,9 +222,8 @@ class ApiClientTest {
     }
 
     /**
-     * 回归测试：DataSource.kt 写入的 SPECIMEN 类型 sourceUrl 形如 `/specimenDetail/33`，
-     * 而早期版本的 `extractSpecimenId` 只匹配 `/speciesDetail/` 与 `/kibspecimen/`，
-     * 导致 SPECIMEN 源永远走不到详情 API，多图回源直接失败。
+     * 回归测试:DataSource.kt 写入的 sourceUrl 同时支持 `/speciesDetail/{id}` 与
+     * `/specimenDetail/{id}` 两种模式(历史 `/specimenDetail/` 链接仍可回源)。
      */
     @Test
     fun findImageUrls_routesSpecimenDetailSourceUrlToDetailApi() = runBlocking {

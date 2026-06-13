@@ -1,64 +1,62 @@
 package com.yangzhiguo.mushroom.data.local
 
 import androidx.room.Dao
-import androidx.room.Insert
-import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Upsert
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface SpeciesDao {
     /**
-     * 图鉴默认视图：只展示爬取自 `general_directory` 名录的数据。
-     * `species_specimen` 标本记录不在此处显示，但用户仍可搜索到（见 [searchByName]）。
+     * 图鉴展示三个物种名录来源。
      */
     @Query("""
         SELECT * FROM mushroom_species
-        WHERE scraw_source = 'general_directory'
-        ORDER BY id ASC
+        WHERE scraw_source IN ('general_directory', 'edible_fungi', 'toxic_fungi')
+        ORDER BY mushroom_id ASC
     """)
     fun observeAll(): Flow<List<SpeciesEntity>>
 
     @Query("""
         SELECT * FROM mushroom_species
-        WHERE scraw_source = 'general_directory'
+        WHERE scraw_source IN ('general_directory', 'edible_fungi', 'toxic_fungi')
           AND instr(',' || source_types || ',', ',EDIBLE,') > 0
-        ORDER BY id ASC
+        ORDER BY mushroom_id ASC
     """)
     fun filterEdible(): Flow<List<SpeciesEntity>>
 
     @Query("""
         SELECT * FROM mushroom_species
-        WHERE scraw_source = 'general_directory'
+        WHERE scraw_source IN ('general_directory', 'edible_fungi', 'toxic_fungi')
           AND instr(',' || source_types || ',', ',MEDICINAL,') > 0
-        ORDER BY id ASC
+        ORDER BY mushroom_id ASC
     """)
     fun filterMedicinal(): Flow<List<SpeciesEntity>>
 
     @Query("""
         SELECT * FROM mushroom_species
-        WHERE scraw_source = 'general_directory'
+        WHERE scraw_source IN ('general_directory', 'edible_fungi', 'toxic_fungi')
           AND instr(',' || source_types || ',', ',POISONOUS,') > 0
-        ORDER BY toxicity_level DESC, id ASC
+        ORDER BY toxicity_level DESC, mushroom_id ASC
     """)
     fun filterPoisonous(): Flow<List<SpeciesEntity>>
 
     @Query("""
         SELECT * FROM mushroom_species
-        WHERE scraw_source = 'general_directory'
+        WHERE scraw_source IN ('general_directory', 'edible_fungi', 'toxic_fungi')
           AND instr(',' || source_types || ',', ',CAUTION,') > 0
-        ORDER BY id ASC
+        ORDER BY mushroom_id ASC
     """)
     fun filterCaution(): Flow<List<SpeciesEntity>>
 
-    /**
-     * 检索：跨全数据库（不限 `scraw_source`），让用户能找到标本记录与名录记录。
-     * 与图鉴默认视图的「只看名录」相反——这是显式设计。
-     */
     @Query("""
         SELECT * FROM mushroom_species
-        WHERE chinese_name LIKE '%' || :query || '%' COLLATE NOCASE
-           OR scientific_name LIKE '%' || :query || '%' COLLATE NOCASE
+        WHERE scraw_source IN ('general_directory', 'edible_fungi', 'toxic_fungi')
+          AND (
+            chinese_name LIKE '%' || :query || '%' COLLATE NOCASE
+            OR scientific_name LIKE '%' || :query || '%' COLLATE NOCASE
+            OR alias_names LIKE '%' || :query || '%' COLLATE NOCASE
+          )
         ORDER BY
             CASE
                 WHEN chinese_name = :query COLLATE NOCASE THEN 0
@@ -67,65 +65,89 @@ interface SpeciesDao {
                 WHEN scientific_name LIKE :query || '%' COLLATE NOCASE THEN 3
                 ELSE 4
             END,
-            id ASC
+            mushroom_id ASC
     """)
     fun searchByName(query: String): Flow<List<SpeciesEntity>>
 
-    @Query("SELECT * FROM mushroom_species WHERE id = :id LIMIT 1")
-    suspend fun findById(id: Int): SpeciesEntity?
+    /** 按 PK 查找 — 仅 debug 用,业务查找请用 [findByMushroomId]。 */
+    @Query("SELECT * FROM mushroom_species WHERE id = :rowId LIMIT 1")
+    suspend fun findByRowId(rowId: Long): SpeciesEntity?
 
-    @Query("SELECT * FROM mushroom_species WHERE scientific_name = :name COLLATE NOCASE LIMIT 1")
+    /** 业务 id 查找 — UI / repository 实际调用的入口。 */
+    @Query("SELECT * FROM mushroom_species WHERE mushroom_id = :mushroomId LIMIT 1")
+    suspend fun findByMushroomId(mushroomId: Int): SpeciesEntity?
+
+    @Query("""
+        SELECT * FROM mushroom_species
+        WHERE scraw_source IN ('general_directory', 'edible_fungi', 'toxic_fungi')
+          AND scientific_name = :name COLLATE NOCASE
+        LIMIT 1
+    """)
     suspend fun findByScientificName(name: String): SpeciesEntity?
 
     @Query("""
         SELECT * FROM mushroom_species
-        WHERE (
-            :scientificName != '' AND (
-                scientific_name LIKE '%' || :scientificName || '%' COLLATE NOCASE
-                OR :scientificName LIKE '%' || scientific_name || '%' COLLATE NOCASE
+        WHERE scraw_source IN ('general_directory', 'edible_fungi', 'toxic_fungi')
+          AND (
+            (
+                :scientificName != '' AND (
+                    scientific_name LIKE '%' || :scientificName || '%' COLLATE NOCASE
+                    OR :scientificName LIKE '%' || scientific_name || '%' COLLATE NOCASE
+                )
+            ) OR (
+                :commonName != '' AND (
+                    chinese_name LIKE '%' || :commonName || '%' COLLATE NOCASE
+                    OR :commonName LIKE '%' || chinese_name || '%' COLLATE NOCASE
+                )
+            ) OR (
+                :aliasName != '' AND alias_names LIKE '%' || :aliasName || '%' COLLATE NOCASE
             )
-        ) OR (
-            :commonName != '' AND (
-                chinese_name LIKE '%' || :commonName || '%' COLLATE NOCASE
-                OR :commonName LIKE '%' || chinese_name || '%' COLLATE NOCASE
-            )
-        )
+          )
         ORDER BY
             CASE
                 WHEN scientific_name = :scientificName COLLATE NOCASE THEN 0
                 WHEN chinese_name = :commonName COLLATE NOCASE THEN 1
-                WHEN scientific_name LIKE :scientificName || '%' COLLATE NOCASE THEN 2
-                WHEN chinese_name LIKE :commonName || '%' COLLATE NOCASE THEN 3
-                ELSE 4
+                WHEN alias_names LIKE '%"' || :aliasName || '"%' COLLATE NOCASE THEN 2
+                WHEN scientific_name LIKE :scientificName || '%' COLLATE NOCASE THEN 3
+                WHEN chinese_name LIKE :commonName || '%' COLLATE NOCASE THEN 4
+                ELSE 5
             END,
             abs(length(scientific_name) - length(:scientificName))
                 + abs(length(chinese_name) - length(:commonName)),
-            id ASC
+            mushroom_id ASC
         LIMIT 1
     """)
-    suspend fun findBestNameMatch(scientificName: String, commonName: String): SpeciesEntity?
+    suspend fun findBestNameMatch(
+        scientificName: String,
+        commonName: String,
+        aliasName: String = "",
+    ): SpeciesEntity?
 
-    @Query("SELECT * FROM mushroom_species WHERE id IN (:ids)")
-    suspend fun findByIds(ids: List<Int>): List<SpeciesEntity>
+    @Query("SELECT * FROM mushroom_species WHERE mushroom_id IN (:mushroomIds)")
+    suspend fun findByMushroomIds(mushroomIds: List<Int>): List<SpeciesEntity>
 
     @Query("SELECT COUNT(*) FROM mushroom_species")
     suspend fun count(): Int
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertAll(species: List<SpeciesEntity>)
+    /**
+     * Upsert by `(scraw_source, source_url)` 唯一索引。
+     * PK `id` 由 SQLite 分配;已存在的 (source, url) 行会被原地覆盖更新。
+     */
+    @Upsert
+    suspend fun upsertAll(species: List<SpeciesEntity>)
 
     @Query("DELETE FROM mushroom_species")
     suspend fun deleteAll()
 
-    @Query("UPDATE mushroom_species SET image_local_path = :path, last_updated = :ts WHERE id = :id")
-    suspend fun updateImagePath(id: Int, path: String?, ts: Long = System.currentTimeMillis())
+    @Query("UPDATE mushroom_species SET image_local_path = :path, last_updated = :ts WHERE mushroom_id = :mushroomId")
+    suspend fun updateImagePath(mushroomId: Int, path: String?, ts: Long = System.currentTimeMillis())
 
-    @Query("UPDATE mushroom_species SET image_url = :url, last_updated = :ts WHERE id = :id")
-    suspend fun updateImageUrl(id: Int, url: String?, ts: Long = System.currentTimeMillis())
+    @Query("UPDATE mushroom_species SET image_url = :url, last_updated = :ts WHERE mushroom_id = :mushroomId")
+    suspend fun updateImageUrl(mushroomId: Int, url: String?, ts: Long = System.currentTimeMillis())
 
-    @Query("SELECT * FROM mushroom_species WHERE is_favorite = 1 ORDER BY last_updated DESC, id ASC")
+    @Query("SELECT * FROM mushroom_species WHERE is_favorite = 1 ORDER BY last_updated DESC, mushroom_id ASC")
     fun observeFavorites(): Flow<List<SpeciesEntity>>
 
-    @Query("UPDATE mushroom_species SET is_favorite = :isFavorite, last_updated = :ts WHERE id = :id")
-    suspend fun setFavorite(id: Int, isFavorite: Boolean, ts: Long = System.currentTimeMillis())
+    @Query("UPDATE mushroom_species SET is_favorite = :isFavorite, last_updated = :ts WHERE mushroom_id = :mushroomId")
+    suspend fun setFavorite(mushroomId: Int, isFavorite: Boolean, ts: Long = System.currentTimeMillis())
 }

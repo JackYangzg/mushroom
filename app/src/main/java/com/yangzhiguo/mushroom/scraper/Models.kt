@@ -2,10 +2,20 @@ package com.yangzhiguo.mushroom.scraper
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.KSerializer
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.descriptors.PrimitiveKind
+import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
 import kotlinx.serialization.json.JsonElement
+import kotlinx.serialization.json.JsonNull
+import kotlinx.serialization.json.JsonPrimitive
+import kotlinx.serialization.json.JsonDecoder
 
 @Serializable
-data class ApiResponse(val code: Int = 0, val msg: String? = null, val data: PageData? = null)
+data class ApiResponse(val code: Int = 0, val msg: String? = null, val data: SpecimenPageData? = null)
 
 @Serializable
 data class SpecimenDetailResponse(
@@ -15,7 +25,7 @@ data class SpecimenDetailResponse(
 )
 
 @Serializable
-data class PageData(
+data class SpecimenPageData(
     val records: List<Specimen> = emptyList(),
     val total: Long = 0,
     val size: Int = 0,
@@ -27,13 +37,25 @@ data class PageData(
 data class SpeciesApiResponse(
     val code: Int = 0,
     val msg: String? = null,
-    val data: SpeciesPageData? = null,
+    val data: SpeciesListPageData? = null,
 )
 
 @Serializable
-data class SpeciesPageData(
+data class SpeciesListPageData(
     val total: Long = 0,
     val specimenSpeciesList: List<Specimen> = emptyList(),
+)
+
+@Serializable
+data class SpeciesDetailApiResponse(
+    val code: Int = 0,
+    val msg: String? = null,
+    val data: SpeciesDetailData? = null,
+)
+
+@Serializable
+data class SpeciesDetailData(
+    val kibSpecimen: Specimen? = null,
 )
 
 @Serializable
@@ -131,6 +153,7 @@ data class Specimen(
     val stipe: String? = null,
     val stipeContext: String? = null,
     val odor: String? = null,
+    @Serializable(with = NullableFlexibleStringSerializer::class)
     val calmSeed: String? = null,
     val otherData: String? = null,
     val isApprove: String? = null,
@@ -148,11 +171,34 @@ data class Specimen(
     val economicUse: String? = null,
     @SerialName("sysFileList") val sysFileList: JsonElement? = null,
     @SerialName("kibSpeciesPictures") val kibSpeciesPictures: JsonElement? = null,
-    @SerialName("itsGenbankFileList") val itsGenbankFileList: JsonElement? = null,
-    @SerialName("nrlsuGenbankFileList") val nrlsuGenbankFileList: JsonElement? = null,
-    @SerialName("tef1GenbankFileList") val tef1GenbankFileList: JsonElement? = null,
-    @SerialName("rpb1GenbankFileList") val rpb1GenbankFileList: JsonElement? = null,
-    @SerialName("rpb2GenbankFileList") val rpb2GenbankFileList: JsonElement? = null,
-    @SerialName("ssuFileList") val ssuFileList: JsonElement? = null,
-    @SerialName("tub2FileList") val tub2FileList: JsonElement? = null,
 )
+
+/**
+ * The upstream API inconsistently returns textual fields as either JSON strings
+ * or numbers (for example `calmSeed: 0`). Preserve the value instead of
+ * failing the whole record during deserialization.
+ */
+@OptIn(ExperimentalSerializationApi::class)
+object NullableFlexibleStringSerializer : KSerializer<String?> {
+    override val descriptor: SerialDescriptor =
+        PrimitiveSerialDescriptor("NullableFlexibleString", PrimitiveKind.STRING)
+
+    override fun deserialize(decoder: Decoder): String? {
+        val jsonDecoder = decoder as? JsonDecoder
+        if (jsonDecoder != null) {
+            return when (val value = jsonDecoder.decodeJsonElement()) {
+                JsonNull -> null
+                is JsonPrimitive -> value.content
+                else -> value.toString()
+            }
+        }
+        return if (decoder.decodeNotNullMark()) decoder.decodeString() else {
+            decoder.decodeNull()
+            null
+        }
+    }
+
+    override fun serialize(encoder: Encoder, value: String?) {
+        if (value == null) encoder.encodeNull() else encoder.encodeString(value)
+    }
+}

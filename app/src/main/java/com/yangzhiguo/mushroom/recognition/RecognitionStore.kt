@@ -63,6 +63,15 @@ class RecognitionStore @Inject constructor(
         startRecognition(listOf(imageDataUrl), listOfNotNull(photoUri))
     }
 
+    /**
+     * 识别页首次进入时使用。导航到物种详情再返回会重新执行 Compose effect，
+     * 但已有结果不应被重新读取图片或覆盖。
+     */
+    fun startRecognitionIfIdle(imageDataUrls: List<String>, photoUris: List<String>) {
+        if (_state.value != RecognitionState.Idle) return
+        startRecognition(imageDataUrls, photoUris)
+    }
+
     fun startRecognition(imageDataUrls: List<String>, photoUris: List<String>) {
         if (imageDataUrls.isEmpty()) {
             _state.value = RecognitionState.Error(
@@ -187,7 +196,7 @@ class RecognitionStore @Inject constructor(
                     scientificName = candidate.scientificName.trim(),
                     commonName = candidate.commonName.orEmpty().trim(),
                 )?.let {
-                    candidate.scientificName to it.id
+                    candidate.scientificName to it.mushroomId
                 }
             }.toMap()
             runCatching {

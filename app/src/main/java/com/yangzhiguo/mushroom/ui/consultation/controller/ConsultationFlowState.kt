@@ -2,16 +2,20 @@ package com.yangzhiguo.mushroom.ui.consultation.controller
 
 import android.net.Uri
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.Stable
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import com.yangzhiguo.mushroom.domain.model.FeatureTraits
 
 @Stable
-class ConsultationFlowState {
-    private val _photoUris = mutableStateOf<List<Uri>>(emptyList())
-    val photoUris: List<Uri> get() = _photoUris.value
-    val photoUri: Uri? get() = _photoUris.value.firstOrNull()
+class ConsultationFlowState internal constructor(
+    private val savedPhotoUris: MutableState<List<String>> = mutableStateOf(emptyList()),
+) {
+    internal val photoUriStrings: List<String> get() = savedPhotoUris.value
+    val photoUris: List<Uri> get() = savedPhotoUris.value.map(Uri::parse)
+    val photoUri: Uri? get() = savedPhotoUris.value.firstOrNull()?.let(Uri::parse)
 
     private val _traits = mutableStateOf(FeatureTraits())
     val traits: FeatureTraits get() = _traits.value
@@ -20,17 +24,20 @@ class ConsultationFlowState {
     val candidateIds: List<Int> get() = _candidateIds.value
 
     fun addPhoto(uri: Uri) {
-        if (uri !in _photoUris.value && _photoUris.value.size < MAX_PHOTOS) {
-            _photoUris.value = _photoUris.value + uri
+        val value = uri.toString()
+        if (value !in savedPhotoUris.value && savedPhotoUris.value.size < MAX_PHOTOS) {
+            savedPhotoUris.value = savedPhotoUris.value + value
         }
     }
     fun addPhotos(uris: List<Uri>) {
-        _photoUris.value = (_photoUris.value + uris).distinct().take(MAX_PHOTOS)
+        savedPhotoUris.value = (savedPhotoUris.value + uris.map(Uri::toString))
+            .distinct()
+            .take(MAX_PHOTOS)
     }
     fun removePhoto(uri: Uri) {
-        _photoUris.value = _photoUris.value - uri
+        savedPhotoUris.value = savedPhotoUris.value - uri.toString()
     }
-    fun clearPhotos() { _photoUris.value = emptyList() }
+    fun clearPhotos() { savedPhotoUris.value = emptyList() }
     fun setTraits(t: FeatureTraits) { _traits.value = t }
     fun setCandidateIds(ids: List<Int>) { _candidateIds.value = ids }
 
@@ -40,4 +47,7 @@ class ConsultationFlowState {
 }
 
 @Composable
-fun rememberConsultationFlowState(): ConsultationFlowState = remember { ConsultationFlowState() }
+fun rememberConsultationFlowState(): ConsultationFlowState {
+    val savedPhotoUris = rememberSaveable { mutableStateOf(emptyList<String>()) }
+    return remember(savedPhotoUris) { ConsultationFlowState(savedPhotoUris) }
+}

@@ -23,7 +23,7 @@ class SeedDataInitializer @Inject constructor(
             return
         }
         val species = loader.load()
-        speciesDao.insertAll(species)
+        speciesDao.upsertAll(species)
         Log.d(TAG, "Seeded ${species.size} species.")
     }
 
