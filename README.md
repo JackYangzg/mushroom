@@ -6,6 +6,7 @@
 > 本项目不能判断蘑菇是否可以安全食用。AI 结果和图鉴资料仅供科普与检索参考，不得作为采食、售卖、加工、药用、诊断或治疗依据。请勿食用仅经本 App 识别的野生蘑菇。
 
 ## 功能
+<img width="1672" height="941" alt="image" src="https://github.com/user-attachments/assets/b59da229-701b-4d38-92d4-3322b36ee736" />
 
 - 拍照或从系统相册选择图片，单次最多支持 6 张照片
 - 使用 MiniMax M3 流式分析图片并展示识别过程
