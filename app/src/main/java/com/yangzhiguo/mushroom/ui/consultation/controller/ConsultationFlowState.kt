@@ -12,10 +12,12 @@ import com.yangzhiguo.mushroom.domain.model.FeatureTraits
 @Stable
 class ConsultationFlowState internal constructor(
     private val savedPhotoUris: MutableState<List<String>> = mutableStateOf(emptyList()),
+    private val savedUserInfo: MutableState<String> = mutableStateOf(""),
 ) {
     internal val photoUriStrings: List<String> get() = savedPhotoUris.value
     val photoUris: List<Uri> get() = savedPhotoUris.value.map(Uri::parse)
     val photoUri: Uri? get() = savedPhotoUris.value.firstOrNull()?.let(Uri::parse)
+    val userInfo: String get() = savedUserInfo.value
 
     private val _traits = mutableStateOf(FeatureTraits())
     val traits: FeatureTraits get() = _traits.value
@@ -38,6 +40,7 @@ class ConsultationFlowState internal constructor(
         savedPhotoUris.value = savedPhotoUris.value - uri.toString()
     }
     fun clearPhotos() { savedPhotoUris.value = emptyList() }
+    fun setUserInfo(value: String) { savedUserInfo.value = value }
     fun setTraits(t: FeatureTraits) { _traits.value = t }
     fun setCandidateIds(ids: List<Int>) { _candidateIds.value = ids }
 
@@ -49,5 +52,8 @@ class ConsultationFlowState internal constructor(
 @Composable
 fun rememberConsultationFlowState(): ConsultationFlowState {
     val savedPhotoUris = rememberSaveable { mutableStateOf(emptyList<String>()) }
-    return remember(savedPhotoUris) { ConsultationFlowState(savedPhotoUris) }
+    val savedUserInfo = rememberSaveable { mutableStateOf("") }
+    return remember(savedPhotoUris, savedUserInfo) {
+        ConsultationFlowState(savedPhotoUris, savedUserInfo)
+    }
 }

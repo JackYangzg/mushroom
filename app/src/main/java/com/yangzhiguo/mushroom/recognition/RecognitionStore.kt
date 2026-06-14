@@ -67,12 +67,20 @@ class RecognitionStore @Inject constructor(
      * 识别页首次进入时使用。导航到物种详情再返回会重新执行 Compose effect，
      * 但已有结果不应被重新读取图片或覆盖。
      */
-    fun startRecognitionIfIdle(imageDataUrls: List<String>, photoUris: List<String>) {
+    fun startRecognitionIfIdle(
+        imageDataUrls: List<String>,
+        photoUris: List<String>,
+        userInfo: String = "",
+    ) {
         if (_state.value != RecognitionState.Idle) return
-        startRecognition(imageDataUrls, photoUris)
+        startRecognition(imageDataUrls, photoUris, userInfo)
     }
 
-    fun startRecognition(imageDataUrls: List<String>, photoUris: List<String>) {
+    fun startRecognition(
+        imageDataUrls: List<String>,
+        photoUris: List<String>,
+        userInfo: String = "",
+    ) {
         if (imageDataUrls.isEmpty()) {
             _state.value = RecognitionState.Error(
                 message = "无法读取所选图片，请重新选择。",
@@ -93,7 +101,7 @@ class RecognitionStore @Inject constructor(
         _selectedMushroom.value = null
         _fallbackName.value = ""
         _candidateSpeciesIds.value = emptyMap()
-        runRecognition(imageDataUrls, photoUris)
+        runRecognition(imageDataUrls, photoUris, userInfo)
     }
 
     /** 取消当前识别任务，回到 Canceled。 */
@@ -129,7 +137,11 @@ class RecognitionStore @Inject constructor(
 
     // ---- 内部 ----
 
-    private fun runRecognition(imageDataUrls: List<String>, photoUris: List<String>) {
+    private fun runRecognition(
+        imageDataUrls: List<String>,
+        photoUris: List<String>,
+        userInfo: String,
+    ) {
         // 启动期 guard
         try {
             ApiKeyGuard.require()
@@ -141,7 +153,10 @@ class RecognitionStore @Inject constructor(
         currentJob = viewModelScope.launch {
             _state.value = RecognitionState.Uploading
 
-            val stream = api.streamRecognize(imageDataUrls)
+            val stream = api.streamRecognize(
+                imageDataUrls = imageDataUrls,
+                userPrompt = buildRecognitionPrompt(userInfo),
+            )
             val collected = mutableListOf<Candidate>()
 
             try {
@@ -168,7 +183,7 @@ class RecognitionStore @Inject constructor(
                 if (!retried) {
                     retried = true
                     Log.w(tag, "触发自动重试 1 次")
-                    runRecognition(imageDataUrls, photoUris)
+                    runRecognition(imageDataUrls, photoUris, userInfo)
                     return@launch
                 }
                 _state.value = RecognitionState.Error(

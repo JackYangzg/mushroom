@@ -22,4 +22,16 @@ class ConsultationFlowStateTest {
             recreated.photoUriStrings,
         )
     }
+
+    @Test
+    fun userInfoSurvivesFlowStateRecreation() {
+        val savedUserInfo = mutableStateOf("上海，雨后草地，菌盖约 5 厘米")
+
+        val recreated = ConsultationFlowState(
+            savedPhotoUris = mutableStateOf(emptyList()),
+            savedUserInfo = savedUserInfo,
+        )
+
+        assertEquals("上海，雨后草地，菌盖约 5 厘米", recreated.userInfo)
+    }
 }

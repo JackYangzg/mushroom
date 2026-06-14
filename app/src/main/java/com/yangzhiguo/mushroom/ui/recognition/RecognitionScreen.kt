@@ -66,6 +66,7 @@ import com.yangzhiguo.mushroom.ui.components.MarkdownText
 @Composable
 fun RecognitionScreen(
     photoUris: List<String>,
+    userInfo: String = "",
     onOpen3D: (scientificName: String) -> Unit,
     onOpenSpecies: (speciesId: Int) -> Unit = {},
     onRetake: () -> Unit,
@@ -79,10 +80,10 @@ fun RecognitionScreen(
     val fallbackName by viewModel.fallbackName.collectAsStateWithLifecycle()
     val candidateSpeciesIds by viewModel.candidateSpeciesIds.collectAsStateWithLifecycle()
 
-    LaunchedEffect(photoUris) {
+    LaunchedEffect(photoUris, userInfo) {
         if (photoUris.isEmpty()) return@LaunchedEffect
         val dataUrls = photoUris.mapNotNull { photoUriToDataUrl(context, it) }
-        viewModel.startRecognitionIfIdle(dataUrls, photoUris)
+        viewModel.startRecognitionIfIdle(dataUrls, photoUris, userInfo)
     }
 
     Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
@@ -134,7 +135,7 @@ fun RecognitionScreen(
                 retryable = current.retryable,
                 onRetry = {
                     val dataUrls = photoUris.mapNotNull { photoUriToDataUrl(context, it) }
-                    viewModel.startRecognition(dataUrls, photoUris)
+                    viewModel.startRecognition(dataUrls, photoUris, userInfo)
                 },
                 onRetake = onRetake,
             )

@@ -23,6 +23,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -46,6 +47,8 @@ fun PhotoPreviewScreen(
     onBack: () -> Unit,
     onAddMore: () -> Unit,
     onRemove: (Uri) -> Unit,
+    userInfo: String,
+    onUserInfoChange: (String) -> Unit,
     onUsePhotos: () -> Unit,
 ) {
     var selected by remember(photoUris) { mutableStateOf(photoUris.firstOrNull()) }
@@ -122,10 +125,25 @@ fun PhotoPreviewScreen(
                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                 modifier = Modifier.padding(horizontal = 20.dp),
             )
+            OutlinedTextField(
+                value = userInfo,
+                onValueChange = { onUserInfoChange(it.take(MAX_USER_INFO_LENGTH)) },
+                label = { Text("补充信息（选填）") },
+                placeholder = { Text("例如发现地点、时间、生长环境、气味或尺寸") },
+                supportingText = {
+                    Text("${userInfo.length}/$MAX_USER_INFO_LENGTH")
+                },
+                minLines = 2,
+                maxLines = 4,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp, vertical = 12.dp),
+            )
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(20.dp),
+                    .padding(horizontal = 20.dp, vertical = 8.dp)
+                    .padding(bottom = 12.dp),
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
             ) {
                 OutlinedButton(
@@ -148,3 +166,5 @@ fun PhotoPreviewScreen(
         }
     }
 }
+
+private const val MAX_USER_INFO_LENGTH = 500

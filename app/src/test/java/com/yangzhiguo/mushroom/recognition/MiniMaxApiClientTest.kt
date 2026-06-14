@@ -70,4 +70,45 @@ class MiniMaxApiClientTest {
             server.shutdown()
         }
     }
+
+    @Test
+    fun streamRecognize_includesExplicitUserInfoInPrompt() = runBlocking {
+        val server = MockWebServer()
+        server.enqueue(
+            MockResponse()
+                .setHeader("Content-Type", "text/event-stream")
+                .setBody("data: [DONE]\n\n"),
+        )
+        server.start()
+
+        try {
+            val client = MiniMaxApiClient(
+                apiKey = "test-key",
+                baseUrl = server.url("/").toString().removeSuffix("/"),
+                model = "test-model",
+            )
+
+            withTimeout(3_000) {
+                client.streamRecognize(
+                    imageDataUrls = listOf("data:image/jpeg;base64,AA=="),
+                    userPrompt = buildRecognitionPrompt("雨后在松树林发现，气味不明显"),
+                ).toList()
+            }
+
+            val requestBody = server.takeRequest().body.readUtf8()
+            assertTrue(requestBody.contains("【用户补充信息】"))
+            assertTrue(requestBody.contains("雨后在松树林发现，气味不明显"))
+            assertTrue(requestBody.contains("用户提供但图片不可验证"))
+        } finally {
+            server.shutdown()
+        }
+    }
+
+    @Test
+    fun buildRecognitionPrompt_omitsUserInfoSectionWhenBlank() {
+        val prompt = buildRecognitionPrompt("  ")
+
+        assertEquals("请综合分析这些图片中的同一株蘑菇。", prompt)
+        assertTrue(!prompt.contains("用户补充信息"))
+    }
 }

@@ -53,6 +53,8 @@ fun ConsultationFlowNav(
                 onBack = { navController.popBackStack() },
                 onAddMore = { navController.popBackStack() },
                 onRemove = state::removePhoto,
+                userInfo = state.userInfo,
+                onUserInfoChange = state::setUserInfo,
                 onUsePhotos = {
                     if (useAi) {
                         val uri = state.photoUri?.toString().orEmpty()
@@ -68,6 +70,7 @@ fun ConsultationFlowNav(
         composable(Route.Recognition.PATTERN) {
             RecognitionScreen(
                 photoUris = state.photoUris.map { it.toString() },
+                userInfo = state.userInfo,
                 onOpen3D = onOpen3D,
                 onOpenSpecies = onOpenSpecies,
                 onRetake = {

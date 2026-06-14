@@ -844,3 +844,19 @@ JSON 字段填写规则：
 """.trimIndent()
     }
 }
+
+internal fun buildRecognitionPrompt(userInfo: String): String {
+    val normalizedInfo = userInfo.trim()
+    val basePrompt = "请综合分析这些图片中的同一株蘑菇。"
+    if (normalizedInfo.isEmpty()) return basePrompt
+
+    return """
+$basePrompt
+
+【用户补充信息】
+$normalizedInfo
+【用户补充信息结束】
+
+以上内容由用户主动提供。请在分析中显性注明并纳入参考；无法从图片验证的内容必须标记为“用户提供但图片不可验证”，不得改写为图片中直接观察到的事实。
+    """.trimIndent()
+}
