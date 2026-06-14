@@ -23,6 +23,10 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -37,6 +41,7 @@ fun CameraScreen(
     onPhotoReady: (android.net.Uri) -> Unit,
     onPhotosReady: (List<android.net.Uri>) -> Unit = { uris -> uris.forEach(onPhotoReady) },
     onClose: () -> Unit,
+    openCameraOnLaunch: Boolean = false,
     openGalleryOnLaunch: Boolean = false,
 ) {
     val context = LocalContext.current
@@ -45,6 +50,27 @@ fun CameraScreen(
         onPhotoReady = onPhotoReady,
         onPhotosReady = onPhotosReady,
     )
+    var autoCameraLaunchHandled by rememberSaveable(openCameraOnLaunch) {
+        mutableStateOf(!openCameraOnLaunch)
+    }
+    var awaitingCameraPermission by rememberSaveable(openCameraOnLaunch) {
+        mutableStateOf(false)
+    }
+
+    LaunchedEffect(openCameraOnLaunch, controller.cameraPermission.status) {
+        if (autoCameraLaunchHandled) return@LaunchedEffect
+
+        if (controller.cameraPermission.status.isGranted) {
+            autoCameraLaunchHandled = true
+            awaitingCameraPermission = false
+            val uri = controller.newPhotoUri(context)
+            controller.takePicture.launch(uri)
+        } else if (!awaitingCameraPermission) {
+            awaitingCameraPermission = true
+            controller.cameraPermission.launchPermissionRequest()
+        }
+    }
+
     LaunchedEffect(openGalleryOnLaunch) {
         if (openGalleryOnLaunch) {
             controller.pickMultipleFromGallery.launch(

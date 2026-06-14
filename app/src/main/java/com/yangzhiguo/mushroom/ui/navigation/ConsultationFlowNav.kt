@@ -43,6 +43,7 @@ fun ConsultationFlowNav(
                     navController.navigate(Route.PhotoPreview.path)
                 },
                 onClose = onExit,
+                openCameraOnLaunch = !startWithGallery,
                 openGalleryOnLaunch = startWithGallery,
             )
         }
