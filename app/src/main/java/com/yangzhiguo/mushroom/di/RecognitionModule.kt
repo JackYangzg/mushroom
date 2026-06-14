@@ -3,6 +3,7 @@ package com.yangzhiguo.mushroom.di
 import com.yangzhiguo.mushroom.BuildConfig
 import com.yangzhiguo.mushroom.data.local.SpeciesDao
 import com.yangzhiguo.mushroom.recognition.DetailLruCache
+import com.yangzhiguo.mushroom.recognition.DoubaoApiClient
 import com.yangzhiguo.mushroom.recognition.MiniMaxApiClient
 import com.yangzhiguo.mushroom.recognition.MushroomIndex
 import com.yangzhiguo.mushroom.recognition.MushroomRepository
@@ -18,6 +19,14 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object RecognitionModule {
+
+    @Provides
+    @Singleton
+    fun provideDoubaoApiClient(): DoubaoApiClient = DoubaoApiClient(
+        apiKey = BuildConfig.ARK_API_KEY,
+        baseUrl = BuildConfig.ARK_API_BASE,
+        model = BuildConfig.ARK_MODEL,
+    )
 
     @Provides
     @Singleton

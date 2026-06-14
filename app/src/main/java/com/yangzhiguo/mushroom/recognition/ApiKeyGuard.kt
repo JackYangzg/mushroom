@@ -3,7 +3,7 @@ package com.yangzhiguo.mushroom.recognition
 import com.yangzhiguo.mushroom.BuildConfig
 
 /**
- * 启动期 guard：检查 BuildConfig.MINIMAX_API_KEY 是否仍是占位符或空。
+ * 启动期 guard：检查当前模型供应商对应的 API key 是否已配置。
  *
  * 设计意图：把"忘记在 local.properties 填 key"这种错误尽早暴露在 App 启动时
  * （或首次拍照时），而不是流式响应中收到 401 才反馈给用户。
@@ -21,12 +21,16 @@ object ApiKeyGuard {
         data object Missing : Status()
     }
 
-    fun check(): Status {
-        val key = BuildConfig.MINIMAX_API_KEY
+    fun check(provider: AiModelProvider): Status {
+        val key = when (provider) {
+            AiModelProvider.DOUBAO -> BuildConfig.ARK_API_KEY
+            AiModelProvider.MINIMAX -> BuildConfig.MINIMAX_API_KEY
+        }
         return when {
             key.isBlank() -> Status.Missing
-            key.trim() == PLACEHOLDER -> Status.Missing
-            !key.startsWith("sk-cp-") -> Status.Missing
+            provider == AiModelProvider.MINIMAX && key.trim() == PLACEHOLDER -> Status.Missing
+            provider == AiModelProvider.MINIMAX && !key.startsWith("sk-cp-") -> Status.Missing
+            provider == AiModelProvider.DOUBAO && !key.startsWith("ark-") -> Status.Missing
             else -> Status.Configured
         }
     }
@@ -35,12 +39,15 @@ object ApiKeyGuard {
      * 启动期检查：未配置时抛 [MissingApiKeyException]，调用方应 catch 后
      * 跳到 onboarding 引导用户配置。
      */
-    fun require() {
-        if (check() is Status.Missing) {
+    fun require(provider: AiModelProvider) {
+        if (check(provider) is Status.Missing) {
+            val keyName = when (provider) {
+                AiModelProvider.DOUBAO -> "ARK_API_KEY"
+                AiModelProvider.MINIMAX -> "MINI_MAX_API_KEY"
+            }
             throw MissingApiKeyException(
-                "MINIMAX_API_KEY 未配置。请在 local.properties 中设置 " +
-                    "MINI_MAX_API_KEY=sk-cp-xxx 真实值（占位符或空均无效）。" +
-                    "参考 .env.example。"
+                "${provider.displayName} 的 API key 未配置。请在 local.properties 中设置 " +
+                    "$keyName，参考 .env.example。"
             )
         }
     }

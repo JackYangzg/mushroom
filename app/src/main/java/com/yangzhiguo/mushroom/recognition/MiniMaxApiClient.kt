@@ -39,7 +39,7 @@ class MiniMaxApiClient(
     private val model: String = BuildConfig.MINIMAX_MODEL,
     private val connectTimeoutMs: Int = 15_000,
     private val readTimeoutMs: Int = 30_000,
-) {
+) : RecognitionApiClient {
     private val tag = "MiniMaxApiClient"
     private val json = Json {
         ignoreUnknownKeys = true
@@ -63,10 +63,10 @@ class MiniMaxApiClient(
         systemPrompt = systemPrompt,
     )
 
-    fun streamRecognize(
+    override fun streamRecognize(
         imageDataUrls: List<String>,
-        userPrompt: String = "请综合分析这些图片中的同一株蘑菇。",
-        systemPrompt: String = DEFAULT_SYSTEM_PROMPT,
+        userPrompt: String,
+        systemPrompt: String,
     ): Flow<StreamEvent> = callbackFlow {
         val parser = RecognitionStreamParser(json)
         val cancelled = AtomicBoolean(false)

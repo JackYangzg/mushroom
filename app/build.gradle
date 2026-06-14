@@ -14,6 +14,7 @@ if (localPropsFile.exists()) {
     localProps.load(new FileInputStream(localPropsFile))
 }
 def minimaxApiKey = localProps.getProperty('MINI_MAX_API_KEY', '')
+def arkApiKey = localProps.getProperty('ARK_API_KEY', '')
 def releaseStoreFile = localProps.getProperty(
     'RELEASE_STORE_FILE',
     project.findProperty('RELEASE_STORE_FILE') ?: '',
@@ -51,6 +52,9 @@ android {
         buildConfigField "String", "MINIMAX_API_KEY", "\"${minimaxApiKey}\""
         buildConfigField "String", "MINIMAX_API_BASE", "\"https://api.minimaxi.com\""
         buildConfigField "String", "MINIMAX_MODEL", "\"MiniMax-M3\""
+        buildConfigField "String", "ARK_API_KEY", "\"${arkApiKey}\""
+        buildConfigField "String", "ARK_API_BASE", "\"https://ark.cn-beijing.volces.com\""
+        buildConfigField "String", "ARK_MODEL", "\"doubao-seed-2-0-pro-260215\""
     }
 
     signingConfigs {

@@ -1,6 +1,6 @@
 # 蘑菇鉴别
 
-一款面向自然观察与科普学习的 Android 蘑菇辅助识别应用。用户可以拍摄或选择多张蘑菇照片，通过 MiniMax 模型获取候选结果，再结合随 App 发布的本地图鉴查看物种名称、形态特征、生态分布和毒性风险等资料。
+一款面向自然观察与科普学习的 Android 蘑菇辅助识别应用。用户可以拍摄或选择多张蘑菇照片，通过豆包模型获取候选结果，再结合随 App 发布的本地图鉴查看物种名称、形态特征、生态分布和毒性风险等资料。
 
 > [!WARNING]
 > 本项目不能判断蘑菇是否可以安全食用。AI 结果和图鉴资料仅供科普与检索参考，不得作为采食、售卖、加工、药用、诊断或治疗依据。请勿食用仅经本 App 识别的野生蘑菇。
@@ -9,7 +9,7 @@
 <img width="1672" height="941" alt="image" src="https://github.com/user-attachments/assets/b59da229-701b-4d38-92d4-3322b36ee736" />
 
 - 拍照或从系统相册选择图片，单次最多支持 6 张照片
-- 使用 MiniMax M3 流式分析图片并展示识别过程
+- 默认使用豆包模型流式分析图片并展示识别过程，可切换到保留的 MiniMax 实现
 - 输出多个候选物种、判断理由和安全提示
 - 将 AI 候选与本地中文名、学名及别名进行匹配
 - 内置离线图鉴，支持中文名、学名和别名搜索
@@ -32,7 +32,7 @@
 - Kotlin Coroutines / Flow
 - Kotlin Serialization
 - Coil
-- MiniMax OpenAI 兼容流式接口
+- 火山方舟豆包 Responses 流式接口
 - JUnit、Robolectric、MockWebServer
 
 ## 环境要求
@@ -41,7 +41,7 @@
 - JDK 17
 - Android SDK 34
 - Android 7.0（API 24）或更高版本的设备或模拟器
-- MiniMax API Key，未配置时仍可浏览本地图鉴，但不能使用 AI 识别
+- 火山方舟 API Key，未配置时仍可浏览本地图鉴，但不能使用 AI 识别
 
 ## 快速开始
 
@@ -52,14 +52,15 @@
    cd mushroom
    ```
 
-2. 在项目根目录的 `local.properties` 中配置 Android SDK 和 MiniMax API Key：
+2. 在项目根目录的 `local.properties` 中配置 Android SDK 和火山方舟 API Key：
 
    ```properties
    sdk.dir=/path/to/Android/sdk
+   ARK_API_KEY=ark-your-api-key
    MINI_MAX_API_KEY=sk-cp-your-api-key
    ```
 
-   API Key 由 `app/build.gradle` 注入 `BuildConfig.MINIMAX_API_KEY`。`local.properties` 已被 Git 忽略，请勿将真实密钥写入源码或提交到仓库。更多说明见 `.env.example`。
+   API Key 由 `app/build.gradle` 注入 BuildConfig。`local.properties` 已被 Git 忽略，请勿将真实密钥写入源码或提交到仓库。识别页面默认选择豆包，也可切换到 MiniMax。
 
 3. 构建 Debug APK：
 
@@ -137,7 +138,7 @@ app/src/main/
 ├── assets/                 # 离线数据库、别名库和识别索引
 ├── java/.../mushroom/
 │   ├── data/               # Room、收藏和数据仓库
-│   ├── recognition/        # MiniMax 客户端、解析、匹配和识别历史
+│   ├── recognition/        # 豆包/MiniMax 客户端、解析、匹配和识别历史
 │   ├── scraper/            # iFlora 数据抓取
 │   ├── sync/               # WorkManager 同步、合并和别名回填
 │   ├── ui/                 # Compose 页面、组件和导航
@@ -147,7 +148,7 @@ app/src/main/
 
 ## 数据与隐私
 
-- 只有用户主动发起识别时，所选图片才会发送至 MiniMax 模型服务。
+- 只有用户主动发起识别时，所选图片才会发送至当前配置的模型服务。
 - 图鉴、收藏、识别历史照片和图片缓存主要保存在设备本地。
 - 数据库同步、远程图片和 3D 资料会访问第三方服务，服务方可能记录常规网络日志。
 - App 不要求注册账号，不读取通讯录、短信或精确位置，也不出售个人信息。

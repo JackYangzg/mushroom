@@ -21,7 +21,7 @@ import javax.inject.Inject
  *       ↘ Error | Canceled
  *
  *  - 输入：用户拍的图片（base64 data URL）
- *  - 调用：MiniMaxApiClient（流式） + MushroomRepository（本地/远端查表）
+ *  - 调用：RecognitionApiClient（流式） + MushroomRepository（本地/远端查表）
  *  - 暴露：StateFlow<RecognitionState>（UI 订阅）
  *  - 副作用：折叠/展开思考区、取消、自动重试 1 次
  *
@@ -32,7 +32,8 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class RecognitionStore @Inject constructor(
-    private val api: MiniMaxApiClient,
+    private val doubaoApi: DoubaoApiClient,
+    private val miniMaxApi: MiniMaxApiClient,
     private val repository: MushroomRepository,
     private val historyRepository: RecognitionHistoryRepository,
     private val speciesDao: SpeciesDao,
@@ -60,7 +61,11 @@ class RecognitionStore @Inject constructor(
      * @param photoUri 可选，本地文件 URI（仅用于回显）
      */
     fun startRecognition(imageDataUrl: String, photoUri: String? = null) {
-        startRecognition(listOf(imageDataUrl), listOfNotNull(photoUri))
+        startRecognition(
+            imageDataUrls = listOf(imageDataUrl),
+            photoUris = listOfNotNull(photoUri),
+            provider = AiModelProvider.DOUBAO,
+        )
     }
 
     /**
@@ -71,15 +76,17 @@ class RecognitionStore @Inject constructor(
         imageDataUrls: List<String>,
         photoUris: List<String>,
         userInfo: String = "",
+        provider: AiModelProvider = AiModelProvider.DOUBAO,
     ) {
         if (_state.value != RecognitionState.Idle) return
-        startRecognition(imageDataUrls, photoUris, userInfo)
+        startRecognition(imageDataUrls, photoUris, userInfo, provider)
     }
 
     fun startRecognition(
         imageDataUrls: List<String>,
         photoUris: List<String>,
         userInfo: String = "",
+        provider: AiModelProvider = AiModelProvider.DOUBAO,
     ) {
         if (imageDataUrls.isEmpty()) {
             _state.value = RecognitionState.Error(
@@ -101,7 +108,7 @@ class RecognitionStore @Inject constructor(
         _selectedMushroom.value = null
         _fallbackName.value = ""
         _candidateSpeciesIds.value = emptyMap()
-        runRecognition(imageDataUrls, photoUris, userInfo)
+        runRecognition(imageDataUrls, photoUris, userInfo, provider)
     }
 
     /** 取消当前识别任务，回到 Canceled。 */
@@ -141,10 +148,11 @@ class RecognitionStore @Inject constructor(
         imageDataUrls: List<String>,
         photoUris: List<String>,
         userInfo: String,
+        provider: AiModelProvider,
     ) {
         // 启动期 guard
         try {
-            ApiKeyGuard.require()
+            ApiKeyGuard.require(provider)
         } catch (e: MissingApiKeyException) {
             _state.value = RecognitionState.Error(e.message ?: "API key 未配置", retryable = false)
             return
@@ -153,6 +161,10 @@ class RecognitionStore @Inject constructor(
         currentJob = viewModelScope.launch {
             _state.value = RecognitionState.Uploading
 
+            val api: RecognitionApiClient = when (provider) {
+                AiModelProvider.DOUBAO -> doubaoApi
+                AiModelProvider.MINIMAX -> miniMaxApi
+            }
             val stream = api.streamRecognize(
                 imageDataUrls = imageDataUrls,
                 userPrompt = buildRecognitionPrompt(userInfo),
@@ -183,7 +195,7 @@ class RecognitionStore @Inject constructor(
                 if (!retried) {
                     retried = true
                     Log.w(tag, "触发自动重试 1 次")
-                    runRecognition(imageDataUrls, photoUris, userInfo)
+                    runRecognition(imageDataUrls, photoUris, userInfo, provider)
                     return@launch
                 }
                 _state.value = RecognitionState.Error(

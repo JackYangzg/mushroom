@@ -33,17 +33,18 @@ import androidx.compose.material.icons.rounded.Warning
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -56,6 +57,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
 import com.yangzhiguo.mushroom.recognition.Candidate
+import com.yangzhiguo.mushroom.recognition.AiModelProvider
 import com.yangzhiguo.mushroom.recognition.LocalMushroom
 import com.yangzhiguo.mushroom.recognition.RecognitionResult
 import com.yangzhiguo.mushroom.recognition.RecognitionState
@@ -79,20 +81,27 @@ fun RecognitionScreen(
     val selectedImageUrl by viewModel.selectedImageUrl.collectAsStateWithLifecycle()
     val fallbackName by viewModel.fallbackName.collectAsStateWithLifecycle()
     val candidateSpeciesIds by viewModel.candidateSpeciesIds.collectAsStateWithLifecycle()
+    var selectedProvider by rememberSaveable { mutableStateOf(AiModelProvider.DOUBAO) }
 
-    LaunchedEffect(photoUris, userInfo) {
-        if (photoUris.isEmpty()) return@LaunchedEffect
+    fun startRecognition() {
         val dataUrls = photoUris.mapNotNull { photoUriToDataUrl(context, it) }
-        viewModel.startRecognitionIfIdle(dataUrls, photoUris, userInfo)
+        viewModel.startRecognition(
+            imageDataUrls = dataUrls,
+            photoUris = photoUris,
+            userInfo = userInfo,
+            provider = selectedProvider,
+        )
     }
 
     Surface(modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background) {
         when (val current = state) {
-            RecognitionState.Idle, RecognitionState.Canceled -> CenterMessage(
-                title = "已取消识别",
-                body = "可以重新拍摄一张更清晰的照片。",
-                action = "重新拍照",
-                onAction = onRetake,
+            RecognitionState.Idle, RecognitionState.Canceled -> ModelSelectionContent(
+                photoUris = photoUris,
+                selectedProvider = selectedProvider,
+                onProviderSelected = { selectedProvider = it },
+                onStart = ::startRecognition,
+                onRetake = onRetake,
+                wasCanceled = current == RecognitionState.Canceled,
             )
             RecognitionState.Uploading -> RecognitionProgress(
                 photoUris,
@@ -133,12 +142,73 @@ fun RecognitionScreen(
             is RecognitionState.Error -> ErrorContent(
                 message = friendlyError(current.message),
                 retryable = current.retryable,
-                onRetry = {
-                    val dataUrls = photoUris.mapNotNull { photoUriToDataUrl(context, it) }
-                    viewModel.startRecognition(dataUrls, photoUris, userInfo)
-                },
+                onRetry = ::startRecognition,
                 onRetake = onRetake,
             )
+        }
+    }
+}
+
+@Composable
+private fun ModelSelectionContent(
+    photoUris: List<String>,
+    selectedProvider: AiModelProvider,
+    onProviderSelected: (AiModelProvider) -> Unit,
+    onStart: () -> Unit,
+    onRetake: () -> Unit,
+    wasCanceled: Boolean,
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(20.dp),
+        verticalArrangement = Arrangement.spacedBy(20.dp),
+    ) {
+        Text(
+            text = if (wasCanceled) "已取消识别" else "开始识别",
+            style = MaterialTheme.typography.headlineSmall,
+        )
+        RecognitionPhotoStrip(photoUris)
+        Column(verticalArrangement = Arrangement.spacedBy(10.dp)) {
+            Text("选择识别模型", style = MaterialTheme.typography.titleMedium)
+            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                AiModelProvider.entries.forEach { provider ->
+                    FilterChip(
+                        selected = selectedProvider == provider,
+                        onClick = { onProviderSelected(provider) },
+                        label = { Text(provider.displayName) },
+                        leadingIcon = if (selectedProvider == provider) {
+                            {
+                                Icon(
+                                    Icons.Rounded.CheckCircle,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(18.dp),
+                                )
+                            }
+                        } else {
+                            null
+                        },
+                    )
+                }
+            }
+            Text(
+                text = when (selectedProvider) {
+                    AiModelProvider.DOUBAO -> "默认模型：豆包 Seed 2.0 Pro"
+                    AiModelProvider.MINIMAX -> "备用模型：MiniMax M3"
+                },
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+            )
+        }
+        Spacer(Modifier.weight(1f))
+        PrimaryButton(
+            text = "使用${selectedProvider.displayName}开始识别",
+            onClick = onStart,
+            enabled = photoUris.isNotEmpty(),
+            modifier = Modifier.fillMaxWidth(),
+        )
+        OutlinedButton(onClick = onRetake, modifier = Modifier.fillMaxWidth()) {
+            Text("重新拍照")
         }
     }
 }

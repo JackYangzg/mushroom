@@ -4,7 +4,7 @@ import kotlinx.serialization.SerializationException
 import kotlinx.serialization.json.Json
 
 /**
- * 流式解析器：把 MiniMax M3 的逐 token delta.content 拆分为「思考过程」与
+ * 流式解析器：把模型返回的逐 token 文本拆分为「思考过程」与
  * 「最终候选」两类事件。
  *
  * 解析规则（设计文档 §3.2）：
@@ -15,7 +15,7 @@ import kotlinx.serialization.json.Json
  *  - 一旦 emit 过 FinalCandidates，parser 进入 no-op 状态
  *
  * 注意：parser 不处理 SSE 帧的拆包（`data: {...}\n\n`），那一步由
- * MiniMaxApiClient 在读取 InputStream 时完成。这里只接收纯文本 delta。
+ * 具体 API 客户端在读取 InputStream 时完成。这里只接收纯文本 delta。
  */
 class RecognitionStreamParser(
     private val json: Json = DefaultJson,
