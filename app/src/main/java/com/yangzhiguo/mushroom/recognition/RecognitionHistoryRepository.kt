@@ -68,6 +68,28 @@ class RecognitionHistoryRepository @Inject constructor(
     fun find(id: String): RecognitionHistoryRecord? =
         _records.value.firstOrNull { it.id == id }
 
+    suspend fun delete(id: String): Boolean = withContext(Dispatchers.IO) {
+        mutex.withLock {
+            val existing = _records.value.firstOrNull { it.id == id } ?: return@withLock false
+            val updated = _records.value.filterNot { it.id == id }
+            writeRecords(updated)
+            _records.value = updated
+            deleteRecordFiles(existing)
+            true
+        }
+    }
+
+    private fun deleteRecordFiles(record: RecognitionHistoryRecord) {
+        runCatching {
+            File(historyRoot, record.id).deleteRecursively()
+            record.photoPaths.forEach { path ->
+                File(path).takeIf { it.exists() }?.delete()
+            }
+        }.onFailure {
+            Log.w(TAG, "Unable to delete recognition history files: ${it.message}")
+        }
+    }
+
     private fun copyPhoto(rawUri: String, destination: File): String? {
         return runCatching {
             val uri = Uri.parse(rawUri)

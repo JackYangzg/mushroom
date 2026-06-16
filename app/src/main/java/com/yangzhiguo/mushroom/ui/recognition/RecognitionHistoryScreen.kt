@@ -1,8 +1,12 @@
 package com.yangzhiguo.mushroom.ui.recognition
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.detectHorizontalDragGestures
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -10,8 +14,10 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
@@ -24,6 +30,7 @@ import androidx.compose.material.icons.rounded.ChevronRight
 import androidx.compose.material.icons.rounded.ExpandLess
 import androidx.compose.material.icons.rounded.ExpandMore
 import androidx.compose.material.icons.rounded.History
+import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -40,9 +47,12 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontStyle
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.platform.LocalDensity
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -74,6 +84,12 @@ class RecognitionHistoryViewModel @Inject constructor(
     val candidateSpeciesIds: StateFlow<Map<String, Int>> = _candidateSpeciesIds.asStateFlow()
 
     fun find(id: String): RecognitionHistoryRecord? = repository.find(id)
+
+    fun delete(id: String) {
+        viewModelScope.launch {
+            repository.delete(id)
+        }
+    }
 
     fun resolveCandidateIds(record: RecognitionHistoryRecord) {
         viewModelScope.launch {
@@ -131,7 +147,11 @@ fun RecognitionHistoryScreen(
                 contentPadding = PaddingValues(horizontal = 20.dp, vertical = 8.dp),
             ) {
                 items(records, key = { it.id }) { record ->
-                    HistoryRow(record = record, onClick = { onRecordClick(record.id) })
+                    SwipeToDeleteHistoryRow(
+                        record = record,
+                        onClick = { onRecordClick(record.id) },
+                        onDelete = { viewModel.delete(record.id) },
+                    )
                     Divider()
                 }
             }
@@ -174,6 +194,83 @@ fun RecognitionHistoryDetailScreen(
                 candidateSpeciesIds = candidateSpeciesIds,
                 onOpenSpecies = onOpenSpecies,
                 modifier = Modifier.padding(padding),
+            )
+        }
+    }
+}
+
+@Composable
+private fun SwipeToDeleteHistoryRow(
+    record: RecognitionHistoryRecord,
+    onClick: () -> Unit,
+    onDelete: () -> Unit,
+) {
+    val revealWidth = 84.dp
+    val revealWidthPx = with(LocalDensity.current) { revealWidth.toPx() }
+    var targetOffset by remember(record.id) { mutableStateOf(0f) }
+    var dragOffset by remember(record.id) { mutableStateOf(0f) }
+    val animatedOffset by animateFloatAsState(
+        targetValue = targetOffset + dragOffset,
+        label = "history-delete-offset",
+    )
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(12.dp)),
+    ) {
+        Box(
+            modifier = Modifier
+                .matchParentSize()
+                .background(MaterialTheme.colorScheme.errorContainer),
+            contentAlignment = Alignment.CenterEnd,
+        ) {
+            IconButton(
+                onClick = onDelete,
+                modifier = Modifier.width(revealWidth),
+            ) {
+                Icon(
+                    Icons.Rounded.Delete,
+                    contentDescription = "删除记录",
+                    tint = MaterialTheme.colorScheme.onErrorContainer,
+                )
+            }
+        }
+        Surface(
+            modifier = Modifier
+                .fillMaxWidth()
+                .offset { IntOffset(animatedOffset.toInt(), 0) }
+                .pointerInput(record.id) {
+                    detectHorizontalDragGestures(
+                        onDragEnd = {
+                            targetOffset = if (targetOffset + dragOffset < -revealWidthPx / 2f) {
+                                -revealWidthPx
+                            } else {
+                                0f
+                            }
+                            dragOffset = 0f
+                        },
+                        onDragCancel = {
+                            dragOffset = 0f
+                        },
+                        onHorizontalDrag = { change, dragAmount ->
+                            change.consume()
+                            dragOffset = (dragOffset + dragAmount)
+                                .coerceIn(-revealWidthPx - targetOffset, -targetOffset)
+                        },
+                    )
+                },
+            color = MaterialTheme.colorScheme.background,
+        ) {
+            HistoryRow(
+                record = record,
+                onClick = {
+                    if (targetOffset < 0f) {
+                        targetOffset = 0f
+                    } else {
+                        onClick()
+                    }
+                },
             )
         }
     }
